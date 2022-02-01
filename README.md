@@ -1,6 +1,6 @@
 # DATS-6101-group-6
 
-# Every Member should provide their contact number so that we can make whatsapp group as well. 
+# Every Member should provide their contact number so that we can make whatsapp group as well. - Shumel
 =======
 
 Github repository for group 6 of Professor Edwin Lo's Spring 2022 DATS 6101 course.
