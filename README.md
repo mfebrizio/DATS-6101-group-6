@@ -1,6 +1,5 @@
 # DATS-6101-group-6
-<<<<<<< Updated upstream
- 
+
 # Every Member should provide their contact number so that we can make whatsapp group as well. 
 =======
 
@@ -33,5 +32,3 @@ Interests: Federal regulatory policy (i.e., rulemaking conducted by administrati
 Familiar with data sources related to US regulation: public commenting ([Regulations.gov](https://www.regulations.gov/)); regulatory review ([Reginfo.gov](https://www.reginfo.gov/public/)); proposed and final rulemaking documents ([Federal Register](https://www.federalregister.gov/))
 
 ## Project Ideas
-
->>>>>>> Stashed changes
