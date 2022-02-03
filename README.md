@@ -1,8 +1,5 @@
 # DATS-6101-group-6
 
-# Every Member should provide their contact number so that we can make whatsapp group as well. - Shumel
-=======
-
 Github repository for group 6 of Professor Edwin Lo's Spring 2022 DATS 6101 course.
 
 Members:
@@ -15,9 +12,10 @@ Members:
 
 I created a .gitignore file with the R template and selected the MIT License – a fairly permissive license for the project.
 
-Also if any of you have a preference for a team name, I'm open to that. Personally, I'm indifferent to have a name.
+Also if any of you have a preference for a team name, I'm open to that. Personally, I'm indifferent to having a name.
 
-Perhaps we can start adding some ideas for the project in this ReadMe file (we can clean it up later). That could be a good way to practice markdown as well!
+Alex created a [page on OneNote](https://gwu0.sharepoint.com/sites/22SP_Dats6101_10M-GRP/_layouts/OneNote.aspx?id=%2Fsites%2F22SP_Dats6101_10M-GRP%2FSiteAssets%2F22SP_Dats6101_10M-GRP%20Notebook&wd=target%28_Collaboration%20Space%2FT6.one%7CECA6BC36-B95B-4F1F-833F-FD766D4E165F%2FTeam%20Project%20Brainstorm%7CB92533EC-1CA9-49E2-BD6E-C012CE298887%2F%29
+onenote:https://gwu0.sharepoint.com/sites/22SP_Dats6101_10M-GRP/SiteAssets/22SP_Dats6101_10M-GRP%20Notebook/_Collaboration%20Space/T6.one#Team%20Project%20Brainstorm&section-id={ECA6BC36-B95B-4F1F-833F-FD766D4E165F}&page-id={B92533EC-1CA9-49E2-BD6E-C012CE298887}&end) for brainstorming project ideas. I think we should start sharing ideas (even if they're very general) there. Once we figure out a shortlist of options, then we can add them to this ReadMe file. That could be a good way to practice markdown as well!
 
 ~ Mark
 
@@ -31,4 +29,4 @@ Interests: Federal regulatory policy (i.e., rulemaking conducted by administrati
 
 Familiar with data sources related to US regulation: public commenting ([Regulations.gov](https://www.regulations.gov/)); regulatory review ([Reginfo.gov](https://www.reginfo.gov/public/)); proposed and final rulemaking documents ([Federal Register](https://www.federalregister.gov/))
 
-## Project Ideas
+## Project Options
