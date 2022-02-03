@@ -28,4 +28,11 @@ Interests: Federal regulatory policy (i.e., rulemaking conducted by administrati
 
 Familiar with data sources related to US regulation: public commenting ([Regulations.gov](https://www.regulations.gov/)); regulatory review ([Reginfo.gov](https://www.reginfo.gov/public/)); proposed and final rulemaking documents ([Federal Register](https://www.federalregister.gov/))
 
+
+### Alex
+
+Hello everyone. I am a grad student here at GWU pursuing a M.S. in Applied Economics and a Graduate Certificate in Data Science. My undergraduate degrees were in Economics, Political Science, and Biological Sciences. I have experience using R, Python, and Stata for data analysis, primarily used for my research papers. I am still early in my career and my most recent job was working as an intern for the United Nations Foundation.
+
+Interests: Economics, Health Economics, Econometrics, Epidemiology, and Social Epidemiology.
+
 ## Project Options
