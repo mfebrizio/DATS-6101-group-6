@@ -17,6 +17,7 @@ df_year1 <- data.frame(read.csv('raw/file.csv'))
 ## etc.
 
 # append datasets using rbind() function
+# each dataframe should have the same columns (including data types)
 df_all <- rbind(df_year1, df_year2, df_year3, df_year4) ## add more years as necessary
 
 # import library
