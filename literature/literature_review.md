@@ -1,34 +1,47 @@
 
 ---
+project: DATS 6101 Group Project
+group: Team 6
 title: Initial Literature Review  
 author: Mark Febrizio  
-date revised: 2022-03-11
+date revised: 2022-03-11  
 ---
 
-# Summary of Review
+# Contents
 
-## Income Inequality and Mental Health
+[Summary of Review](#header-1)  
+- [Income Inequality and Mental Health](#header-1.1)  
 
-While the relationship between income inequality and health, generally, has been extensively studied, less focus has been paid to 
-Two notable systematic reviews focus on summarizing the relationship between income inequality and mental health.
-
-
-even if yes/no for prevalence, do extent of mental health problems matter too?
-
-distinction between subjective vs objective measures seems critical
-
-Given the heterogeneity in effects among countries, does the relationship between income inequality and mental health differ across regions of the US?
-
-Are there differences between rural and urban areas (eg, predominantly rural vs urban counties)?
+[Articles Reviewed](#header-2)  
+- [Measures of Income Inequality](#header-2.1)  
+- [Income Inequality and Mental Health](#header-2.2)  
 
 
-# Articles Reviewed
+# Summary of Review {#header-1}
 
-ie measures:
+## Income Inequality and Mental Health {#header-1.1}
+
+While the relationship between income inequality and health, generally, has been extensively studied, less focus has been paid to the relationship with mental health, specifically. Further, the results seem sensitive to the geographic locations studied and measures used. As a result, although the research area is not unexplored, there is still room for novel empirical investigations.
+
+Two notable systematic reviews focus on summarizing the relationship between income inequality and mental health. First, Ribeiro et al. (2017) conducted a meta-analysis of 27 studies exploring the relationship between income inequality and the incidence of mental health problems. Of these articles, 9 found a positive association, 10 found mixed results, and 8 found no association. The meta-analysis included both qualitative evaluation and pooled empirical analysis of select study results. The authors concluded, "Income inequality negatively affects mental health but the effect sizes are small and there is marked heterogeneity among studies." Second, Tibber et al. (2022) systematically reviewed 42  subnational studies (i.e., within countries rather than across countries) and determined whether they supported the Income Inequality Hypothesis or the Mixed Neighbourhood Hypothesis. A plurality of these studies focused on US populations. After controlling for absolute deprivation, approximately 55 percent of the studies supported the IIH, 12 percent supported the MNH, and the remaining studies (roughly 1/3) did not establish a conclusive association. The results were robust to mental health conditions, geographical unit size, and across countries with different incomes.
+
+Considering these systematic reviews, as well as one-off studies, pursuing additional research on the relationship between income inequality and mental health is warranted. Given the heterogeneity in effects among countries and geographies, focusing on how the relationship between income inequality and mental health differs across regions of the US would be valuable. In addition, are there differences in the association between rural and urban areas (e.g., predominantly rural vs urban counties)?
+
+In terms of measures, focusing on the prevalence of mental health problems would be a good place to start (i.e., the frequency of mental health issues within a population). Depending on the answer to that question, does the extent or severity of mental health problems matter too?
+
+Lastly, distinguishing between subjective and objective measures seems critical, as they could produce different results. We should be careful to understand how our variables were measured and their potential limitations.
+
+
+# Articles Reviewed {#header-2}
+
+## Measures of Income Inequality {#header-2.1}
+
 https://www.pewresearch.org/fact-tank/2015/09/22/the-many-ways-to-measure-economic-inequality/
+
 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2652960/
 
-## Income Inequality and Mental Health
+
+## Income Inequality and Mental Health {#header-2.2}
 
 **Bechtel, Lordan, & Rao 2012**
 - [INCOME INEQUALITY AND MENTAL HEALTH—EMPIRICAL EVIDENCE FROM AUSTRALIA](https://doi.org/10.1002/hec.2814). Health Economics
@@ -102,6 +115,15 @@ Volume 21, Issue S1 p. 4-17. June 2012.
 	+ geographic scale for income inequality measures is important -- less support for the relationship as it becomes more granular
 	+ conclusions: "The body of evidence on income inequality and health points strongly to a causal connection. The major criteria of temporality, biological plausibility, consistency and lack of alternative explanations are well supported. Of the small minority of studies which find no association, most can be explained by income inequality being measured at an inappropriate scale, the inclusion of mediating variables as controls, the use of subjective rather than objective measures of health, or follow up periods which are too short."
 
+**Ribeiro et al. 2017**  
+- [Income inequality and mental illness-related morbidity and resilience: a systematic review and meta-analysis](https://doi.org/10.1016/S2215-0366(17)30159-1). The Lancet Psychiatry, Volume 4, Issue 7, July 2017, Pages 554-562  
+- Notes:
+	+ meta-analysis of 27 studies examining the relationship between income inequality and the incidence of mental health problems
+	+ "Nine articles found a positive association between income inequality and the prevalence or incidence of mental health problems; ten articles found mixed results, with positive association in some subgroups and non-significant or negative association in other subgroups; and eight articles found no association between income inequality and mental health problems."
+	+ conclusion: "Income inequality negatively affects mental health but the effect sizes are small and there is marked heterogeneity among studies."
+	+ found significant but small effects among pooled effect sizes for categorical variable (yes/no to existence of mental health problem and depressive disorder) 
+	+ "Even though our narrative synthesis showed mixed results, its general trend suggests that income inequality negatively affects mental health, as did our meta-analysis. Therefore, our findings support the inclusion of income inequality in the public health agenda, because reducing income inequality could improve population mental health and wellbeing."
+
 **Sommet, Morselli, & Spini 2018**
 - [Income Inequality Affects the Psychological Health of Only the People Facing Scarcity]
 - not yet reviewed
@@ -123,15 +145,6 @@ Volume 21, Issue S1 p. 4-17. June 2012.
 	+ systematic review found the most support for income inequality hypothesis, but a large proportion of studies reported no significant association or mixed associations
 		- "Based on a systematic review of the literature we consistently found greater support for the IIH over the MNH ... However, a high proportion of studies supported neither hypothesis, reporting no significant association between inequality and mental health, or else mixed patterns of associations."
 
-**Wagner Silva Ribeiro et al. 2017**  
-- [Income inequality and mental illness-related morbidity and resilience: a systematic review and meta-analysis](https://doi.org/10.1016/S2215-0366(17)30159-1). The Lancet Psychiatry, Volume 4, Issue 7, July 2017, Pages 554-562  
-- Notes:
-	+ meta-analysis of 27 studies examining the relationship between income inequality and the incidence of mental health problems
-	+ "Nine articles found a positive association between income inequality and the prevalence or incidence of mental health problems; ten articles found mixed results, with positive association in some subgroups and non-significant or negative association in other subgroups; and eight articles found no association between income inequality and mental health problems."
-	+ conclusion: "Income inequality negatively affects mental health but the effect sizes are small and there is marked heterogeneity among studies."
-	+ found significant but small effects among pooled effect sizes for categorical variable (yes/no to existence of mental health problem and depressive disorder) 
-	+ "Even though our narrative synthesis showed mixed results, its general trend suggests that income inequality negatively affects mental health, as did our meta-analysis. Therefore, our findings support the inclusion of income inequality in the public health agenda, because reducing income inequality could improve population mental health and wellbeing."
-
 **Zimmerman & Bell 2006**
 - [Income inequality and physical and mental health: testing associations consistent with proposed causal pathways](http://dx.doi.org/10.1136/jech.2005.040154). Journal of Epidemiology & Community Health 2006; 60: 513-521.
 - Notes:
@@ -139,5 +152,3 @@ Volume 21, Issue S1 p. 4-17. June 2012.
 	+ main outcome measures were mostly self-reported and/or subjective
 	+ "The effect of income inequality on health may work through the influence of invidious social comparisons (particularly among white subjects) and (among black subjects and Latinos) through a reduction in social capital. Researchers may find it fruitful to recognise the cultural specificity of any such effects."
 
-
-## 
