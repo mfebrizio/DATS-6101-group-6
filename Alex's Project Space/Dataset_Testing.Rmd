@@ -10,6 +10,12 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
+Step 0: Link to Datasets
+
+https://www.countyhealthrankings.org/explore-health-rankings/rankings-data-documentation/national-data-documentation-2010-2019
+
+
+
 Step 1: Loading Datasets
 ```{r}
 #Loading RWJF Datasets from 2012-2019
@@ -50,6 +56,8 @@ analytic_data2012 <- read_csv("~/Documents/GitHub/DATS-6101-group-6/data/raw/ana
 Step 2: Parse Variables
 ```{r}
 #Combine Datasets
+
+
 
 
 ```
