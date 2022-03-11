@@ -9,7 +9,8 @@ date revised: 2022-03-11
 
 ## Income Inequality and Mental Health
 
-Two 
+While the relationship between income inequality and health, generally, has been extensively studied, less focus has been paid to 
+Two notable systematic reviews focus on summarizing the relationship between income inequality and mental health.
 
 
 even if yes/no for prevalence, do extent of mental health problems matter too?
