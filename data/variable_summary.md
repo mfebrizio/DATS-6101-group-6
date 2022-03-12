@@ -32,7 +32,7 @@ v145_cihigh
 
 ## Explanatory var
 
-**Income inequality** (ratio) -- *starts 2015*  
+**Income inequality** (ratio) -- *starts in 2015*  
 v044_rawvalue  
 v044_numerator  
 v044_denominator  
@@ -67,7 +67,7 @@ v023_denominator
 **Children in poverty rate**  
 v024_rawvalue  
 v024_numerator  
-*x* v024_denominator -- *== % population < 18*  
+*x* v024_denominator -- *== population < 18*  
 v024_cilow  
 v024_cihigh  
 
@@ -79,13 +79,13 @@ v082_cilow
 v082_cihigh  
 
 **Severe housing problems rate**  
-v136_rawvalue
-v136_numerator
-v136_denominator
-v136_cilow
-v136_cihigh
+v136_rawvalue  
+v136_numerator  
+v136_denominator  
+v136_cilow  
+v136_cihigh  
 
-**Food environment index** -- *starts 2014*  
+**Food environment index** -- *starts in 2014*  
 v133_rawvalue  
 v133_numerator  
 v133_denominator  
