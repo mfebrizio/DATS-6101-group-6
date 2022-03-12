@@ -2,23 +2,23 @@
 
 ## Id var
 
-1 statecode
-2 countycode
-3 fipscode
-4 state
-5 county
-6 year
-7 county_ranked [County Ranked (Yes=1/No=0); missing if national or state level]
+1 statecode  
+2 countycode  
+3 fipscode  
+4 state  
+5 county  
+6 year  
+7 county_ranked [County Ranked (Yes=1/No=0); missing if national or state level]  
 
 
 ## Dependent var
 
 note: 2018 and 2019 data seem to use same underlying source data for dependent var (from 2016); 2020 uses 2017 data; 2021 uses 2018 data
 
-Poor mental health days
-v042_rawvalue
-v042_cilow
-v042_cihigh
+Poor mental health days  
+v042_rawvalue  
+v042_cilow  
+v042_cihigh  
 
 Frequent mental distress rate [starts in 2016]
 v145_rawvalue
