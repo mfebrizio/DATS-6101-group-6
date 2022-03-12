@@ -1,22 +1,35 @@
-# Cleaning and Appending Data #
+### Cleaning and Appending Data ###
 # source: https://www.countyhealthrankings.org
 
+
+# Initialize #
+
+# Import libraries
+library(readr)
+library(dplyr)
+library(data.table)
+
 # set path variables
-## must change userPath to match your local machine!
+## change userPath to match your local machine!
 userPath <- "C:/Users/mark/Box Sync/_MF/Studies/DATS 6101/"
 dataPath <- paste(userPath, "DATS-6101-group-6/data/", sep="")
 setwd(dataPath)
 
+
+# Load Raw Data #
+
 # import library
-library(readr)
+#library(readr)
 
 # list of csv files to load
 csv_files <- list.files('raw/', pattern = "[_0]?.csv$")
-csv_files <- csv_files[5:length(csv_files)]
+csv_files <- csv_files[5:length(csv_files)]  ## select only years 2016 and on
 
 # empty list to append dataframes
-my_data <- list()
+dataframe_list <- list()
 
+# for loop to process each year's data
+# load dataframe, clean the data, 
 for (i in seq_along(csv_files)) {
   
   # load data for one year
@@ -30,7 +43,7 @@ for (i in seq_along(csv_files)) {
   df <- df[-c(1, 2), ]
   
   # import library
-  library(dplyr)
+  #library(dplyr)
   
   # columns to use for analysis
   keep_cols <- c('statecode', 'countycode', 'fipscode', 'state', 'county', 'year', 'county_ranked',  ## id vars
@@ -44,10 +57,15 @@ for (i in seq_along(csv_files)) {
                  'v057_rawvalue', 'v058_rawvalue'
                  )
   
-  # filter dataset with select
-  # select columns by name
+  # filter dataset with select()
   df_filter <- df %>% select(all_of(keep_cols))
   
+  
+  # change column names
+  ## identify which colnames to change
+  change_colnames <- colnames(df_filter[-c(1:7)])
+  
+  # set new colnames
   new_colnames <- c('mental_health_days', 'mental_distress_rate', 
                     'inequality', 
                     'median_inc', 'hs_grad', 'college', 'unempl', 
@@ -58,12 +76,10 @@ for (i in seq_along(csv_files)) {
                     'pct_female', 'pct_rural'
                     )
   
-  change_colnames <- colnames(df_filter[-c(1:7)])
-  
   # import library
-  library(data.table)
+  #library(data.table)
   
-  # rename columns
+  # rename columns with new_colnames vector
   if (length(change_colnames)== length(new_colnames)) {
     setnames(df_filter, old=change_colnames, new=new_colnames)
     print('Renamed columns!')
@@ -72,24 +88,33 @@ for (i in seq_along(csv_files)) {
     print('New column names and slice do not align.')
   }
   
-  # convert columns to numeric
+  # convert columns from char to numeric
   df_filter[new_colnames] <- lapply(df_filter[new_colnames], as.numeric)
   
-  my_data[[i]] <- df_filter
+  # append dataframe to list
+  dataframe_list[[i]] <- df_filter
+  
 }
 
+
+# Combine Annual Datasets #
+
+# create empty dataframe to append data
+df_all <- data.frame()
 
 # append datasets using rbind() function
 # each dataframe should have the same columns (including data types)
-df_all <- data.frame()
-for (df in my_data){
-  df_all <- rbind(df_all, df) ## add more years as necessary
+for (df in dataframe_list){
+  df_all <- rbind(df_all, df)
+
 }
 
 
-# import library
-library(data.table)
+# Export Processed Data #
 
-# export data to processed folder
+# import library
+#library(data.table)
+
+# export combined data to processed folder
 fwrite(df_all, "processed/analytic_data_2016_2021.csv")
 
