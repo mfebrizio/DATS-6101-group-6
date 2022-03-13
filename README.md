@@ -2,12 +2,6 @@
 
 Github repository for group 6 of Professor Edwin Lo's Spring 2022 DATS 6101 course.
 
-Members:
-- Shumel Siraj | <shumelsiraj@gwu.edu> | 201-850-0855
-- Mark Febrizio | <mfebrizio@gwu.edu> | 631-624-0127
-- Alex Thiersch | <akthiersch@gwmail.gwu.edu> | 4254226398
-- Xuan Zou | <xuanzou@gwu.edu> | 5714443143
-
 ## Initial Housekeeping
 
 I created a .gitignore file with the R template and selected the MIT License – a fairly permissive license for the project.
