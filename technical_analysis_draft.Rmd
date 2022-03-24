@@ -139,18 +139,33 @@ xkablesummary()
 
 ## Graphs and Figures
 
-**Assigned to:** Mark, Shumel, Xuan
+**Assigned to:** Mark (with help from Shumel & Xuan)
 
 For example, histograms, boxplots, scatterplots, line graphs (for aggregated annual data), etc. We should use the `ggplot()` function.
 
-```{r graphs, results='markup'}
+```{r graphs_init, results='hide'}
 
 loadPkg("ggplot2")
 
+```
 
+
+```{r histograms, results='markup'}
+
+# Shumel -- please work on some histograms
 
 
 ```
+
+
+```{r boxplots, results='markup'}
+
+# Xuan -- please work on some boxplots
+
+
+```
+
+
 
 
 ## Measures of Variation
@@ -185,7 +200,7 @@ qqline()
 ## Initial Correlation and Hypothesis Tests
 *When applicable.*
 
-**Assigned to:** Alex
+**Assigned to:** Alex (with help from Mark)
 
 For example, Chi Square tests, ANOVA analysis, Z-test or Z-interval, T-test or T-interval, etc.
 
