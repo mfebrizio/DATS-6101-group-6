@@ -126,9 +126,13 @@ ranked_by_year <- ranked %>% group_by(year)
 
 summ_by_year <- ranked_by_year %>%  summarize(num_counties = n_distinct(fipscode), 
                               num_states = n_distinct(statecode),
-                              wmean_inequality = weighted.mean(inequality, pop, na.rm = T), 
-                              wmean_mh_rate = weighted.mean(mental_distress_rate, pop, na.rm = T), 
-                              wmean_mh_days = weighted.mean(mental_health_days, pop, na.rm = T))
+                              wmean_inequality = weighted.mean(inequality, pop, na.rm=T), 
+                              wmean_mh_rate = weighted.mean(mental_distress_rate, pop, na.rm=T), 
+                              wmean_mh_days = weighted.mean(mental_health_days, pop, na.rm=T), 
+                              wmean_unempl = weighted.mean(unempl, pop, na.rm=T), 
+                              wmean_medinc = weighted.mean(median_inc, pop, na.rm=T),
+                              )
+
 summ_by_year
 
 # groupby year and state
@@ -137,8 +141,9 @@ ranked_by_year_state <- ranked %>% group_by(year, statecode)
 summ_by_year_state <- ranked_by_year_state %>% summarize(num_obs = n(), 
                                    state_name = first(state),
                                    wmean_inequality = weighted.mean(inequality, pop, na.rm = T),
-                                   wmean_mh_rate = weighted.mean(mental_distress_rate, pop, na.rm = T),
-                                   wmean_mh_days = weighted.mean(mental_health_days, pop, na.rm = T))
+                                   wmean_mh_rate = weighted.mean(mental_distress_rate, pop, na.rm=T),
+                                   wmean_mh_days = weighted.mean(mental_health_days, pop, na.rm=T)
+                                   )
 
 summ_by_year_state
 
@@ -167,47 +172,119 @@ For example, histograms, boxplots, scatterplots, line graphs (for aggregated ann
 ```{r graphs_init, results='hide'}
 
 loadPkg("ggplot2")
-loadPkg("patchwork")
+loadPkg("patchwork") ## for combining graphs
 
 ```
 
-```{r line, results='markup'}
+```{r lines_annual, results='markup'}
 
 # use summ_by_year
 
-ggplot(summ_by_year, aes(x = year)) + 
-  expand_limits(y=c(0,5)) + 
-  geom_line(aes(y = wmean_mh_days, color = 'poor MH days'), size=1.5) +
-  geom_point(aes(y = wmean_mh_days)) + 
-  scale_y_continuous(
-    
-    # Features of the first axis
-    name = "First Axis",
-    
-    # Add a second axis and specify its features
-    sec.axis = sec_axis( trans=~.*.1, name="Second Axis")
-  ) + 
-  geom_line(aes(y = wmean_mh_rate, color = 'MH distress rate'), size=1.5) +
-  geom_point(aes(y = wmean_mh_rate)) 
-
-
-# Most basic line chart
+# annual trends for mental health var
 p1 <- ggplot(summ_by_year, aes(x=year)) +
-  geom_line(aes(y = wmean_mh_days)) + 
+  geom_line(aes(y = wmean_mh_days), lwd=1) + 
   expand_limits(y=c(0,5)) +
-  labs(title = "Poor Mental Health Days", x = "Report Year", y = "Avg for past 30 days")
+  labs(title = "Poor Mental Health Days", 
+       x = "Report Year", y = "Avg for past 30 days") +
+  theme_minimal()
 
 p2 <- ggplot(summ_by_year, aes(x=year)) +
-  geom_line(aes(y = wmean_mh_rate)) + 
-  expand_limits(y=c(0,.25)) +
-  labs(title = "Frequent Mental Distress Rate", x = "Report Year", y = "Percentage of adults")
+  geom_line(aes(y = wmean_mh_rate), lwd=1) + 
+  expand_limits(y=c(0,.2)) +
+  labs(title = "Frequent Mental Distress Rate", 
+       x = "Report Year", y = "Percentage of adults") + 
+  theme_minimal()
 
-# Display both charts side by side thanks to the patchwork package
+# combine plots using patchwork package
 p1 + p2
+
+# annual trends for inequality and median income
+p3 <- ggplot(summ_by_year, aes(x=year)) +
+  geom_line(aes(y = wmean_inequality), lwd=1) + 
+  expand_limits(y=c(0,5)) +
+  labs(title = "Income Inequality", 
+       x = "Report Year", y = "Ratio 80th : 20th pctl") +
+  theme_minimal()
+
+p4 <- ggplot(summ_by_year, aes(x=year)) +
+  geom_line(aes(y = wmean_medinc / 1000), lwd=1) + 
+  expand_limits(y=c(0,max(summ_by_year$wmean_medinc/1000)+5)) +
+  labs(title = "Median Income", 
+       x = "Report Year", y = "Thousands of Dollars") +
+  theme_minimal()
+
+p5 <- ggplot(summ_by_year, aes(x=year)) +
+  geom_line(aes(y = wmean_unempl), lwd=1) + 
+  expand_limits(y=c(0,.10)) +
+  labs(title = "Unemployment Rate", 
+       x = "Report Year", y = "Percent unemployed") +
+  theme_minimal()
+
+# combine plots
+p3 / (p4 + p5)
+
+```
+
+```{r scatter, results='markup'}
+
+# data: use ranked
+colnames(ranked)
+
+# mental health vars vs. inequality
+ggplot(ranked, aes(y=mental_health_days, x=inequality, color=median_inc/1000)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) +  ## Add linear regression line
+  labs(title = "Scatterplot of Poor Mental Health Days vs. Inequality",
+       y = 'Poor mental health days per 30', x = 'Income inequality rate')
+
+ggplot(ranked, aes(y=mental_distress_rate, x=inequality, color=median_inc/1000)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) +  ## Add linear regression line
+  labs(title = "Scatterplot of Frequent Distress vs. Inequality",
+       y = 'Mental distress rate', x = 'Income inequality rate')
+
+# median income vs inequality
+ggplot(ranked, aes(y=median_inc/1000, x=inequality)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) +  ## Add linear regression line
+  labs(title = "Scatterplot")
+
+#---
+# median income vs inequality
+ggplot(ranked, aes(y=unempl, x=inequality)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) +  ## Add linear regression line
+  labs(title = "Scatterplot")
+
+# y vs inequality
+ggplot(ranked, aes(y=child_poverty, x=inequality)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) +  ## Add linear regression line
+  labs(title = "Scatterplot")
+
 
 
 ```
 
+```{r scatter_colors, results='markup'}
+
+# use ranked
+
+colnames(ranked)
+
+# generate scatterplot using ggplot
+ggplot(ranked) + 
+  geom_point(aes(y=mental_health_days, x=inequality, color = factor(state))) + 
+  geom_smooth(aes(y=mental_health_days, x=inequality), 
+              formula = y ~ x, method=lm, se=FALSE) +  ## Add linear regression line
+  labs(title = paste("Scatterplot of Poor Mental Health Days vs. Inequality"),
+       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+       color = "State")
+
+
+#mental_distress_rate
+
+```
 
 
 ```{r histograms, results='markup'}
