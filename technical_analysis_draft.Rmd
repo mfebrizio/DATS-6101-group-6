@@ -86,27 +86,38 @@ print(summary(dframe$county_ranked))
 # subset of dataframe including only ranked counties
 ranked <- dframe %>% subset(county_ranked==1)
 
+# subset of dataframe including only ranked counties
+unranked <- dframe %>% subset(county_ranked==0)
 
-xkabledplyhead(ranked)
-
-
+# subset of dataframe including only aggregated data
+aggregated <- dframe %>% subset(is.na(county_ranked))
 
 ```
 
-Our data set contains `r nrow(dframe)` observations and `r ncol(dframe)` variables.
+Our data are identified at the county-year level. Our data set contains `r nrow(dframe)` observations and `r ncol(dframe)` variables, although `r nrow(aggregated)` of these observations are for aggregated data at the national or state level. In addition, `r nrow(unranked)` observations are for counties that are unranked by the [University of Wisconsin Population Health Institute](https://www.countyhealthrankings.org/explore-health-rankings/faq-page), suggesting that the data for these counties is less reliable.
+
+In total, we have `r nrow(ranked)` observations in the ranked data, combined across 6 annual reports (2016–2021).
+
+```{r ranked, results='markup'}
+
+# view head and tail of ranked data
+xkabledplyhead(ranked, 5, title = "Table: First 5 Rows of Ranked Data")
+xkabledplytail(ranked, 5, title = "Table: Last 5 Rows of Ranked Data")
+
+summary(ranked$mental_distress_rate)
+
+```
 
 
 
 ## Descriptive Statistics
 
-**Assigned to:** TBD
+**Assigned to:** Alex
 
 ```{r dstats, results='markup'}
 
-
-
-#summary()
-#xkablesummary()
+summary()
+xkablesummary()
 
 
 ```
@@ -114,9 +125,15 @@ Our data set contains `r nrow(dframe)` observations and `r ncol(dframe)` variabl
 
 ## Graphs and Figures
 
-**Assigned to:** TBD
+**Assigned to:** Mark, Shumel, Xuan
+
+For example, histograms, boxplots, scatterplots, line graphs (for aggregated annual data), etc.
 
 ```{r graphs, results='markup'}
+
+loadPkg("ggplot2")
+
+
 
 
 ```
@@ -125,7 +142,7 @@ Our data set contains `r nrow(dframe)` observations and `r ncol(dframe)` variabl
 ## Measures of Variation
 *When applicable.*
 
-**Assigned to:** TBD
+**Assigned to:** Xuan
 
 Variance, standard deviation, etc.
 
@@ -138,12 +155,14 @@ Variance, standard deviation, etc.
 ## Normality tests
 *When applicable.*
 
-**Assigned to:** TBD
+**Assigned to:** Shumel
 
-For example, 
+For example, histograms, Q-Q plots, etc. Try `ezids::outlierKD2()` function if necessary.
 
 ```{r norm, results='markup'}
 
+qqnorm()
+qqline()
 
 ```
 
@@ -152,7 +171,7 @@ For example,
 ## Initial Correlation and Hypothesis Tests
 *When applicable.*
 
-**Assigned to:** TBD
+**Assigned to:** Alex
 
 For example, Chi Square tests, ANOVA analysis, Z-test or Z-interval, T-test or T-interval, etc.
 
