@@ -19,9 +19,11 @@ output:
 
 # Import libraries
 library(ezids)
-#library(readr)
 library(dplyr)
 library(data.table)
+#library(readr)
+library(lattice)
+library(corrplot)
 
 ```
 
@@ -92,11 +94,26 @@ unranked <- dframe %>% subset(county_ranked==0)
 # subset of dataframe including only aggregated data
 aggregated <- dframe %>% subset(is.na(county_ranked))
 
+# subset ranked data into annual datasets
+ranked16 <- ranked %>% subset(year==2016)
+ranked17 <- ranked %>% subset(year==2017)
+ranked18 <- ranked %>% subset(year==2018)
+ranked19 <- ranked %>% subset(year==2019)
+ranked20 <- ranked %>% subset(year==2020)
+ranked21 <- ranked %>% subset(year==2021)
+
+# view size of annual datasets
+df_annual_list <- list(ranked16, ranked17, ranked18, ranked19, ranked20, ranked21)
+for (df in df_annual_list) {
+  print(paste("Observations in", median(df$year), "data: ", nrow(df)))
+  
+}
+
 ```
 
 Our data are identified at the county-year level. Our data set contains `r nrow(dframe)` observations and `r ncol(dframe)` variables, although `r nrow(aggregated)` of these observations are for aggregated data at the national or state level. In addition, `r nrow(unranked)` observations are for counties that are unranked by the [University of Wisconsin Population Health Institute](https://www.countyhealthrankings.org/explore-health-rankings/faq-page), suggesting that the data for these counties is less reliable.
 
-In total, we have `r nrow(ranked)` observations in the ranked data, combined across 6 annual reports (2016–2021).
+In total, we have `r nrow(ranked)` observations in the ranked data, combined across 6 annual reports (2016–2021). Each annual data set has between 3071 and 3084 observations, indicating that the number of ranked counties is consistent over time.
 
 ```{r ranked, results='markup'}
 
@@ -104,10 +121,7 @@ In total, we have `r nrow(ranked)` observations in the ranked data, combined acr
 xkabledplyhead(ranked, 5, title = "Table: First 5 Rows of Ranked Data")
 xkabledplytail(ranked, 5, title = "Table: Last 5 Rows of Ranked Data")
 
-summary(ranked$mental_distress_rate)
-
 ```
-
 
 
 ## Descriptive Statistics
@@ -127,7 +141,7 @@ xkablesummary()
 
 **Assigned to:** Mark, Shumel, Xuan
 
-For example, histograms, boxplots, scatterplots, line graphs (for aggregated annual data), etc.
+For example, histograms, boxplots, scatterplots, line graphs (for aggregated annual data), etc. We should use the `ggplot()` function.
 
 ```{r graphs, results='markup'}
 
@@ -177,6 +191,18 @@ For example, Chi Square tests, ANOVA analysis, Z-test or Z-interval, T-test or T
 
 ```{r corr, results='markup'}
 
+t.test()
+
+table() ## creates contingency table
+chisq.test()
+
+aov(y ~ x, data=)
+
+
+pairs()
+cor() ## correlation matrix
+corrplot()
+
 
 ```
 
@@ -188,6 +214,11 @@ For example, Chi Square tests, ANOVA analysis, Z-test or Z-interval, T-test or T
 **Assigned to:** TBD
 
 ```{r reg, results='markup'}
+
+lm()
+xkablevif()
+anova()
+xkabledply(, title = )
 
 
 ```
