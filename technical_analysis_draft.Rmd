@@ -233,7 +233,7 @@ corrplot()
 lm()
 xkablevif()
 anova()
-xkabledply(, title = )
+xkabledply()
 
 
 ```
