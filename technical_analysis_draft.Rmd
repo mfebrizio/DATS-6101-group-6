@@ -1,0 +1,175 @@
+---
+title: "Technical Analysis"
+author: "Team 6"
+#date: "3/23/2022"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: hide
+    number_sections: false
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+---
+
+```{r init, include=F}
+
+# Import libraries
+library(ezids)
+#library(readr)
+library(dplyr)
+library(data.table)
+
+```
+
+
+```{r setup, include=FALSE}
+
+# knitr::opts_chunk$set(warning = F, results = "markup", message = F)
+knitr::opts_chunk$set(warning = F, results = "hide", message = F, echo = TRUE)
+options(scientific=T, digits = 3) 
+# options(scipen=9, digits = 3) 
+# ‘scipen’: integer. A penalty to be applied when deciding to print numeric values in fixed or exponential notation.  Positive values bias towards fixed and negative towards scientific notation: fixed notation will be preferred unless it is more than ‘scipen’ digits wider.
+# use scipen=999 to prevent scientific notation at all times
+
+```
+
+
+# Technical Analysis
+
+## Instructions
+
+Technical analysis (R code), 25% (First attempt due: Mar 28 Monday 12:30pm)
+
+Just before your team presentation, provide an R-markdown, or R script file, which shows the R-code and brief explanations as well as the rationale of the Exploratory Data Analysis of
+your project. (Also submit your data file, or give the online source url.) This submission,
+together with your final document (in part VI), will determine your team’s grade. This
+document shows a technical person the math/stat/codes that you used in your analysis. It
+should include:  
+- Summary of the dataset
+- Descriptive Statistics
+- Graphical representations of the data
+- [When applicable] Measures of Variance / sd
+- [When applicable] Normality tests
+- [When applicable] Initial correlation / Chi Square tests / ANOVA analysis / Z-test or Z-interval / T-test or T-interval etc.
+
+
+## Summary
+
+**Assigned to:** Mark
+
+```{r import, results='hide', echo=F}
+
+# import csv as dataframe
+dframe <- data.frame(read.csv("data/processed/analytic_data_2016_2021.csv"))
+
+# convert variables to type factor
+dframe$statecode <- factor(dframe$statecode)
+dframe$countycode <- factor(dframe$countycode)
+dframe$fipscode <- factor(dframe$fipscode)
+dframe$county_ranked <- factor(dframe$county_ranked)
+
+# check structure of data
+str(dframe)
+
+```
+
+```{r summary, results='hide'}
+
+# look at county_ranked var; not all counties are ranked; also some aggregated data per state and country exist in the observations
+# =1 means they are ranked, =0 means unranked, and =NA is for state/national data
+print(summary(dframe$county_ranked))
+
+# subset of dataframe including only ranked counties
+ranked <- dframe %>% subset(county_ranked==1)
+
+
+xkabledplyhead(ranked)
+
+
+
+```
+
+Our data set contains `r nrow(dframe)` observations and `r ncol(dframe)` variables.
+
+
+
+## Descriptive Statistics
+
+**Assigned to:** TBD
+
+```{r dstats, results='markup'}
+
+
+
+#summary()
+#xkablesummary()
+
+
+```
+
+
+## Graphs and Figures
+
+**Assigned to:** TBD
+
+```{r graphs, results='markup'}
+
+
+```
+
+
+## Measures of Variation
+*When applicable.*
+
+**Assigned to:** TBD
+
+Variance, standard deviation, etc.
+
+```{r variance, results='markup'}
+
+
+```
+
+
+## Normality tests
+*When applicable.*
+
+**Assigned to:** TBD
+
+For example, 
+
+```{r norm, results='markup'}
+
+
+```
+
+
+
+## Initial Correlation and Hypothesis Tests
+*When applicable.*
+
+**Assigned to:** TBD
+
+For example, Chi Square tests, ANOVA analysis, Z-test or Z-interval, T-test or T-interval, etc.
+
+```{r corr, results='markup'}
+
+
+```
+
+
+
+## Linear Modeling and Regression
+*When applicable. Might not need at all.*
+
+**Assigned to:** TBD
+
+```{r reg, results='markup'}
+
+
+```
+
