@@ -37,6 +37,7 @@ options(scientific=T, digits = 3)
 # ‘scipen’: integer. A penalty to be applied when deciding to print numeric values in fixed or exponential notation.  Positive values bias towards fixed and negative towards scientific notation: fixed notation will be preferred unless it is more than ‘scipen’ digits wider.
 # use scipen=999 to prevent scientific notation at all times
 
+
 ```
 
 
@@ -66,7 +67,7 @@ should include:
 ```{r import, results='hide', echo=F}
 
 # import csv as dataframe
-dframe <- data.frame(read.csv("data/processed/analytic_data_2016_2021.csv"))
+dframe <- data.frame(read.csv("data/processed/analytic_data_2016_2021_with_regions.csv"))
 
 # convert variables to factor
 dframe$region <- factor(dframe$region)
@@ -78,6 +79,7 @@ dframe$county_ranked <- factor(dframe$county_ranked)
 
 # check structure of data
 str(dframe)
+summary(dframe)
 
 ```
 
