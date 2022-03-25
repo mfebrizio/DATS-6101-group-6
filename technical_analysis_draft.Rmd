@@ -150,6 +150,27 @@ summ_by_year_state
 ```
 
 
+```{r regions, results='hide'}
+
+# https://www.census.gov/geographies/reference-maps/2010/geo/2010-census-regions-and-divisions-of-the-united-states.html
+# source: https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf
+# converted to csv: https://github.com/cphalpert/census-regions
+
+census_regions <- data.frame(read.csv("https://raw.githubusercontent.com/cphalpert/census-regions/master/us%20census%20bureau%20regions%20and%20divisions.csv"))
+
+census_regions <- census_regions[2:4]
+
+colnames(census_regions) <- c('state', 'region', 'division')
+
+rankedreg <- merge(ranked, census_regions, by="state", all = TRUE)
+
+rankedreg$region <- factor(rankedreg$region)
+rankedreg$division <- factor(rankedreg$division)
+
+str(rankedreg)
+
+```
+
 ## Descriptive Statistics
 
 **Assigned to:** Alex
@@ -173,6 +194,9 @@ For example, histograms, boxplots, scatterplots, line graphs (for aggregated ann
 
 loadPkg("ggplot2")
 loadPkg("patchwork") ## for combining graphs
+loadPkg("purrr")
+loadPkg("tidyr")
+loadPkg("gridExtra")
 
 ```
 
@@ -225,12 +249,14 @@ p3 / (p4 + p5)
 
 ```
 
-```{r scatter, results='markup'}
+```{r scatter_a, results='markup'}
 
 # data: use ranked
 colnames(ranked)
 
-# mental health vars vs. inequality
+#-- Dependent vs Explanatory --#
+
+# color = median income
 ggplot(ranked, aes(y=mental_health_days, x=inequality, color=median_inc/1000)) + 
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +  ## Add linear regression line
@@ -245,46 +271,131 @@ ggplot(ranked, aes(y=mental_distress_rate, x=inequality, color=median_inc/1000))
        y = 'Mental distress rate', x = 'Income inequality rate', 
        color = "Median Income ($ Thous.)")
 
-# median income vs inequality
-ggplot(ranked, aes(y=median_inc/1000, x=inequality)) + 
+# color = % rural
+ggplot(ranked, aes(y=mental_health_days, x=inequality, color=pct_rural)) + 
   geom_point() +
-  geom_smooth(formula = y ~ x, method=lm, se=FALSE) +  ## Add linear regression line
-  labs(title = "Scatterplot")
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +  ## Add linear regression line
+  labs(title = "Scatterplot of Poor Mental Health Days vs. Inequality",
+       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+       color = "% Rural Pop.")
 
-#---
-# median income vs inequality
-ggplot(ranked, aes(y=unempl, x=inequality)) + 
+ggplot(ranked, aes(y=mental_distress_rate, x=inequality, color=pct_rural)) + 
   geom_point() +
-  geom_smooth(formula = y ~ x, method=lm, se=FALSE) +  ## Add linear regression line
-  labs(title = "Scatterplot")
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
+  labs(title = "Scatterplot of Frequent Distress vs. Inequality",
+       y = 'Mental distress rate', x = 'Income inequality rate', 
+       color = "% Rural Pop.")
 
-# y vs inequality
-ggplot(ranked, aes(y=child_poverty, x=inequality)) + 
+
+#-- Dependent vs. Provision of Mental Health Care --#
+
+# color = % rural
+ggplot(ranked, aes(y=mental_health_days, x=pop_provider_ratio, color=pct_rural)) + 
   geom_point() +
-  geom_smooth(formula = y ~ x, method=lm, se=FALSE) +  ## Add linear regression line
-  labs(title = "Scatterplot")
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
+  labs(title = "Scatterplot of Poor Mental Health Days vs. Mental Health Providers",
+       y = 'Mental distress rate', x = 'Ratio population : providers', 
+       color = "% Rural Pop.")
+
+ggplot(ranked, aes(y=mental_distress_rate, x=pop_provider_ratio, color=pct_rural)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
+  labs(title = "Scatterplot of Frequent Distress vs. Mental Health Providers",
+       y = 'Mental distress rate', x = 'Ratio population : providers', 
+       color = "% Rural Pop.")
+
+
+#-- Inequality vs. other economic variables --#
+
+# unempl, child_poverty, hs_grad, college, single_parent, severe_housing, food_index
+
+gg1 <- ggplot(ranked, aes(y=inequality, x=unempl)) + 
+  geom_point() + 
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (a)")
+
+gg2 <- ggplot(ranked, aes(y=inequality, x=severe_housing)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (b)")
+
+gg3 <- ggplot(ranked, aes(y=inequality, x=child_poverty)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (c)")
+
+gg4 <- ggplot(ranked, aes(y=inequality, x=single_parent)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (d)")
+
+gg5 <- ggplot(ranked, aes(y=inequality, x=hs_grad)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (e)")
+
+gg6 <- ggplot(ranked, aes(y=inequality, x=college)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (f)")
+
+gg7 <- ggplot(ranked, aes(y=inequality, x=food_index)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (g)")
+
+plot_list <- list(gg1, gg2, gg3, gg4, gg5, gg6, gg7)
+
+do.call("grid.arrange", c(plot_list, ncol = 3))
+
+```
+
+```{r scatter_b, results='markup'}
+
+# use ranked
+
+colnames(rankedreg)
+str(rankedreg)
+rankedreg %>% subset(is.na(region))
+rankedreg %>% subset(statecode==46 & countycode==113)
+
+
+# generate scatterplot using ggplot
+ggplot(rankedreg, aes(y=mental_health_days, x=inequality, color = factor(region))) + 
+  geom_point() +
+  labs(title = paste("Scatterplot of Poor Mental Health Days vs. Inequality"),
+       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+       color = "Region")
+
+
+#mental_distress_rate
+# generate scatterplot using ggplot
+ggplot(rankedreg, aes(y=mental_distress_rate, x=inequality, color = factor(region))) + 
+  geom_point() + 
+  labs(title = paste("Scatterplot of Mental Distress vs. Inequality"),
+       y = 'Mental distress rate', x = 'Income inequality rate', 
+       color = "Region")
 
 
 
 ```
 
-```{r scatter_colors, results='markup'}
 
-# use ranked
+```{r hist_multiple, results='markup'}
 
-colnames(ranked)
+# https://www.r-bloggers.com/2016/07/quick-plot-of-all-variables/
 
-# generate scatterplot using ggplot
-ggplot(ranked) + 
-  geom_point(aes(y=mental_health_days, x=inequality, color = factor(state))) + 
-  geom_smooth(aes(y=mental_health_days, x=inequality), 
-              formula = y ~ x, method=lm, se=FALSE) +  ## Add linear regression line
-  labs(title = paste("Scatterplot of Poor Mental Health Days vs. Inequality"),
-       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
-       color = "State")
+keep_var <- c('inequality', 'unempl', 'child_poverty', 'hs_grad', 'college', 'single_parent', 'severe_housing', 'food_index', 'mental_health_days', 'mental_distress_rate', 'median_inc')
+
+#ranked[keep_var]
+
+ranked[keep_var] %>% 
+  gather() %>% 
+  ggplot(aes(x=value)) + 
+    facet_wrap(~ key, scales = "free") + 
+    geom_histogram(bins=50)
 
 
-#mental_distress_rate
 
 ```
 
