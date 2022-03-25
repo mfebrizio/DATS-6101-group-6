@@ -66,7 +66,7 @@ should include:
 ```{r import, results='hide', echo=F}
 
 # import csv as dataframe
-dframe <- data.frame(read.csv("data/processed/analytic_data_2016_2021.csv"))
+dframe <- data.frame(read.csv("data/processed/analytic_data_2016_2021_with_regions.csv"))
 
 # convert variables to factor
 dframe$region <- factor(dframe$region)
@@ -148,6 +148,35 @@ summ_by_year_state <- ranked_by_year_state %>% summarize(num_obs = n(),
                                    )
 
 summ_by_year_state
+
+# groupby region
+ranked_by_region <- ranked %>% group_by(region)
+
+summ_by_region <- ranked_by_region %>%  summarize(num_counties = n_distinct(fipscode), 
+                              num_states = n_distinct(statecode),
+                              wmean_inequality = weighted.mean(inequality, pop, na.rm=T), 
+                              wmean_mh_rate = weighted.mean(mental_distress_rate, pop, na.rm=T), 
+                              wmean_mh_days = weighted.mean(mental_health_days, pop, na.rm=T), 
+                              wmean_unempl = weighted.mean(unempl, pop, na.rm=T), 
+                              wmean_medinc = weighted.mean(median_inc, pop, na.rm=T),
+                              )
+
+summ_by_region
+
+
+# groupby year and state
+ranked_by_year_region <- ranked %>% group_by(year, region)
+
+summ_by_year_region <- ranked_by_year_region %>% summarize(num_obs = n(), 
+                                   region_name = first(region),
+                                   sum_pop_millions = sum(pop/1000000, na.rm = T),
+                                   wmean_inequality = weighted.mean(inequality, pop, na.rm = T),
+                                   wmean_mh_rate = weighted.mean(mental_distress_rate, pop, na.rm=T),
+                                   wmean_mh_days = weighted.mean(mental_health_days, pop, na.rm=T)
+                                   )
+
+summ_by_year_region
+
 
 ```
 
@@ -233,7 +262,7 @@ p3 / (p4 + p5)
 ```{r scatter_a, results='markup'}
 
 # data: use ranked
-colnames(ranked)
+# colnames(ranked)
 
 #-- Dependent vs Explanatory --#
 
@@ -285,6 +314,11 @@ ggplot(ranked, aes(y=mental_distress_rate, x=pop_provider_ratio, color=pct_rural
        y = 'Mental distress rate', x = 'Ratio population : providers', 
        color = "% Rural Pop.")
 
+```
+
+```{r scatter_b, results='markup'}
+
+# Multi-plot figures
 
 #-- Inequality vs. other economic variables --#
 
@@ -329,33 +363,173 @@ plot_list <- list(gg1, gg2, gg3, gg4, gg5, gg6, gg7)
 
 do.call("grid.arrange", c(plot_list, ncol = 3))
 
+
+#-- Dependent vs. other economic variables --#
+
+# poor mental health days
+gg1 <- ggplot(ranked, aes(y=mental_health_days, x=unempl)) + 
+  geom_point() + 
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (a)")
+
+gg2 <- ggplot(ranked, aes(y=mental_health_days, x=severe_housing)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (b)")
+
+gg3 <- ggplot(ranked, aes(y=mental_health_days, x=child_poverty)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (c)")
+
+gg4 <- ggplot(ranked, aes(y=mental_health_days, x=single_parent)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (d)")
+
+gg5 <- ggplot(ranked, aes(y=mental_health_days, x=hs_grad)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (e)")
+
+gg6 <- ggplot(ranked, aes(y=mental_health_days, x=college)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (f)")
+
+gg7 <- ggplot(ranked, aes(y=mental_health_days, x=food_index)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (g)")
+
+plot_list <- list(gg1, gg2, gg3, gg4, gg5, gg6, gg7)
+
+do.call("grid.arrange", c(plot_list, ncol = 3))
+
+
+# mental distress rate
+gg1 <- ggplot(ranked, aes(y=mental_distress_rate, x=unempl)) + 
+  geom_point() + 
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (a)")
+
+gg2 <- ggplot(ranked, aes(y=mental_distress_rate, x=severe_housing)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (b)")
+
+gg3 <- ggplot(ranked, aes(y=mental_distress_rate, x=child_poverty)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (c)")
+
+gg4 <- ggplot(ranked, aes(y=mental_distress_rate, x=single_parent)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (d)")
+
+gg5 <- ggplot(ranked, aes(y=mental_distress_rate, x=hs_grad)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (e)")
+
+gg6 <- ggplot(ranked, aes(y=mental_distress_rate, x=college)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (f)")
+
+gg7 <- ggplot(ranked, aes(y=mental_distress_rate, x=food_index)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE) + 
+  labs(title = "Plot (g)")
+
+plot_list <- list(gg1, gg2, gg3, gg4, gg5, gg6, gg7)
+
+do.call("grid.arrange", c(plot_list, ncol = 3))
+
+
 ```
 
-```{r scatter_b, results='markup'}
+```{r scatter_c, results='markup'}
 
-# use ranked
+# data: use ranked
 
-colnames(rankedreg)
-str(rankedreg)
-rankedreg %>% subset(is.na(region))
-rankedreg %>% subset(statecode==46 & countycode==113)
+#-- All Years --#
 
-
-# generate scatterplot using ggplot
-ggplot(rankedreg, aes(y=mental_health_days, x=inequality, color = factor(region))) + 
-  geom_point() +
-  labs(title = paste("Scatterplot of Poor Mental Health Days vs. Inequality"),
+p1 <- ggplot(ranked, aes(y=mental_health_days, x=inequality, color = factor(region))) + 
+  geom_point(show.legend = F) +
+  labs(title = paste("(a) per 30 days"),
        y = 'Poor mental health days per 30', x = 'Income inequality rate', 
        color = "Region")
 
-
-#mental_distress_rate
-# generate scatterplot using ggplot
-ggplot(rankedreg, aes(y=mental_distress_rate, x=inequality, color = factor(region))) + 
+p2 <- ggplot(ranked, aes(y=mental_distress_rate, x=inequality, color = factor(region))) + 
   geom_point() + 
-  labs(title = paste("Scatterplot of Mental Distress vs. Inequality"),
-       y = 'Mental distress rate', x = 'Income inequality rate', 
+  labs(title = paste("(b) percentage"),
+       y = 'Frequent distress rate', x = 'Income inequality rate', 
        color = "Region")
+
+p_all <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental health variables vs. Income inequality, 2016-2021")
+p_all
+
+
+#-- Is relationship sensitive to report year? --#
+
+# 2016 vs 2021
+
+# 2016
+p1 <- ggplot(ranked16, aes(y=mental_health_days, x=inequality, color = factor(region))) + 
+  geom_point(show.legend = F) +
+  labs(title = "(a) per 30 days",
+       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+       color = "Region")
+
+p2 <- ggplot(ranked16, aes(y=mental_distress_rate, x=inequality, color = factor(region))) + 
+  geom_point() + 
+  labs(title = "(b) percentage",
+       y = 'Frequent distress rate', x = 'Income inequality rate', 
+       color = "Region")
+
+p16 <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental health variables vs. Income inequality, 2016")
+p16
+
+# 2021
+p1 <- ggplot(ranked21, aes(y=mental_health_days, x=inequality, color = factor(region))) + 
+  geom_point(show.legend = F) +
+  labs(title = "(a) per 30 days",
+       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+       color = "Region")
+
+p2 <- ggplot(ranked21, aes(y=mental_distress_rate, x=inequality, color = factor(region))) + 
+  geom_point() + 
+  labs(title = "(b) percentage",
+       y = 'Frequent distress rate', x = 'Income inequality rate', 
+       color = "Region")
+
+p21 <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental health variables vs. Income inequality, 2021")
+p21
+
+
+# 2016 mental_health_days data looks weird (like it's been rounded)
+# let's check 2017
+p1 <- ggplot(ranked17, aes(y=mental_health_days, x=inequality, color = factor(region))) + 
+  geom_point(show.legend = F) +
+  labs(title = "(a) per 30 days",
+       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+       color = "Region")
+
+p2 <- ggplot(ranked17, aes(y=mental_distress_rate, x=inequality, color = factor(region))) + 
+  geom_point() + 
+  labs(title = "(b) percentage",
+       y = 'Frequent distress rate', x = 'Income inequality rate', 
+       color = "Region")
+
+p17 <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental health variables vs. Income inequality, 2017")
+p17
+
+
+```
+
+```{r}
 
 
 
@@ -375,7 +549,6 @@ ranked[keep_var] %>%
   ggplot(aes(x=value)) + 
     facet_wrap(~ key, scales = "free") + 
     geom_histogram(bins=50)
-
 
 
 ```
