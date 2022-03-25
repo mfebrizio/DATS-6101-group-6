@@ -233,15 +233,17 @@ colnames(ranked)
 # mental health vars vs. inequality
 ggplot(ranked, aes(y=mental_health_days, x=inequality, color=median_inc/1000)) + 
   geom_point() +
-  geom_smooth(formula = y ~ x, method=lm, se=FALSE) +  ## Add linear regression line
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +  ## Add linear regression line
   labs(title = "Scatterplot of Poor Mental Health Days vs. Inequality",
-       y = 'Poor mental health days per 30', x = 'Income inequality rate')
+       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+       color = "Median Income ($ Thous.)")
 
 ggplot(ranked, aes(y=mental_distress_rate, x=inequality, color=median_inc/1000)) + 
   geom_point() +
-  geom_smooth(formula = y ~ x, method=lm, se=FALSE) +  ## Add linear regression line
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
   labs(title = "Scatterplot of Frequent Distress vs. Inequality",
-       y = 'Mental distress rate', x = 'Income inequality rate')
+       y = 'Mental distress rate', x = 'Income inequality rate', 
+       color = "Median Income ($ Thous.)")
 
 # median income vs inequality
 ggplot(ranked, aes(y=median_inc/1000, x=inequality)) + 
