@@ -68,7 +68,9 @@ should include:
 # import csv as dataframe
 dframe <- data.frame(read.csv("data/processed/analytic_data_2016_2021.csv"))
 
-# convert variables to type factor
+# convert variables to factor
+dframe$region <- factor(dframe$region)
+dframe$division <- factor(dframe$division)
 dframe$statecode <- factor(dframe$statecode)
 dframe$countycode <- factor(dframe$countycode)
 dframe$fipscode <- factor(dframe$fipscode)
@@ -149,27 +151,6 @@ summ_by_year_state
 
 ```
 
-
-```{r regions, results='hide'}
-
-# https://www.census.gov/geographies/reference-maps/2010/geo/2010-census-regions-and-divisions-of-the-united-states.html
-# source: https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf
-# converted to csv: https://github.com/cphalpert/census-regions
-
-census_regions <- data.frame(read.csv("https://raw.githubusercontent.com/cphalpert/census-regions/master/us%20census%20bureau%20regions%20and%20divisions.csv"))
-
-census_regions <- census_regions[2:4]
-
-colnames(census_regions) <- c('state', 'region', 'division')
-
-rankedreg <- merge(ranked, census_regions, by="state", all = TRUE)
-
-rankedreg$region <- factor(rankedreg$region)
-rankedreg$division <- factor(rankedreg$division)
-
-str(rankedreg)
-
-```
 
 ## Descriptive Statistics
 
