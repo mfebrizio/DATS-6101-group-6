@@ -654,123 +654,96 @@ ranked[keep_var] %>%
 ```{r boxplots, results='markup'}
 
 # Xuan -- please work on some boxplots
-# In this part, in order to better show the relationship between the economic level and mental health of people in different regions of the United States, I divided the United States into 4 regions by geographical method (for details, you can check this link below). I will analyze the four parts of "Northeast", "South", "West", "Midwest" separately.(https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf) In addition, I would like to say that there are many independent variables and dependent variables selected by our group, but in order to shorten the space and highlight the key points, I only select two independent variables and one dependent variable for analysis. The two independent variables that I selected are "Median household income" (median_inc) and "Food environment index" (food_index). The one dependent variable that I selected is "Poor mental health days" (mental_health_days).
-
+# In this part, in order to better show the relationship between the economic level and mental health of people, mental_distress_rate in different regions of the United States, I divided the United States into 4 regions by geographical method (for details, you can check this link below). I will analyze the four parts of "Northeast", "South", "West", "Midwest" separately.(https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf) In addition, I would like to say that there are many independent variables and dependent variables selected by our group, but in order to shorten the space and highlight the key points, I only select two independent variables and two dependent variable for analysis. The two independent variables that I selected are "Median household income" (median_inc) and "Food environment index" (food_index). The two dependent variable that I selected is "Poor mental health days" (mental_health_days) and "Frequent mental distress rate" (mental_distress_rate).
+dframe0NA <- na.omit(dframe)
 #1.1 Analysis of Northeast in 2016
 #View(dframe)
-dframe2016West = subset(dframe, year == 2016 & region == "West")
-dframeremoveNA <- na.omit(dframe)
-
-
-dframe2016West
-boxplot(dframe2016West$mental_health_days, main="The relationship between median_inc and mental_health_days", ylab="mental_health_days(days)",col='#0000FF')
+dframe2016 = subset(dframe0NA, year == 2016)
+dframe2016West = subset(dframe2016, region == "West")
+#boxplot(dframe2016West$mental_health_days, main="The relationship between median_inc and mental_health_days", ylab="mental_health_days(days)",col='#0000FF')
 
 loadPkg("ggplot2")
-
 dframe$year <- factor(dframe$year)
 # dframe$year <- factor(dframe$year)
-ggplot(dframeremoveNA, aes(x=region, y=median_inc)) + 
+# Characterization of the median annual income of households in four regions of the United States in 2016.
+dframe2016 = subset(dframe0NA, year == 2016)
+ggplot(dframe2016, aes(x=region, y=median_inc)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="")
-```
+  labs(title="The Characterization of median_inc of four regions in 2016")
 
+# Characterization of the median annual income of households in four regions of the United States in 2017.
+dframe2017 = subset(dframe0NA, year == 2017)
+ggplot(dframe2017, aes(x=region, y=median_inc)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of median_inc of four regions in 2017")
+
+# Characterization of the median annual income of households in four regions of the United States in 2018.
+dframe2018 = subset(dframe0NA, year == 2018)
+ggplot(dframe2018, aes(x=region, y=median_inc)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of median_inc of four regions in 2018")
+
+# Characterization of the median annual income of households in four regions of the United States in 2019.
+dframe2019 = subset(dframe0NA, year == 2019)
+ggplot(dframe2019, aes(x=region, y=median_inc)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of median_inc of four regions in 2019")
+
+# Characterization of the median annual income of households in four regions of the United States in 2020.
+dframe2020 = subset(dframe0NA, year == 2020)
+ggplot(dframe2020, aes(x=region, y=median_inc)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of median_inc of four regions in 2020")
+
+# Characterization of the median annual income of households in four regions of the United States in 2021.
+dframe2021 = subset(dframe0NA, year == 2021)
+ggplot(dframe2021, aes(x=region, y=median_inc)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of median_inc of four regions in 2021")
+```
 ```{r boxplots, results='markup'}
-#1.1.1 The relationship between the median household income and poor mental health days
-#1.1.2 The relationship between the Food environment index and poor mental health days
-#1.2 Analysis of Northeast in 2017
-#1.2.1 The relationship between the median household income and poor mental health days
-#1.2.2 The relationship between the Food environment index and poor mental health days
-#1.3 Analysis of Northeast in 2018
-#1.3.1 The relationship between the median household income and poor mental health days
-#1.3.2 The relationship between the Food environment index and poor mental health days
-#1.4 Analysis of Northeast in 2019
-#1.4.1 The relationship between the median household income and poor mental health days
-#1.4.2 The relationship between the Food environment index and poor mental health days
-#1.5 Analysis of Northeast in 2020
-#1.5.1 The relationship between the median household income and poor mental health days
-#1.5.2 The relationship between the Food environment index and poor mental health days
-#1.6 Analysis of Northeast in 2021
-#1.6.1 The relationship between the median household income and poor mental health days
-#1.6.2 The relationship between the Food environment index and poor mental health days
+# Characterization of the Poor mental health days in four regions of the United States in 2016.
+ggplot(dframe2016, aes(x=region, y=mental_health_days)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of mental unhealthy days/month of four regions in 2016")
 
-#2.1 Analysis of South in 2016
-#2.1.1 The relationship between the median household income and poor mental health days
-#2.1.2 The relationship between the Food environment index and poor mental health days
-#2.2 Analysis of South in 2017
-#2.2.1 The relationship between the median household income and poor mental health days
-#2.2.2 The relationship between the Food environment index and poor mental health days
-#2.3 Analysis of South in 2018
-#2.3.1 The relationship between the median household income and poor mental health days
-#2.3.2 The relationship between the Food environment index and poor mental health days
-#2.4 Analysis of South in 2019
-#2.4.1 The relationship between the median household income and poor mental health days
-#2.4.2 The relationship between the Food environment index and poor mental health days
-#2.5 Analysis of South in 2020
-#2.5.1 The relationship between the median household income and poor mental health days
-#2.5.2 The relationship between the Food environment index and poor mental health days
-#2.6 Analysis of South in 2021
-#2.6.1 The relationship between the median household income and poor mental health days
-#2.6.2 The relationship between the Food environment index and poor mental health days
+# Characterization of the Poor mental health days in four regions of the United States in 2017.
+ggplot(dframe2017, aes(x=region, y=mental_health_days)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of mental unhealthy days/month of four regions in 2017")
 
-#3.1 Analysis of West in 2016
+# Characterization of the Poor mental health days in four regions of the United States in 2018.
+ggplot(dframe2018, aes(x=region, y=mental_health_days)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of mental unhealthy days/month of four regions in 2018")
 
-#3.1.1 The relationship between the median household income and poor mental health days
+# Characterization of the Poor mental health days in four regions of the United States in 2019.
+ggplot(dframe2019, aes(x=region, y=mental_health_days)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of mental unhealthy days/month of four regions in 2019")
 
-#3.1.2 The relationship between the Food environment index and poor mental health days
-#3.2 Analysis of West in 2017
-#3.2.1 The relationship between the median household income and poor mental health days
-#3.2.2 The relationship between the Food environment index and poor mental health days
-#3.3 Analysis of West in 2018
-#3.3.1 The relationship between the median household income and poor mental health days
-#3.3.2 The relationship between the Food environment index and poor mental health days
-#3.4 Analysis of West in 2019
-#3.4.1 The relationship between the median household income and poor mental health days
-#3.4.2 The relationship between the Food environment index and poor mental health days
-#3.5 Analysis of West in 2020
-#3.5.1 The relationship between the median household income and poor mental health days
-#3.5.2 The relationship between the Food environment index and poor mental health days
-#3.6 Analysis of West in 2021
-#3.6.1 The relationship between the median household income and poor mental health days
-#3.6.2 The relationship between the Food environment index and poor mental health days
+# Characterization of the Poor mental health days in four regions of the United States in 2020.
+ggplot(dframe2020, aes(x=region, y=mental_health_days)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of mental unhealthy days/month of four regions in 2020")
 
-#4.1 Analysis of Midwest in 2016
-# import csv as dataframe
-dframe_2016_west <- data.frame(read.csv("data/processed/Xuan/analytic_data_2016_2021_with_regions_2016_west.csv"))
-
-# convert variables to factor
-dframe$region <- factor(dframe$region)
-dframe$division <- factor(dframe$division)
-dframe$statecode <- factor(dframe$statecode)
-dframe$countycode <- factor(dframe$countycode)
-dframe$fipscode <- factor(dframe$fipscode)
-dframe$county_ranked <- factor(dframe$county_ranked)
-
-# check structure of data
-str(dframe)
-summary(dframe)
-#4.1.1 The relationship between the median household income and poor mental health days
-#4.1.2 The relationship between the Food environment index and poor mental health days
-#4.2 Analysis of Midwest in 2017
-#4.2.1 The relationship between the median household income and poor mental health days
-#4.2.2 The relationship between the Food environment index and poor mental health days
-#4.3 Analysis of Midwest in 2018
-#4.3.1 The relationship between the median household income and poor mental health days
-#4.3.2 The relationship between the Food environment index and poor mental health days
-#4.4 Analysis of Midwest in 2019
-#4.4.1 The relationship between the median household income and poor mental health days
-#4.4.2 The relationship between the Food environment index and poor mental health days
-#4.5 Analysis of Midwest in 2020
-#4.5.1 The relationship between the median household income and poor mental health days
-#4.5.2 The relationship between the Food environment index and poor mental health days
-#4.6 Analysis of Midwest in 2021
-#4.6.1 The relationship between the median household income and poor mental health days
-#4.6.2 The relationship between the Food environment index and poor mental health days
-
+# Characterization of the Poor mental health days in four regions of the United States in 2021.
+ggplot(dframe2021, aes(x=region, y=mental_health_days)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of mental unhealthy days/month of four regions in 2021")
 ```
-
-
-
 
 ## Measures of Variation
 *When applicable.*
