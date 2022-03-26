@@ -1,5 +1,5 @@
 ---
-title: "Technical Analysis"
+title: "Investigating the Relationship between Mental Health and Income Inequality"
 author: "Team 6"
 #date: "3/23/2022"
 date: "`r Sys.Date()`"
@@ -49,8 +49,10 @@ Technical analysis (R code), 25% (First attempt due: Mar 28 Monday 12:30pm)
 Just before your team presentation, provide an R-markdown, or R script file, which shows the R-code and brief explanations as well as the rationale of the Exploratory Data Analysis of
 your project. (Also submit your data file, or give the online source url.) This submission,
 together with your final document (in part VI), will determine your team’s grade. This
-document shows a technical person the math/stat/codes that you used in your analysis. It
-should include:  
+document shows a technical person the math/stat/codes that you used in your analysis.
+
+The document should include:
+
 - Summary of the dataset
 - Descriptive Statistics
 - Graphical representations of the data
@@ -154,17 +156,25 @@ for (df in df_annual_list) {
   
 }
 
+# view head and tail of ranked data
+xkabledplyhead(ranked, 2, title = "Table: First 2 Rows of Ranked Data")
+xkabledplytail(ranked, 2, title = "Table: Last 2 Rows of Ranked Data")
+
 ```
 
 Our data are identified at the county-year level. Our data set contains `r nrow(dframe)` observations and `r ncol(dframe)` variables, although `r nrow(aggregated)` of these observations are for aggregated data at the national or state level. In addition, `r nrow(unranked)` observations are for counties that are unranked by the [University of Wisconsin Population Health Institute](https://www.countyhealthrankings.org/explore-health-rankings/faq-page), suggesting that the data for these counties is less reliable.
 
 In total, we have `r nrow(ranked)` observations in the ranked data, combined across 6 annual reports (2016–2021). Each annual data set has between 3071 and 3084 observations, indicating that the number of ranked counties is consistent over time.
 
-```{r ranked, results='markup', message=FALSE}
+We also grouped the data on several dimensions using the `group_by()` and `summarise()` functions from the dplyr package. This helped us better investigate time and geographic patterns in our data.
 
-# view head and tail of ranked data
-xkabledplyhead(ranked, 5, title = "Table: First 5 Rows of Ranked Data")
-xkabledplytail(ranked, 5, title = "Table: Last 5 Rows of Ranked Data")
+First, we grouped the data set by report year and calculating the population-weighted means for several variables. In general, the mean income inequality has stayed relatively constant over time, while the mental health variables have risen slightly. Other economic variables, such as unemployment and median income, have moved in positive directions (unemployment has fallen, while median incomes have increased). 
+
+Next, we grouped the data by year and state and calculated population-weighted means and state-level medians. There was a lot more variation among the data at this level, which will be helpful when plotting aggregated data later.
+
+Finally, we grouped the data by region, giving us a sense of the size of the 4 census regions: the South contains the most states and counties and has the largest population, while the Northeast is the smallest on these measures. The Northeast has highest measured inequality, and the Midwest has the lowest. The mental health variables are highest (i.e., worst) in the South and lowest in the West. These general trends hold up when grouping by year and region. These differences suggest that comparing the relationship between the variables across regions would be worthwhile.
+
+```{r ranked, results='markup', message=FALSE}
 
 # groupby year
 ranked_by_year <- ranked %>% group_by(year)
@@ -178,7 +188,8 @@ summ_by_year <- ranked_by_year %>%  summarize(num_counties = n_distinct(fipscode
                               wmean_medinc = weighted.mean(median_inc, pop, na.rm=T),
                               )
 
-summ_by_year
+xkabledplyhead(summ_by_year, 6, title = "Table: Data grouped by Year")
+
 
 # groupby year and state
 ranked_by_year_state <- ranked %>% group_by(year, statecode)
@@ -203,7 +214,8 @@ summ_by_year_state <- ranked_by_year_state %>% summarize(num_obs = n(),
                                    med_medinc = median(median_inc, na.rm=T)
                                    )
 
-summ_by_year_state
+xkabledplyhead(summ_by_year_state, 8, title = "Table: Data grouped by Year and State")
+
 
 # groupby region
 ranked_by_region <- ranked %>% group_by(region)
@@ -217,7 +229,7 @@ summ_by_region <- ranked_by_region %>%  summarize(num_counties = n_distinct(fips
                               wmean_medinc = weighted.mean(median_inc, pop, na.rm=T),
                               )
 
-summ_by_region
+xkabledplyhead(summ_by_region, 4, title = "Table: Data grouped by Region")
 
 
 # groupby year and state
@@ -231,25 +243,16 @@ summ_by_year_region <- ranked_by_year_region %>% summarize(num_obs = n(),
                                    wmean_mh_days = weighted.mean(mental_health_days, pop, na.rm=T)
                                    )
 
-summ_by_year_region
-
+xkabledplyhead(summ_by_year_region, 8, title = "Table: Data grouped by Year and Region")
 
 ```
-
-We also grouped the data on several dimensions using the `group_by()` and `summarise()` functions from the dplyr package. This helped us better investigate time and geographic patterns in our data.
-
-First, we grouped the data set by report year and calculating the population-weighted means for several variables. In general, the mean income inequality has stayed relatively constant over time, while the mental health variables have risen slightly. Other economic variables, such as unemployment and median income, have moved in positive directions (unemployment has fallen, while median incomes have increased). 
-
-Next, we grouped the data by year and state and calculated population-weighted means and state-level medians. There was a lot more variation among the data at this level, which will be helpful when plotting aggregated data later.
-
-Finally, we grouped the data by region, giving us a sense of the size of the 4 census regions: the South contains the most states and counties and has the largest population, while the Northeast is the smallest on these measures. The Northeast has highest measured inequality, and the Midwest has the lowest. The mental health variables are highest (i.e., worst) in the South and lowest in the West. These general trends hold up when grouping by year and region. These differences suggest that comparing the relationship between the variables across regions would be worthwhile.
 
 
 ## Descriptive Statistics
 
 **Assigned to:** Alex
 
-```{r dstats, results='markup'}
+```{r dstats, results='markup', eval=F}
 
 summary()
 xkablesummary()
@@ -273,6 +276,8 @@ loadPkg("tidyr")
 loadPkg("gridExtra")
 
 ```
+
+To visualize trends over time, we graphed several variables from the data, grouped by report year. Both measures of mental health have increased, but it's difficult to tell whether these increases are substantial. Notably, income inequality appears largely flat, while median income and unemployment have slightly improved.
 
 ```{r lines_annual, results='markup', message=F}
 
@@ -323,8 +328,11 @@ p3 / (p4 + p5)
 
 ```
 
-To visualize trends over time, we graphed several variables from the data, grouped by report year. Both measures of mental health have increased, but it's difficult to tell whether these increases are substantial. Notably, income inequality appears largely flat, while median income and unemployment have slightly improved.
+Next, we graphed the county-level data using scatterplots to compare the mental health measures with economic variables.
 
+Both poor mental health days and the frequent mental distress rate are positively correlated with income inequality. When coloring the scatterplot by median income, counties with a lower median income tend toward the outer limits of the figure, which suggests that poorer counties generally have higher inequality and worse mental health. It's harder to infer a clear relationship when coloring the points by `pct_rural`, although the many of the highly unequal counties are heavily urban.
+
+There is not much of a correlation between the mental health outcomes and the ratio of the population to mental health providers.
 
 ```{r scatter_a, results='markup'}
 
@@ -389,12 +397,7 @@ ggplot(ranked, aes(y=mental_distress_rate, x=pop_provider_ratio, color=pct_rural
 
 ```
 
-Next, we graphed the county-level data using scatterplots to compare the mental health measures with economic variables.
-
-Both poor mental health days and the frequent mental distress rate are positively correlated with income inequality. When coloring the scatterplot by median income, counties with a lower median income tend toward the outer limits of the figure, which suggests that poorer counties generally have higher inequality and worse mental health. It's harder to infer a clear relationship when coloring the points by `pct_rural`, although the many of the highly unequal counties are heavily urban.
-
-There is not much of a correlation between the mental health outcomes and the ratio of the population to mental health providers.
-
+To get a better sense of how income inequality is associated with the other economic variables, we created a figure with multiple scatterplots. In general, the variables suggest the expected relationship: for example, `inequality` is positively correlated with unemployment, severe housing issues, and child poverty but negatively associated with a better food environment and high school graduation rates. Both `mental_health_days` and `mental_distress_rate` exhibit similarly signed correlations with the economic variables.
 
 ```{r scatter_b, results='markup'}
 
@@ -530,13 +533,15 @@ do.call("grid.arrange", c(plot_list, ncol = 3))
 
 ```
 
-To get a better sense of how income inequality is associated with the other economic variables, we created a figure with multiple scatterplots. In general, the variables suggest the expected relationship: for example, `inequality` is positively correlated with unemployment, severe housing issues, and child poverty but negatively associated with a better food environment and high school graduation rates. Both `mental_health_days` and `mental_distress_rate` exhibit similarly signed correlations with the economic variables.
+Because we are interested in whether the relationship between mental health and income inequality differs geographically, we also colored the points in the scatterplot by region.
 
+An initial look by region is consistent with our previous takeaways from the aggregated region data. In general, counties in the South seem to have both relatively poor mental health and greater income inequality, while counties in the Midwest seem to do best on both dimensions. 
+
+To make sure this relationship is not sensitive to report year, we also graphed the data for 2016 and 2021 separately. Overall, the trends are very similar to the multi-year data. The 2016 data for mental_health_days does look strange though, almost as if it's rounded to one decimal place. To be safe, we plotted the 2017 report data, which also corresponded nicely to the other years.
 
 ```{r scatter_c, results='markup'}
 
 # data: use ranked
-# color = % rural
 color_value <- "Region"
 
 #-- All Years --#
@@ -614,8 +619,7 @@ p17
 
 ```
 
-[INSERT brief summary]
-
+The county-level scatterplots look crowded because of all the data. So we also plotted the aggregated data by state, using the population-weighted means and statewide medians. The relationship between mental health and income inequality at this aggregated level is consistent with the disaggregated scatterplots.
 
 ```{r scatter_agg, results='markup'}
 
@@ -661,10 +665,9 @@ ggplot(summ_by_year_state, aes(y=med_mh_rate, x=med_inequality, color=med_medinc
 
 ```
 
-[INSERT brief summary]
+[INSERT brief summary of histograms]
 
-
-```{r hist_multiple, results='markup'}
+```{r hist_multiple, results='markup', eval=F}
 
 # https://www.r-bloggers.com/2016/07/quick-plot-of-all-variables/
 
@@ -681,23 +684,21 @@ ranked[keep_var] %>%
 
 ```
 
-
-```{r histograms, results='markup'}
+```{r histograms, results='markup', eval=F}
 
 # Shumel -- please work on some histograms
 
 
 ```
 
+[INSERT brief summary of boxplots]
 
-```{r boxplots, results='markup'}
+```{r boxplots, results='markup', eval=F}
 
 # Xuan -- please work on some boxplots
 
 
 ```
-
-
 
 
 ## Measures of Variation
@@ -707,7 +708,7 @@ ranked[keep_var] %>%
 
 Variance, standard deviation, etc.
 
-```{r variance, results='markup'}
+```{r variance, results='markup', eval=F}
 
 
 ```
@@ -720,7 +721,7 @@ Variance, standard deviation, etc.
 
 For example, histograms, Q-Q plots, etc. Try `ezids::outlierKD2()` function if necessary.
 
-```{r norm, results='markup'}
+```{r norm, results='markup', eval=F}
 
 qqnorm()
 qqline()
@@ -736,7 +737,7 @@ qqline()
 
 For example, Chi Square tests, ANOVA analysis, Z-test or Z-interval, T-test or T-interval, etc.
 
-```{r corr, results='markup'}
+```{r corr, results='markup', eval=F}
 
 t.test()
 
@@ -759,6 +760,7 @@ corrplot()
 # Estimation: Establish confidence intervals
 # t-interval by region for inequality, mental_health_days, mental_distress_rate
 
+# estimate for all regions
 ttest99_in <- t.test(x=ranked$inequality, conf.level=0.99)
 ttest99_mh_days <- t.test(x=ranked$mental_health_days, conf.level=0.99)
 ttest99_mh_rate <- t.test(x=ranked$mental_distress_rate, conf.level=0.99)
@@ -767,29 +769,43 @@ ci99_in <- paste0("[", paste0(round(ttest99_in$conf.int, 4), collapse = ", "), "
 
 ci99_mh_days <- paste0("[", paste0(round(ttest99_mh_days$conf.int, 4), collapse = ", "), "]")
 
-ci99_in_mh_rate <- paste0("[", paste0(round(ttest99_mh_rate$conf.int, 4), collapse = ", "), "]")
+ci99_mh_rate <- paste0("[", paste0(round(ttest99_mh_rate$conf.int, 4), collapse = ", "), "]")
+
+var_list <- c("inequality", "mental_health_days", "mental_distress_rate")
+
+ci_list <- list(rep(c("All"), times = length(var_list)), var_list, c(ci99_in, ci99_mh_days, ci99_mh_rate))
 
 
+# estimate by region
 region_list <- c("Midwest", "Northeast", "South", "West")
 
-for (r in region_list) {
+for (r in region_list) {  ## region names
   
   ranked_region <- ranked %>% subset(region==r)
   
   ttest99_in <- t.test(ranked_region$inequality, conf.level=0.99)
-  ttest99_days <- t.test(ranked_region$mental_health_days, conf.level=0.99)
-  ttest99_rate <- t.test(ranked_region$mental_distress_rate, conf.level=0.99)
+  ttest99_mh_days <- t.test(ranked_region$mental_health_days, conf.level=0.99)
+  ttest99_mh_rate <- t.test(ranked_region$mental_distress_rate, conf.level=0.99)
   
+  ci99_in <- paste0("[", paste0(round(ttest99_in$conf.int, 4), collapse = ", "), "]")
   
-  print(paste0(r,"'s income inequality: [", paste0(round(ttest99_in$conf.int, 4), collapse = ", "), "]"))
-  print(paste0(r,"'s poor mental health days: [", paste0(round(ttest99_days$conf.int, 4), collapse = ", "), "]"))
-  print(paste0(r,"'s frequent mental distress rate: [", paste0(round(ttest99_rate$conf.int, 4), collapse = ", "), "]"))
+  ci99_mh_days <- paste0("[", paste0(round(ttest99_mh_days$conf.int, 4), collapse = ", "), "]")
   
+  ci99_mh_rate <- paste0("[", paste0(round(ttest99_mh_rate$conf.int, 4), collapse = ", "), "]")
   
+  ci_list[[1]] <- append(ci_list[[1]], rep(c(r), times = length(var_list)))
+  ci_list[[2]] <- append(ci_list[[2]], var_list)
+  ci_list[[3]] <- append(ci_list[[3]], c(ci99_in, ci99_mh_days, ci99_mh_rate))
+  
+  #print(ci_list)
 }
 
-
-
+# print results
+for (n in 1:15) {
+  
+  print(paste(ci_list[[1]][n], ci_list[[2]][n], ci_list[[3]][n], sep=" | "))
+  
+}
 
 ```
 
@@ -798,6 +814,29 @@ Estimate the t-intervals of our key variables at the 99% confidence level.
 Given the large size of our data set, 
 
 mean estimates
+
+
+The t-intervals by region are reported for each variable of interest in the following table:
+
+***
+Region | Variable | 99% conf.int |
+-------|----------|--------------|
+`r ci_list[[1]][1]` | `r ci_list[[2]][1]` | `r ci_list[[3]][1]` |
+`r ci_list[[1]][2]` | `r ci_list[[2]][2]` | `r ci_list[[3]][2]` |
+`r ci_list[[1]][3]` | `r ci_list[[2]][3]` | `r ci_list[[3]][3]` |
+`r ci_list[[1]][4]` | `r ci_list[[2]][4]` | `r ci_list[[3]][4]` |
+`r ci_list[[1]][5]` | `r ci_list[[2]][5]` | `r ci_list[[3]][5]` |
+`r ci_list[[1]][6]` | `r ci_list[[2]][6]` | `r ci_list[[3]][6]` |
+`r ci_list[[1]][7]` | `r ci_list[[2]][7]` | `r ci_list[[3]][7]` |
+`r ci_list[[1]][8]` | `r ci_list[[2]][8]` | `r ci_list[[3]][8]` |
+`r ci_list[[1]][9]` | `r ci_list[[2]][9]` | `r ci_list[[3]][9]` |
+`r ci_list[[1]][10]` | `r ci_list[[2]][10]` | `r ci_list[[3]][10]` |
+`r ci_list[[1]][11]` | `r ci_list[[2]][11]` | `r ci_list[[3]][11]` |
+`r ci_list[[1]][12]` | `r ci_list[[2]][12]` | `r ci_list[[3]][12]` |
+`r ci_list[[1]][13]` | `r ci_list[[2]][13]` | `r ci_list[[3]][13]` |
+`r ci_list[[1]][14]` | `r ci_list[[2]][14]` | `r ci_list[[3]][14]` |
+`r ci_list[[1]][15]` | `r ci_list[[2]][15]` | `r ci_list[[3]][15]` |
+***
 
 
 ```{r}
@@ -821,7 +860,7 @@ mean estimates
 
 **Assigned to:** TBD
 
-```{r reg, results='markup'}
+```{r reg, results='markup', eval=F}
 
 lm()
 xkablevif()
