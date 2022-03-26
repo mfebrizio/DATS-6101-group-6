@@ -652,9 +652,9 @@ ranked[keep_var] %>%
 
 
 ```{r boxplots, results='markup'}
-
+##Assigned to: Xuan
 # Xuan -- please work on some boxplots
-# In this part, in order to better show the relationship between the economic level and mental health of people, mental_distress_rate in different regions of the United States, I divided the United States into 4 regions by geographical method (for details, you can check this link below). I will analyze the four parts of "Northeast", "South", "West", "Midwest" separately.(https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf) In addition, I would like to say that there are many independent variables and dependent variables selected by our group, but in order to shorten the space and highlight the key points, I only select two independent variables and two dependent variable for analysis. The two independent variables that I selected are "Median household income" (median_inc) and "Food environment index" (food_index). The two dependent variable that I selected is "Poor mental health days" (mental_health_days) and "Frequent mental distress rate" (mental_distress_rate).
+# In this part, in order to better show the relationship between the economic level and mental health of people, mental_distress_rate in different regions of the United States, I divided the United States into 4 regions by geographical method (for details, you can check this link below). I will analyze the four parts of "Northeast", "South", "West", "Midwest" separately.(https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf) In addition, I would like to say that there are many independent variables and dependent variables selected by our group, but in order to shorten the space and highlight the key points, I only select two independent variables and two dependent variable for analysis. The two independent variables that I selected are "Median household income" (median_inc) and "Income inequality" (inequality). The two dependent variable that I selected is "Poor mental health days" (mental_health_days) and "Frequent mental distress rate" (mental_distress_rate).
 dframe0NA <- na.omit(dframe)
 #1.1 Analysis of Northeast in 2016
 #View(dframe)
@@ -707,7 +707,9 @@ ggplot(dframe2021, aes(x=region, y=median_inc)) +
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
   labs(title="The Characterization of median_inc of four regions in 2021")
 ```
+
 ```{r boxplots, results='markup'}
+##Assigned to: Xuan
 # Characterization of the Poor mental health days in four regions of the United States in 2016.
 ggplot(dframe2016, aes(x=region, y=mental_health_days)) + 
   geom_boxplot() + 
@@ -743,6 +745,84 @@ ggplot(dframe2021, aes(x=region, y=mental_health_days)) +
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
   labs(title="The Characterization of mental unhealthy days/month of four regions in 2021")
+```
+
+```{r boxplots, results='markup'}
+##Assigned to: Xuan
+# Characterization of the Frequent mental distress rate in four regions of the United States in 2016.
+ggplot(dframe2016, aes(x=region, y=mental_distress_rate)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of Frequent mental distress rate/month of four regions in 2016")
+
+# Characterization of the Frequent mental distress rate in four regions of the United States in 2017.
+ggplot(dframe2017, aes(x=region, y=mental_distress_rate)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of Frequent mental distress rate/month of four regions in 2017")
+
+# Characterization of the Frequent mental distress rate in four regions of the United States in 2018.
+ggplot(dframe2018, aes(x=region, y=mental_distress_rate)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of Frequent mental distress rate/month of four regions in 2018")
+
+# Characterization of the Frequent mental distress rate in four regions of the United States in 2019.
+ggplot(dframe2019, aes(x=region, y=mental_distress_rate)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of Frequent mental distress rate/month of four regions in 2019")
+
+# Characterization of the Frequent mental distress rate in four regions of the United States in 2020.
+ggplot(dframe2020, aes(x=region, y=mental_distress_rate)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of Frequent mental distress rate/month of four regions in 2020")
+
+# Characterization of the Frequent mental distress rate in four regions of the United States in 2021.
+ggplot(dframe2021, aes(x=region, y=mental_distress_rate)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of Frequent mental distress rate/month of four regions in 2021")
+```
+
+```{r boxplots, results='markup'}
+##Assigned to: Xuan
+# Characterization of Income inequality in four regions of the United States in 2016.
+ggplot(dframe2016, aes(x=region, y=inequality)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of Income inequality of four regions in 2016")
+
+# Characterization of Income inequality in four regions of the United States in 2017.
+ggplot(dframe2017, aes(x=region, y=inequality)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of Income inequality of four regions in 2017")
+
+# Characterization of Income inequality in four regions of the United States in 2018.
+ggplot(dframe2018, aes(x=region, y=inequality)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of Income inequality of four regions in 2018")
+
+# Characterization of Income inequality in four regions of the United States in 2019.
+ggplot(dframe2019, aes(x=region, y=inequality)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of Income inequality of four regions in 2019")
+
+# Characterization of Income inequality in four regions of the United States in 2020.
+ggplot(dframe2020, aes(x=region, y=inequality)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of Income inequality of four regions in 2020")
+
+# Characterization of Income inequality in four regions of the United States in 2021.
+ggplot(dframe2021, aes(x=region, y=inequality)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of Income inequality of four regions in 2021")
 ```
 
 ## Measures of Variation
