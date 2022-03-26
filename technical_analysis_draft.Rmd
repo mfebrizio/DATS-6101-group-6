@@ -58,10 +58,47 @@ should include:
 - [When applicable] Normality tests
 - [When applicable] Initial correlation / Chi Square tests / ANOVA analysis / Z-test or Z-interval / T-test or T-interval etc.
 
-
 ## Summary
 
 **Assigned to:** Mark
+
+The variables in the dataset are:
+
+* `region`: name of the US Census Bureau region (name)
+* `division`: name of the US Census Bureau division (contained with a census region)
+* `state`: state abbreviation
+* `statecode`: FIPS state code
+* `countycode`: FIPS county code
+* `fipscode`: 5-digit FIPS Code (county-level); combines `statecode` and `countycode`
+* `county`: county name
+* `year`: report release year from [County Health Rankings](https://www.countyhealthrankings.org/); range of 2016-2021
+* `county_ranked`: Indicates whether or not the county was ranked; 0=unranked, 1=ranked, or NA for aggregated national or state-level data
+* `mental_health_days`: Average number of mentally unhealthy days reported in past 30 days (age-adjusted)
+* `mental_distress_rate`: Percentage of adults reporting 14 or more days of poor mental health per month
+* `inequality`: Ratio of household income at the 80th percentile to income at the 20th percentile (Income inequality)
+* `median_inc`: The income where half of households in a county earn more and half of households earn less
+* `hs_grad`: Percentage of adults ages 25 and over with a high school diploma or equivalent
+* `college`: Percentage of adults ages 25-44 with some post-secondary education
+* `unempl`: Percentage of population ages 16 and older unemployed but seeking work
+* `child_poverty`: Percentage of people under age 18 in poverty
+* `single_parent`: Percentage of children that live in a household headed by single parent
+* `severe_housing`: Percentage of households with severe housing problems
+* `food_index`: Index of factors that contribute to a healthy food environment, from 0 (worst) to 10 (best)
+* `mh_providers`: rate of providers to 100,000 population
+* `pop_provider_ratio`: ratio of population to mental health providers (i.e., population served per provider)
+* `pop`: census population estimate
+* `pct_below18`: percent of population younger than 18
+* `pct_black`: percent of population that are African-American or non-Hispanic Black
+* `pct_native_am`: percent of population that are Native American or Alaska Natives
+* `pct_asian`: percent of population that are Asian
+* `pct_pacific`: percent of population that are Native Hawaiian or Other Pacific Islander
+* `pct_hispanic`: percent of population that are Hispanic
+* `pct_white`: percent of population that are non-Hispanic white or Caucasian
+* `pct_female`: percent of population that are female
+* `pct_rural`: percent of population that live in rural areas
+
+For more information, see [the measures online](https://www.countyhealthrankings.org/explore-health-rankings/measures-data-sources/2021-measures).
+
 
 ```{r import, results='hide', echo=F}
 
@@ -142,9 +179,22 @@ ranked_by_year_state <- ranked %>% group_by(year, statecode)
 
 summ_by_year_state <- ranked_by_year_state %>% summarize(num_obs = n(), 
                                    state_name = first(state),
-                                   wmean_inequality = weighted.mean(inequality, pop, na.rm = T),
-                                   wmean_mh_rate = weighted.mean(mental_distress_rate, pop, na.rm=T),
-                                   wmean_mh_days = weighted.mean(mental_health_days, pop, na.rm=T)
+                                   region = first(region),
+                                   wmean_inequality = weighted.mean(inequality, 
+                                                                    pop, na.rm = T),
+                                   med_inequality = median(inequality, na.rm = T),
+                                   wmean_mh_rate = weighted.mean(mental_distress_rate, 
+                                                                 pop, na.rm=T),
+                                   med_mh_rate = median(mental_distress_rate, na.rm=T),
+                                   wmean_mh_days = weighted.mean(mental_health_days, 
+                                                                 pop, na.rm=T), 
+                                   med_mh_days = median(mental_health_days, na.rm=T),
+                                   wmean_unempl = weighted.mean(unempl, 
+                                                                pop, na.rm=T), 
+                                   med_unempl = median(unempl, na.rm=T),
+                                   wmean_medinc = weighted.mean(median_inc, 
+                                                                pop, na.rm=T),
+                                   med_medinc = median(median_inc, na.rm=T)
                                    )
 
 summ_by_year_state
@@ -529,9 +579,46 @@ p17
 
 ```
 
-```{r}
+```{r scatter_agg, results='markup'}
+
+# data: use summ_by_year_state
+# aggregated to the state level
+
+#-- Dependent vs Explanatory --#
+
+# means by state
+ggplot(summ_by_year_state, aes(y=wmean_mh_days, x=wmean_inequality, color=wmean_medinc/1000)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
+  labs(title = "Scatterplot of State-level Means (Population weighted)",
+       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+       color = "Mean Median Inc ($T)")
+
+ggplot(summ_by_year_state, aes(y=wmean_mh_rate, x=wmean_inequality, color=wmean_medinc/1000)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
+  labs(title = "Scatterplot of State-level Means (Population weighted)",
+       y = 'Mental distress rate', x = 'Income inequality rate', 
+       color = "Mean Median Inc ($T)")
+
+# medians by state
+ggplot(summ_by_year_state, aes(y=med_mh_days, x=med_inequality, color=med_medinc/1000)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +  ## Add linear regression line
+  labs(title = "Scatterplot of State-level Medians",
+       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+       color = "Med. Median Inc ($T)")
+
+ggplot(summ_by_year_state, aes(y=med_mh_rate, x=med_inequality, color=med_medinc/1000)) + 
+  geom_point() +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
+  labs(title = "Scatterplot of State-level Medians",
+       y = 'Mental distress rate', x = 'Income inequality rate', 
+       color = "Med. Median Inc ($T)")
 
 
+
+#summ_by_year_state
 
 ```
 
