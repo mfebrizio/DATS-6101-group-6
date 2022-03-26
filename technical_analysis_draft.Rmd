@@ -133,6 +133,12 @@ unranked <- dframe %>% subset(county_ranked==0)
 # subset of dataframe including only aggregated data
 aggregated <- dframe %>% subset(is.na(county_ranked))
 
+# subset ranked data by region
+ranked_MW <- ranked %>% subset(region=="Midwest")
+ranked_NE <- ranked %>% subset(region=="Northeast")
+ranked_SO <- ranked %>% subset(region=="South")
+ranked_WE <- ranked %>% subset(region=="West")
+
 # subset ranked data into annual datasets
 ranked16 <- ranked %>% subset(year==2016)
 ranked17 <- ranked %>% subset(year==2017)
@@ -230,6 +236,14 @@ summ_by_year_region
 
 ```
 
+We also grouped the data on several dimensions using the `group_by()` and `summarise()` functions from the dplyr package. This helped us better investigate time and geographic patterns in our data.
+
+First, we grouped the data set by report year and calculating the population-weighted means for several variables. In general, the mean income inequality has stayed relatively constant over time, while the mental health variables have risen slightly. Other economic variables, such as unemployment and median income, have moved in positive directions (unemployment has fallen, while median incomes have increased). 
+
+Next, we grouped the data by year and state and calculated population-weighted means and state-level medians. There was a lot more variation among the data at this level, which will be helpful when plotting aggregated data later.
+
+Finally, we grouped the data by region, giving us a sense of the size of the 4 census regions: the South contains the most states and counties and has the largest population, while the Northeast is the smallest on these measures. The Northeast has highest measured inequality, and the Midwest has the lowest. The mental health variables are highest (i.e., worst) in the South and lowest in the West. These general trends hold up when grouping by year and region. These differences suggest that comparing the relationship between the variables across regions would be worthwhile.
+
 
 ## Descriptive Statistics
 
@@ -309,6 +323,9 @@ p3 / (p4 + p5)
 
 ```
 
+To visualize trends over time, we graphed several variables from the data, grouped by report year. Both measures of mental health have increased, but it's difficult to tell whether these increases are substantial. Notably, income inequality appears largely flat, while median income and unemployment have slightly improved.
+
+
 ```{r scatter_a, results='markup'}
 
 # data: use ranked
@@ -371,6 +388,13 @@ ggplot(ranked, aes(y=mental_distress_rate, x=pop_provider_ratio, color=pct_rural
        color = color_value)
 
 ```
+
+Next, we graphed the county-level data using scatterplots to compare the mental health measures with economic variables.
+
+Both poor mental health days and the frequent mental distress rate are positively correlated with income inequality. When coloring the scatterplot by median income, counties with a lower median income tend toward the outer limits of the figure, which suggests that poorer counties generally have higher inequality and worse mental health. It's harder to infer a clear relationship when coloring the points by `pct_rural`, although the many of the highly unequal counties are heavily urban.
+
+There is not much of a correlation between the mental health outcomes and the ratio of the population to mental health providers.
+
 
 ```{r scatter_b, results='markup'}
 
@@ -506,6 +530,9 @@ do.call("grid.arrange", c(plot_list, ncol = 3))
 
 ```
 
+To get a better sense of how income inequality is associated with the other economic variables, we created a figure with multiple scatterplots. In general, the variables suggest the expected relationship: for example, `inequality` is positively correlated with unemployment, severe housing issues, and child poverty but negatively associated with a better food environment and high school graduation rates. Both `mental_health_days` and `mental_distress_rate` exhibit similarly signed correlations with the economic variables.
+
+
 ```{r scatter_c, results='markup'}
 
 # data: use ranked
@@ -587,6 +614,9 @@ p17
 
 ```
 
+[INSERT brief summary]
+
+
 ```{r scatter_agg, results='markup'}
 
 # data: use summ_by_year_state
@@ -630,6 +660,8 @@ ggplot(summ_by_year_state, aes(y=med_mh_rate, x=med_inequality, color=med_medinc
 
 
 ```
+
+[INSERT brief summary]
 
 
 ```{r hist_multiple, results='markup'}
@@ -720,6 +752,67 @@ corrplot()
 
 
 ```
+
+
+```{r estimation, results='markup'}
+
+# Estimation: Establish confidence intervals
+# t-interval by region for inequality, mental_health_days, mental_distress_rate
+
+ttest99_in <- t.test(x=ranked$inequality, conf.level=0.99)
+ttest99_mh_days <- t.test(x=ranked$mental_health_days, conf.level=0.99)
+ttest99_mh_rate <- t.test(x=ranked$mental_distress_rate, conf.level=0.99)
+
+ci99_in <- paste0("[", paste0(round(ttest99_in$conf.int, 4), collapse = ", "), "]")
+
+ci99_mh_days <- paste0("[", paste0(round(ttest99_mh_days$conf.int, 4), collapse = ", "), "]")
+
+ci99_in_mh_rate <- paste0("[", paste0(round(ttest99_mh_rate$conf.int, 4), collapse = ", "), "]")
+
+
+region_list <- c("Midwest", "Northeast", "South", "West")
+
+for (r in region_list) {
+  
+  ranked_region <- ranked %>% subset(region==r)
+  
+  ttest99_in <- t.test(ranked_region$inequality, conf.level=0.99)
+  ttest99_days <- t.test(ranked_region$mental_health_days, conf.level=0.99)
+  ttest99_rate <- t.test(ranked_region$mental_distress_rate, conf.level=0.99)
+  
+  
+  print(paste0(r,"'s income inequality: [", paste0(round(ttest99_in$conf.int, 4), collapse = ", "), "]"))
+  print(paste0(r,"'s poor mental health days: [", paste0(round(ttest99_days$conf.int, 4), collapse = ", "), "]"))
+  print(paste0(r,"'s frequent mental distress rate: [", paste0(round(ttest99_rate$conf.int, 4), collapse = ", "), "]"))
+  
+  
+}
+
+
+
+
+```
+
+Estimate the t-intervals of our key variables at the 99% confidence level.
+
+Given the large size of our data set, 
+
+mean estimates
+
+
+```{r}
+
+# Hypothesis Testing: Test the process of making decisions about the value of a population parameter
+
+# difference in means
+# - rural vs urban (create binary indicator at 50%?)
+# - across report years (2017 to 2021)
+# - by region (ANOVA or chi-sq??)
+
+
+
+```
+
 
 
 
