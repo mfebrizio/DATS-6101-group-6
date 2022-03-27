@@ -60,8 +60,6 @@ Step 2: Parse Variables
 
 
 
-
-
 ```
 
 
