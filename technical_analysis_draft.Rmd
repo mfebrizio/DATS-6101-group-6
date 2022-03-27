@@ -2510,16 +2510,6 @@ corr_matrix
 # visualize correlation matrix
 corr_plot <- corrplot(corr_matrix)
 corr_plot
-
-
-#aov(y ~ x, data=)
-
-#sapply(dframe2, class)
-
-#a<-pairs(dframe2))
-#b<-cor(a) ## correlation matrix
-#corrplot(dframe2)
-
 ```
 
 
