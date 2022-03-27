@@ -1091,11 +1091,1380 @@ sd(dframeMidwest$mental_health_days)
 
 For example, histograms, Q-Q plots, etc. Try `ezids::outlierKD2()` function if necessary.
 
+
 ```{r norm, results='markup', eval=F}
 
-qqnorm()
-qqline()
 
+library("dplyr")
+library("ggpubr")
+
+# density plot of all the variable for every year
+
+ggplot(dframe, aes(x = mental_distress_rate , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = mental_health_days , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = inequality , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = median_inc , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = hs_grad , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = college , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = unempl , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = child_poverty , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = single_parent , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = severe_housing , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = food_index , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = mh_providers , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = pop_provider_ratio , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = pop , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = pct_below18 , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = pct_black , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = pct_native_am , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = pct_asian , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = pct_hispanic , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = pct_white , color = year, fill = year)) + geom_density(alpha = 0.5)
+ggplot(dframe, aes(x = pct_rural , color = year, fill = year)) + geom_density(alpha = 0.5)
+```
+```{r norm, results='markup', eval=F}
+library("ggpubr")
+# normality test of as per year
+#mental distress rate
+
+ggdensity(dframe2016$mental_distress_rate, 
+          main = "Density plot of mental_distress_rate",
+          xlab = "mental_distress_rate")
+ggqqplot(dframe2016$mental_distress_rate)
+qqnorm(dframe2016$mental_distress_rate)
+qqline(dframe2016$mental_distress_rate, col = "blue")
+shapiro.test(dframe2016$mental_distress_rate)
+
+
+ggdensity(dframe2017$mental_distress_rate, 
+          main = "Density plot of mental_distress_rate",
+          xlab = "mental_distress_rate")
+ggqqplot(dframe2017$mental_distress_rate)
+qqnorm(dframe2017$mental_distress_rate)
+qqline(dframe2017$mental_distress_rate, col = "blue")
+shapiro.test(dframe2017$mental_distress_rate)
+
+
+ggdensity(dframe2018$mental_distress_rate, 
+          main = "Density plot of mental_distress_rate",
+          xlab = "mental_distress_rate")
+ggqqplot(dframe2018$mental_distress_rate)
+qqnorm(dframe2018$mental_distress_rate)
+qqline(dframe2018$mental_distress_rate, col = "blue")
+shapiro.test(dframe2018$mental_distress_rate)    
+
+
+ggdensity(dframe2019$mental_distress_rate, 
+          main = "Density plot of mental_distress_rate",
+          xlab = "mental_distress_rate")
+ggqqplot(dframe2019$mental_distress_rate)
+qqnorm(dframe2019$mental_distress_rate)
+qqline(dframe2019$mental_distress_rate, col = "blue")
+shapiro.test(dframe2019$mental_distress_rate)
+
+ggdensity(dframe2020$mental_distress_rate, 
+          main = "Density plot of mental_distress_rate",
+          xlab = "mental_distress_rate")
+ggqqplot(dframe2020$mental_distress_rate)
+qqnorm(dframe2020$mental_distress_rate)
+qqline(dframe2020$mental_distress_rate, col = "blue")
+shapiro.test(dframe2020$mental_distress_rate)
+
+ggdensity(dframe2021$mental_distress_rate, 
+          main = "Density plot of mental_distress_rate",
+          xlab = "mental_distress_rate")
+ggqqplot(dframe2021$mental_distress_rate)
+qqnorm(dframe2021$mental_distress_rate)
+qqline(dframe2021$mental_distress_rate, col = "blue")
+shapiro.test(dframe2021$mental_distress_rate)
+
+```
+
+```{r norm, results='markup', eval=F}
+
+
+#
+# mental health days
+
+ggdensity(dframe2016$mental_health_days, 
+          main = "Density plot of mental_health_days",
+          xlab = "mental_health_days")
+ggqqplot(dframe2016$mental_health_days)
+qqnorm(dframe2016$mental_health_days)
+qqline(dframe2016$mental_health_days, col = "blue")
+shapiro.test(dframe2016$mental_health_days)
+
+
+
+ggdensity(dframe2017$mental_health_days, 
+          main = "Density plot of mental_health_days",
+          xlab = "mental_health_days")
+ggqqplot(dframe2017$mental_health_days)
+qqnorm(dframe2017$mental_health_days)
+qqline(dframe2017$mental_health_days, col = "blue")
+shapiro.test(dframe2017$mental_health_days)
+
+
+ggdensity(dframe2018$mental_health_days, 
+          main = "Density plot of mental_health_days",
+          xlab = "mental_health_days")
+ggqqplot(dframe2018$mental_health_days)
+qqnorm(dframe2018$mental_health_days)
+qqline(dframe2018$mental_health_days, col = "blue")
+shapiro.test(dframe2018$mental_health_days)    
+
+
+ggdensity(dframe2019$mental_health_days, 
+          main = "Density plot of mental_health_days",
+          xlab = "mental_health_days")
+ggqqplot(dframe2019$mental_health_days)
+qqnorm(dframe2019$mental_health_days)
+qqline(dframe2019$mental_health_days, col = "blue")
+shapiro.test(dframe2019$mental_health_days)
+
+ggdensity(dframe2020$mental_health_days, 
+          main = "Density plot of mental_health_days",
+          xlab = "mental_health_days")
+ggqqplot(dframe2020$mental_health_days)
+qqnorm(dframe2020$mental_health_days)
+qqline(dframe2020$mental_health_days, col = "blue")
+shapiro.test(dframe2020$mental_health_days)
+
+ggdensity(dframe2021$mental_health_days, 
+          main = "Density plot of mental_health_days",
+          xlab = "mental_health_days")
+ggqqplot(dframe2021$mental_health_days)
+qqnorm(dframe2021$mental_health_days)
+qqline(dframe2021$mental_health_days, col = "blue")
+shapiro.test(dframe2021$mental_health_days)
+
+```
+
+```{r norm, results='markup', eval=F}
+
+#
+# inequality
+
+ggdensity(dframe2016$inequality, 
+          main = "Density plot of inequality",
+          xlab = "inequality")
+ggqqplot(dframe2016$inequality)
+qqnorm(dframe2016$inequality)
+qqline(dframe2016$inequality, col = "blue")
+shapiro.test(dframe2016$inequality)
+
+
+
+ggdensity(dframe2017$inequality, 
+          main = "Density plot of inequality",
+          xlab = "inequality")
+ggqqplot(dframe2017$inequality)
+qqnorm(dframe2017$inequality)
+qqline(dframe2017$inequality, col = "blue")
+shapiro.test(dframe2017$inequality)
+
+
+ggdensity(dframe2018$inequality, 
+          main = "Density plot of inequality",
+          xlab = "inequality")
+ggqqplot(dframe2018$inequality)
+qqnorm(dframe2018$inequality)
+qqline(dframe2018$inequality, col = "blue")
+shapiro.test(dframe2018$inequality)    
+
+
+ggdensity(dframe2019$inequality, 
+          main = "Density plot of inequality",
+          xlab = "inequality")
+ggqqplot(dframe2019$inequality)
+qqnorm(dframe2019$inequality)
+qqline(dframe2019$inequality, col = "blue")
+shapiro.test(dframe2019$inequality)
+
+ggdensity(dframe2020$inequality, 
+          main = "Density plot of inequality",
+          xlab = "inequality")
+ggqqplot(dframe2020$inequality)
+qqnorm(dframe2020$inequality)
+qqline(dframe2020$inequality, col = "blue")
+shapiro.test(dframe2020$inequality)
+
+ggdensity(dframe2021$inequality, 
+          main = "Density plot of inequality",
+          xlab = "inequality")
+ggqqplot(dframe2021$inequality)
+qqnorm(dframe2021$inequality)
+qqline(dframe2021$inequality, col = "blue")
+shapiro.test(dframe2021$inequality)
+
+```
+
+```{r norm, results='markup', eval=F}
+
+#
+# median inc
+
+ggdensity(dframe2016$median_inc, 
+          main = "Density plot of median_inc",
+          xlab = "median_inc")
+ggqqplot(dframe2016$median_inc)
+qqnorm(dframe2016$median_inc)
+qqline(dframe2016$median_inc, col = "blue")
+shapiro.test(dframe2016$median_inc)
+
+
+
+ggdensity(dframe2017$median_inc, 
+          main = "Density plot of median_inc",
+          xlab = "median_inc")
+ggqqplot(dframe2017$median_inc)
+qqnorm(dframe2017$median_inc)
+qqline(dframe2017$median_inc, col = "blue")
+shapiro.test(dframe2017$median_inc)
+
+
+ggdensity(dframe2018$median_inc, 
+          main = "Density plot of median_inc",
+          xlab = "median_inc")
+ggqqplot(dframe2018$median_inc)
+qqnorm(dframe2018$median_inc)
+qqline(dframe2018$median_inc, col = "blue")
+shapiro.test(dframe2018$median_inc)    
+
+
+ggdensity(dframe2019$median_inc, 
+          main = "Density plot of median_inc",
+          xlab = "median_inc")
+ggqqplot(dframe2019$median_inc)
+qqnorm(dframe2019$median_inc)
+qqline(dframe2019$median_inc, col = "blue")
+shapiro.test(dframe2019$median_inc)
+
+ggdensity(dframe2020$median_inc, 
+          main = "Density plot of median_inc",
+          xlab = "median_inc")
+ggqqplot(dframe2020$median_inc)
+qqnorm(dframe2020$median_inc)
+qqline(dframe2020$median_inc, col = "blue")
+shapiro.test(dframe2020$median_inc)
+
+ggdensity(dframe2021$median_inc, 
+          main = "Density plot of median_inc",
+          xlab = "median_inc")
+ggqqplot(dframe2021$median_inc)
+qqnorm(dframe2021$median_inc)
+qqline(dframe2021$median_inc, col = "blue")
+shapiro.test(dframe2021$median_inc)
+
+```
+
+```{r norm, results='markup', eval=F}
+
+#
+# hs grad
+
+ggdensity(dframe2016$hs_grad, 
+          main = "Density plot of hs_grad",
+          xlab = "hs_grad")
+ggqqplot(dframe2016$hs_grad)
+qqnorm(dframe2016$hs_grad)
+qqline(dframe2016$hs_grad, col = "blue")
+shapiro.test(dframe2016$hs_grad)
+
+
+
+ggdensity(dframe2017$hs_grad, 
+          main = "Density plot of hs_grad",
+          xlab = "hs_grad")
+ggqqplot(dframe2017$hs_grad)
+qqnorm(dframe2017$hs_grad)
+qqline(dframe2017$hs_grad, col = "blue")
+shapiro.test(dframe2017$hs_grad)
+
+
+ggdensity(dframe2018$hs_grad, 
+          main = "Density plot of hs_grad",
+          xlab = "hs_grad")
+ggqqplot(dframe2018$hs_grad)
+qqnorm(dframe2018$hs_grad)
+qqline(dframe2018$hs_grad, col = "blue")
+shapiro.test(dframe2018$hs_grad)    
+
+
+ggdensity(dframe2019$hs_grad, 
+          main = "Density plot of hs_grad",
+          xlab = "hs_grad")
+ggqqplot(dframe2019$hs_grad)
+qqnorm(dframe2019$hs_grad)
+qqline(dframe2019$hs_grad, col = "blue")
+shapiro.test(dframe2019$hs_grad)
+
+ggdensity(dframe2020$hs_grad, 
+          main = "Density plot of hs_grad",
+          xlab = "hs_grad")
+ggqqplot(dframe2020$hs_grad)
+qqnorm(dframe2020$hs_grad)
+qqline(dframe2020$hs_grad, col = "blue")
+shapiro.test(dframe2020$hs_grad)
+
+ggdensity(dframe2021$hs_grad, 
+          main = "Density plot of hs_grad",
+          xlab = "hs_grad")
+ggqqplot(dframe2021$hs_grad)
+qqnorm(dframe2021$hs_grad)
+qqline(dframe2021$hs_grad, col = "blue")
+shapiro.test(dframe2021$hs_grad)
+
+```
+
+```{r norm, results='markup', eval=F}
+
+#
+# college
+
+ggdensity(dframe2016$college, 
+          main = "Density plot of college",
+          xlab = "college")
+ggqqplot(dframe2016$college)
+qqnorm(dframe2016$college)
+qqline(dframe2016$college, col = "blue")
+shapiro.test(dframe2016$college)
+
+
+
+ggdensity(dframe2017$college, 
+          main = "Density plot of college",
+          xlab = "college")
+ggqqplot(dframe2017$college)
+qqnorm(dframe2017$college)
+qqline(dframe2017$college, col = "blue")
+shapiro.test(dframe2017$college)
+
+
+ggdensity(dframe2018$college, 
+          main = "Density plot of college",
+          xlab = "college")
+ggqqplot(dframe2018$college)
+qqnorm(dframe2018$college)
+qqline(dframe2018$college, col = "blue")
+shapiro.test(dframe2018$college)    
+
+
+ggdensity(dframe2019$college, 
+          main = "Density plot of college",
+          xlab = "college")
+ggqqplot(dframe2019$college)
+qqnorm(dframe2019$college)
+qqline(dframe2019$college, col = "blue")
+shapiro.test(dframe2019$college)
+
+ggdensity(dframe2020$college, 
+          main = "Density plot of college",
+          xlab = "college")
+ggqqplot(dframe2020$college)
+qqnorm(dframe2020$college)
+qqline(dframe2020$college, col = "blue")
+shapiro.test(dframe2020$college)
+
+ggdensity(dframe2021$college, 
+          main = "Density plot of college",
+          xlab = "college")
+ggqqplot(dframe2021$college)
+qqnorm(dframe2021$college)
+qqline(dframe2021$college, col = "blue")
+shapiro.test(dframe2021$college)
+
+```
+
+```{r norm, results='markup', eval=F}
+
+#
+#unempl
+
+
+ggdensity(dframe2016$unempl, 
+          main = "Density plot of unempl",
+          xlab = "unempl")
+ggqqplot(dframe2016$unempl)
+qqnorm(dframe2016$unempl)
+qqline(dframe2016$unempl, col = "blue")
+shapiro.test(dframe2016$unempl)
+
+
+
+ggdensity(dframe2017$unempl, 
+          main = "Density plot of unempl",
+          xlab = "unempl")
+ggqqplot(dframe2017$unempl)
+qqnorm(dframe2017$unempl)
+qqline(dframe2017$unempl, col = "blue")
+shapiro.test(dframe2017$unempl)
+
+
+ggdensity(dframe2018$unempl, 
+          main = "Density plot of unempl",
+          xlab = "unempl")
+ggqqplot(dframe2018$unempl)
+qqnorm(dframe2018$unempl)
+qqline(dframe2018$unempl, col = "blue")
+shapiro.test(dframe2018$unempl)    
+
+
+ggdensity(dframe2019$unempl, 
+          main = "Density plot of unempl",
+          xlab = "unempl")
+ggqqplot(dframe2019$unempl)
+qqnorm(dframe2019$unempl)
+qqline(dframe2019$unempl, col = "blue")
+shapiro.test(dframe2019$unempl)
+
+ggdensity(dframe2020$unempl, 
+          main = "Density plot of unempl",
+          xlab = "unempl")
+ggqqplot(dframe2020$unempl)
+qqnorm(dframe2020$unempl)
+qqline(dframe2020$unempl, col = "blue")
+shapiro.test(dframe2020$unempl)
+
+ggdensity(dframe2021$unempl, 
+          main = "Density plot of unempl",
+          xlab = "unempl")
+ggqqplot(dframe2021$unempl)
+qqnorm(dframe2021$unempl)
+qqline(dframe2021$unempl, col = "blue")
+shapiro.test(dframe2021$unempl)
+```
+
+```{r norm, results='markup', eval=F}
+
+
+#
+# child poverty
+
+
+ggdensity(dframe2016$child_poverty, 
+          main = "Density plot of child_poverty",
+          xlab = "child_poverty")
+ggqqplot(dframe2016$child_poverty)
+qqnorm(dframe2016$child_poverty)
+qqline(dframe2016$child_poverty, col = "blue")
+shapiro.test(dframe2016$child_poverty)
+
+
+
+ggdensity(dframe2017$child_poverty, 
+          main = "Density plot of child_poverty",
+          xlab = "child_poverty")
+ggqqplot(dframe2017$child_poverty)
+qqnorm(dframe2017$child_poverty)
+qqline(dframe2017$child_poverty, col = "blue")
+shapiro.test(dframe2017$child_poverty)
+
+
+ggdensity(dframe2018$child_poverty, 
+          main = "Density plot of child_poverty",
+          xlab = "child_poverty")
+ggqqplot(dframe2018$child_poverty)
+qqnorm(dframe2018$child_poverty)
+qqline(dframe2018$child_poverty, col = "blue")
+shapiro.test(dframe2018$child_poverty)    
+
+
+ggdensity(dframe2019$child_poverty, 
+          main = "Density plot of child_poverty",
+          xlab = "child_poverty")
+ggqqplot(dframe2019$child_poverty)
+qqnorm(dframe2019$child_poverty)
+qqline(dframe2019$child_poverty, col = "blue")
+shapiro.test(dframe2019$child_poverty)
+
+ggdensity(dframe2020$child_poverty, 
+          main = "Density plot of child_poverty",
+          xlab = "child_poverty")
+ggqqplot(dframe2020$child_poverty)
+qqnorm(dframe2020$child_poverty)
+qqline(dframe2020$child_poverty, col = "blue")
+shapiro.test(dframe2020$child_poverty)
+
+ggdensity(dframe2021$child_poverty, 
+          main = "Density plot of child_poverty",
+          xlab = "child_poverty")
+ggqqplot(dframe2021$child_poverty)
+qqnorm(dframe2021$child_poverty)
+qqline(dframe2021$child_poverty, col = "blue")
+shapiro.test(dframe2021$child_poverty)
+```
+
+```{r norm, results='markup', eval=F}
+
+#
+# single parent
+
+
+ggdensity(dframe2016$single_parent, 
+          main = "Density plot of single_parent",
+          xlab = "single_parent")
+ggqqplot(dframe2016$single_parent)
+qqnorm(dframe2016$single_parent)
+qqline(dframe2016$single_parent, col = "blue")
+shapiro.test(dframe2016$single_parent)
+
+
+
+ggdensity(dframe2017$single_parent, 
+          main = "Density plot of single_parent",
+          xlab = "single_parent")
+ggqqplot(dframe2017$single_parent)
+qqnorm(dframe2017$single_parent)
+qqline(dframe2017$single_parent, col = "blue")
+shapiro.test(dframe2017$single_parent)
+
+
+ggdensity(dframe2018$single_parent, 
+          main = "Density plot of single_parent",
+          xlab = "single_parent")
+ggqqplot(dframe2018$single_parent)
+qqnorm(dframe2018$single_parent)
+qqline(dframe2018$single_parent, col = "blue")
+shapiro.test(dframe2018$single_parent)    
+
+
+ggdensity(dframe2019$single_parent, 
+          main = "Density plot of single_parent",
+          xlab = "single_parent")
+ggqqplot(dframe2019$single_parent)
+qqnorm(dframe2019$single_parent)
+qqline(dframe2019$single_parent, col = "blue")
+shapiro.test(dframe2019$single_parent)
+
+ggdensity(dframe2020$single_parent, 
+          main = "Density plot of single_parent",
+          xlab = "single_parent")
+ggqqplot(dframe2020$single_parent)
+qqnorm(dframe2020$single_parent)
+qqline(dframe2020$single_parent, col = "blue")
+shapiro.test(dframe2020$single_parent)
+
+ggdensity(dframe2021$single_parent, 
+          main = "Density plot of single_parent",
+          xlab = "single_parent")
+ggqqplot(dframe2021$single_parent)
+qqnorm(dframe2021$single_parent)
+qqline(dframe2021$single_parent, col = "blue")
+shapiro.test(dframe2021$single_parent)
+```
+
+```{r norm, results='markup', eval=F}
+
+#
+# Severe housing
+
+
+ggdensity(dframe2016$severe_housing, 
+          main = "Density plot of severe_housing",
+          xlab = "severe_housing")
+ggqqplot(dframe2016$severe_housing)
+qqnorm(dframe2016$severe_housing)
+qqline(dframe2016$severe_housing, col = "blue")
+shapiro.test(dframe2016$severe_housing)
+
+
+
+ggdensity(dframe2017$severe_housing, 
+          main = "Density plot of severe_housing",
+          xlab = "severe_housing")
+ggqqplot(dframe2017$severe_housing)
+qqnorm(dframe2017$severe_housing)
+qqline(dframe2017$severe_housing, col = "blue")
+shapiro.test(dframe2017$severe_housing)
+
+
+ggdensity(dframe2018$severe_housing, 
+          main = "Density plot of severe_housing",
+          xlab = "severe_housing")
+ggqqplot(dframe2018$severe_housing)
+qqnorm(dframe2018$severe_housing)
+qqline(dframe2018$severe_housing, col = "blue")
+shapiro.test(dframe2018$severe_housing)    
+
+
+ggdensity(dframe2019$severe_housing, 
+          main = "Density plot of severe_housing",
+          xlab = "severe_housing")
+ggqqplot(dframe2019$severe_housing)
+qqnorm(dframe2019$severe_housing)
+qqline(dframe2019$severe_housing, col = "blue")
+shapiro.test(dframe2019$severe_housing)
+
+ggdensity(dframe2020$severe_housing, 
+          main = "Density plot of severe_housing",
+          xlab = "severe_housing")
+ggqqplot(dframe2020$severe_housing)
+qqnorm(dframe2020$severe_housing)
+qqline(dframe2020$severe_housing, col = "blue")
+shapiro.test(dframe2020$severe_housing)
+
+ggdensity(dframe2021$severe_housing, 
+          main = "Density plot of severe_housing",
+          xlab = "severe_housing")
+ggqqplot(dframe2021$severe_housing)
+qqnorm(dframe2021$severe_housing)
+qqline(dframe2021$severe_housing, col = "blue")
+shapiro.test(dframe2021$severe_housing)
+```
+
+```{r norm, results='markup', eval=F}
+
+#
+#food index
+
+ggdensity(dframe2016$food_index, 
+          main = "Density plot of food_index",
+          xlab = "food_index")
+ggqqplot(dframe2016$food_index)
+qqnorm(dframe2016$food_index)
+qqline(dframe2016$food_index, col = "blue")
+shapiro.test(dframe2016$food_index)
+
+
+
+ggdensity(dframe2017$food_index, 
+          main = "Density plot of food_index",
+          xlab = "food_index")
+ggqqplot(dframe2017$food_index)
+qqnorm(dframe2017$food_index)
+qqline(dframe2017$food_index, col = "blue")
+shapiro.test(dframe2017$food_index)
+
+
+ggdensity(dframe2018$food_index, 
+          main = "Density plot of food_index",
+          xlab = "food_index")
+ggqqplot(dframe2018$food_index)
+qqnorm(dframe2018$food_index)
+qqline(dframe2018$food_index, col = "blue")
+shapiro.test(dframe2018$food_index)    
+
+
+ggdensity(dframe2019$food_index, 
+          main = "Density plot of food_index",
+          xlab = "food_index")
+ggqqplot(dframe2019$food_index)
+qqnorm(dframe2019$food_index)
+qqline(dframe2019$food_index, col = "blue")
+shapiro.test(dframe2019$food_index)
+
+ggdensity(dframe2020$food_index, 
+          main = "Density plot of food_index",
+          xlab = "food_index")
+ggqqplot(dframe2020$food_index)
+qqnorm(dframe2020$food_index)
+qqline(dframe2020$food_index, col = "blue")
+shapiro.test(dframe2020$food_index)
+
+ggdensity(dframe2021$food_index, 
+          main = "Density plot of food_index",
+          xlab = "food_index")
+ggqqplot(dframe2021$food_index)
+qqnorm(dframe2021$food_index)
+qqline(dframe2021$food_index, col = "blue")
+shapiro.test(dframe2021$food_index)
+```
+
+```{r norm, results='markup', eval=F}
+
+#
+# mh provider
+
+
+ggdensity(dframe2016$mh_providers, 
+          main = "Density plot of mh_providers",
+          xlab = "mh_providers")
+ggqqplot(dframe2016$mh_providers)
+qqnorm(dframe2016$mh_providers)
+qqline(dframe2016$mh_providers, col = "blue")
+shapiro.test(dframe2016$mh_providers)
+
+
+
+ggdensity(dframe2017$mh_providers, 
+          main = "Density plot of mh_providers",
+          xlab = "mh_providers")
+ggqqplot(dframe2017$mh_providers)
+qqnorm(dframe2017$mh_providers)
+qqline(dframe2017$mh_providers, col = "blue")
+shapiro.test(dframe2017$mh_providers)
+
+
+ggdensity(dframe2018$mh_providers, 
+          main = "Density plot of mh_providers",
+          xlab = "mh_providers")
+ggqqplot(dframe2018$mh_providers)
+qqnorm(dframe2018$mh_providers)
+qqline(dframe2018$mh_providers, col = "blue")
+shapiro.test(dframe2018$mh_providers)    
+
+
+ggdensity(dframe2019$mh_providers, 
+          main = "Density plot of mh_providers",
+          xlab = "mh_providers")
+ggqqplot(dframe2019$mh_providers)
+qqnorm(dframe2019$mh_providers)
+qqline(dframe2019$mh_providers, col = "blue")
+shapiro.test(dframe2019$mh_providers)
+
+ggdensity(dframe2020$mh_providers, 
+          main = "Density plot of mh_providers",
+          xlab = "mh_providers")
+ggqqplot(dframe2020$mh_providers)
+qqnorm(dframe2020$mh_providers)
+qqline(dframe2020$mh_providers, col = "blue")
+shapiro.test(dframe2020$mh_providers)
+
+ggdensity(dframe2021$mh_providers, 
+          main = "Density plot of mh_providers",
+          xlab = "mh_providers")
+ggqqplot(dframe2021$mh_providers)
+qqnorm(dframe2021$mh_providers)
+qqline(dframe2021$mh_providers, col = "blue")
+shapiro.test(dframe2021$mh_providers)
+```
+
+```{r norm, results='markup', eval=F}
+
+#
+#pop_provider_ratio
+
+
+ggdensity(dframe2016$pop_provider_ratio, 
+          main = "Density plot of pop_provider_ratio",
+          xlab = "pop_provider_ratio")
+ggqqplot(dframe2016$pop_provider_ratio)
+qqnorm(dframe2016$pop_provider_ratio)
+qqline(dframe2016$pop_provider_ratio, col = "blue")
+shapiro.test(dframe2016$pop_provider_ratio)
+
+
+
+ggdensity(dframe2017$pop_provider_ratio, 
+          main = "Density plot of pop_provider_ratio",
+          xlab = "pop_provider_ratio")
+ggqqplot(dframe2017$pop_provider_ratio)
+qqnorm(dframe2017$pop_provider_ratio)
+qqline(dframe2017$pop_provider_ratio, col = "blue")
+shapiro.test(dframe2017$pop_provider_ratio)
+
+
+ggdensity(dframe2018$pop_provider_ratio, 
+          main = "Density plot of pop_provider_ratio",
+          xlab = "pop_provider_ratio")
+ggqqplot(dframe2018$pop_provider_ratio)
+qqnorm(dframe2018$pop_provider_ratio)
+qqline(dframe2018$pop_provider_ratio, col = "blue")
+shapiro.test(dframe2018$pop_provider_ratio)    
+
+
+ggdensity(dframe2019$pop_provider_ratio, 
+          main = "Density plot of pop_provider_ratio",
+          xlab = "pop_provider_ratio")
+ggqqplot(dframe2019$pop_provider_ratio)
+qqnorm(dframe2019$pop_provider_ratio)
+qqline(dframe2019$pop_provider_ratio, col = "blue")
+shapiro.test(dframe2019$pop_provider_ratio)
+
+ggdensity(dframe2020$pop_provider_ratio, 
+          main = "Density plot of pop_provider_ratio",
+          xlab = "pop_provider_ratio")
+ggqqplot(dframe2020$pop_provider_ratio)
+qqnorm(dframe2020$pop_provider_ratio)
+qqline(dframe2020$pop_provider_ratio, col = "blue")
+shapiro.test(dframe2020$pop_provider_ratio)
+
+ggdensity(dframe2021$pop_provider_ratio, 
+          main = "Density plot of pop_provider_ratio",
+          xlab = "pop_provider_ratio")
+ggqqplot(dframe2021$pop_provider_ratio)
+qqnorm(dframe2021$pop_provider_ratio)
+qqline(dframe2021$pop_provider_ratio, col = "blue")
+shapiro.test(dframe2021$pop_provider_ratio)
+```
+
+```{r norm, results='markup', eval=F}
+
+#
+# pop
+
+
+ggdensity(dframe2016$pop, 
+          main = "Density plot of pop",
+          xlab = "pop")
+ggqqplot(dframe2016$pop)
+qqnorm(dframe2016$pop)
+qqline(dframe2016$pop, col = "blue")
+shapiro.test(dframe2016$pop)
+
+
+
+ggdensity(dframe2017$pop, 
+          main = "Density plot of pop",
+          xlab = "pop")
+ggqqplot(dframe2017$pop)
+qqnorm(dframe2017$pop)
+qqline(dframe2017$pop, col = "blue")
+shapiro.test(dframe2017$pop)
+
+
+ggdensity(dframe2018$pop, 
+          main = "Density plot of pop",
+          xlab = "pop")
+ggqqplot(dframe2018$pop)
+qqnorm(dframe2018$pop)
+qqline(dframe2018$pop, col = "blue")
+shapiro.test(dframe2018$pop)    
+
+
+ggdensity(dframe2019$pop, 
+          main = "Density plot of pop",
+          xlab = "pop")
+ggqqplot(dframe2019$pop)
+qqnorm(dframe2019$pop)
+qqline(dframe2019$pop, col = "blue")
+shapiro.test(dframe2019$pop)
+
+ggdensity(dframe2020$pop, 
+          main = "Density plot of pop",
+          xlab = "pop")
+ggqqplot(dframe2020$pop)
+qqnorm(dframe2020$pop)
+qqline(dframe2020$pop, col = "blue")
+shapiro.test(dframe2020$pop)
+
+ggdensity(dframe2021$pop, 
+          main = "Density plot of pop",
+          xlab = "pop")
+ggqqplot(dframe2021$pop)
+qqnorm(dframe2021$pop)
+qqline(dframe2021$pop, col = "blue")
+shapiro.test(dframe2021$pop)
+```
+
+```{r norm, results='markup', eval=F}
+
+#
+# pct_below18
+
+
+ggdensity(dframe2016$pct_below18, 
+          main = "Density plot of pct_below18",
+          xlab = "pct_below18")
+ggqqplot(dframe2016$pct_below18)
+qqnorm(dframe2016$pct_below18)
+qqline(dframe2016$pct_below18, col = "blue")
+shapiro.test(dframe2016$pct_below18)
+
+
+
+ggdensity(dframe2017$pct_below18, 
+          main = "Density plot of pct_below18",
+          xlab = "pct_below18")
+ggqqplot(dframe2017$pct_below18)
+qqnorm(dframe2017$pct_below18)
+qqline(dframe2017$pct_below18, col = "blue")
+shapiro.test(dframe2017$pct_below18)
+
+
+ggdensity(dframe2018$pct_below18, 
+          main = "Density plot of pct_below18",
+          xlab = "pct_below18")
+ggqqplot(dframe2018$pct_below18)
+qqnorm(dframe2018$pct_below18)
+qqline(dframe2018$pct_below18, col = "blue")
+shapiro.test(dframe2018$pct_below18)    
+
+
+ggdensity(dframe2019$pct_below18, 
+          main = "Density plot of pct_below18",
+          xlab = "pct_below18")
+ggqqplot(dframe2019$pct_below18)
+qqnorm(dframe2019$pct_below18)
+qqline(dframe2019$pct_below18, col = "blue")
+shapiro.test(dframe2019$pct_below18)
+
+ggdensity(dframe2020$pct_below18, 
+          main = "Density plot of pct_below18",
+          xlab = "pct_below18")
+ggqqplot(dframe2020$pct_below18)
+qqnorm(dframe2020$pct_below18)
+qqline(dframe2020$pct_below18, col = "blue")
+shapiro.test(dframe2020$pct_below18)
+
+ggdensity(dframe2021$pct_below18, 
+          main = "Density plot of pct_below18",
+          xlab = "pct_below18")
+ggqqplot(dframe2021$pct_below18)
+qqnorm(dframe2021$pct_below18)
+qqline(dframe2021$pct_below18, col = "blue")
+shapiro.test(dframe2021$pct_below18)
+```
+
+```{r norm, results='markup', eval=F}
+
+
+#
+# pct black
+
+ggdensity(dframe2016$pct_black, 
+          main = "Density plot of pct_black",
+          xlab = "pct_black")
+ggqqplot(dframe2016$pct_black)
+qqnorm(dframe2016$pct_black)
+qqline(dframe2016$pct_black, col = "blue")
+shapiro.test(dframe2016$pct_black)
+
+
+
+ggdensity(dframe2017$pct_black, 
+          main = "Density plot of pct_black",
+          xlab = "pct_black")
+ggqqplot(dframe2017$pct_black)
+qqnorm(dframe2017$pct_black)
+qqline(dframe2017$pct_black, col = "blue")
+shapiro.test(dframe2017$pct_black)
+
+
+ggdensity(dframe2018$pct_black, 
+          main = "Density plot of pct_black",
+          xlab = "pct_black")
+ggqqplot(dframe2018$pct_black)
+qqnorm(dframe2018$pct_black)
+qqline(dframe2018$pct_black, col = "blue")
+shapiro.test(dframe2018$pct_black)    
+
+
+ggdensity(dframe2019$pct_black, 
+          main = "Density plot of pct_black",
+          xlab = "pct_black")
+ggqqplot(dframe2019$pct_black)
+qqnorm(dframe2019$pct_black)
+qqline(dframe2019$pct_black, col = "blue")
+shapiro.test(dframe2019$pct_black)
+
+ggdensity(dframe2020$pct_black, 
+          main = "Density plot of pct_black",
+          xlab = "pct_black")
+ggqqplot(dframe2020$pct_black)
+qqnorm(dframe2020$pct_black)
+qqline(dframe2020$pct_black, col = "blue")
+shapiro.test(dframe2020$pct_black)
+
+ggdensity(dframe2021$pct_black, 
+          main = "Density plot of pct_black",
+          xlab = "pct_black")
+ggqqplot(dframe2021$pct_black)
+qqnorm(dframe2021$pct_black)
+qqline(dframe2021$pct_black, col = "blue")
+shapiro.test(dframe2021$pct_black)
+```
+
+```{r norm, results='markup', eval=F}
+
+#
+# pct native american
+
+
+ggdensity(dframe2016$pct_native_am, 
+          main = "Density plot of pct_native_am",
+          xlab = "pct_native_am")
+ggqqplot(dframe2016$pct_native_am)
+qqnorm(dframe2016$pct_native_am)
+qqline(dframe2016$pct_native_am, col = "blue")
+shapiro.test(dframe2016$pct_native_am)
+
+
+
+ggdensity(dframe2017$pct_native_am, 
+          main = "Density plot of pct_native_am",
+          xlab = "pct_native_am")
+ggqqplot(dframe2017$pct_native_am)
+qqnorm(dframe2017$pct_native_am)
+qqline(dframe2017$pct_native_am, col = "blue")
+shapiro.test(dframe2017$pct_native_am)
+
+
+ggdensity(dframe2018$pct_native_am, 
+          main = "Density plot of pct_native_am",
+          xlab = "pct_native_am")
+ggqqplot(dframe2018$pct_native_am)
+qqnorm(dframe2018$pct_native_am)
+qqline(dframe2018$pct_native_am, col = "blue")
+shapiro.test(dframe2018$pct_native_am)    
+
+
+ggdensity(dframe2019$pct_native_am, 
+          main = "Density plot of pct_native_am",
+          xlab = "pct_native_am")
+ggqqplot(dframe2019$pct_native_am)
+qqnorm(dframe2019$pct_native_am)
+qqline(dframe2019$pct_native_am, col = "blue")
+shapiro.test(dframe2019$pct_native_am)
+
+ggdensity(dframe2020$pct_native_am, 
+          main = "Density plot of pct_native_am",
+          xlab = "pct_native_am")
+ggqqplot(dframe2020$pct_native_am)
+qqnorm(dframe2020$pct_native_am)
+qqline(dframe2020$pct_native_am, col = "blue")
+shapiro.test(dframe2020$pct_native_am)
+
+ggdensity(dframe2021$pct_native_am, 
+          main = "Density plot of pct_native_am",
+          xlab = "pct_native_am")
+ggqqplot(dframe2021$pct_native_am)
+qqnorm(dframe2021$pct_native_am)
+qqline(dframe2021$pct_native_am, col = "blue")
+shapiro.test(dframe2021$pct_native_am)
+
+```
+
+```{r norm, results='markup', eval=F}
+
+#
+# pct asian
+
+ggdensity(dframe2016$pct_asian, 
+          main = "Density plot of pct_asian",
+          xlab = "pct_asian")
+ggqqplot(dframe2016$pct_asian)
+qqnorm(dframe2016$pct_asian)
+qqline(dframe2016$pct_asian, col = "blue")
+shapiro.test(dframe2016$pct_asian)
+
+
+
+ggdensity(dframe2017$pct_asian, 
+          main = "Density plot of pct_asian",
+          xlab = "pct_asian")
+ggqqplot(dframe2017$pct_asian)
+qqnorm(dframe2017$pct_asian)
+qqline(dframe2017$pct_asian, col = "blue")
+shapiro.test(dframe2017$pct_asian)
+
+
+ggdensity(dframe2018$pct_asian, 
+          main = "Density plot of pct_asian",
+          xlab = "pct_asian")
+ggqqplot(dframe2018$pct_asian)
+qqnorm(dframe2018$pct_asian)
+qqline(dframe2018$pct_asian, col = "blue")
+shapiro.test(dframe2018$pct_asian)    
+
+
+ggdensity(dframe2019$pct_asian, 
+          main = "Density plot of pct_asian",
+          xlab = "pct_asian")
+ggqqplot(dframe2019$pct_asian)
+qqnorm(dframe2019$pct_asian)
+qqline(dframe2019$pct_asian, col = "blue")
+shapiro.test(dframe2019$pct_asian)
+
+ggdensity(dframe2020$pct_asian, 
+          main = "Density plot of pct_asian",
+          xlab = "pct_asian")
+ggqqplot(dframe2020$pct_asian)
+qqnorm(dframe2020$pct_asian)
+qqline(dframe2020$pct_asian, col = "blue")
+shapiro.test(dframe2020$pct_asian)
+
+ggdensity(dframe2021$pct_asian, 
+          main = "Density plot of pct_asian",
+          xlab = "pct_asian")
+ggqqplot(dframe2021$pct_asian)
+qqnorm(dframe2021$pct_asian)
+qqline(dframe2021$pct_asian, col = "blue")
+shapiro.test(dframe2021$pct_asian)
+```
+
+```{r norm, results='markup', eval=F}
+
+#
+# pct hispanic
+
+ggdensity(dframe2016$pct_hispanic, 
+          main = "Density plot of pct_hispanic",
+          xlab = "pct_hispanic")
+ggqqplot(dframe2016$pct_hispanic)
+qqnorm(dframe2016$pct_hispanic)
+qqline(dframe2016$pct_hispanic, col = "blue")
+shapiro.test(dframe2016$pct_hispanic)
+
+
+
+ggdensity(dframe2017$pct_hispanic, 
+          main = "Density plot of pct_hispanic",
+          xlab = "pct_hispanic")
+ggqqplot(dframe2017$pct_hispanic)
+qqnorm(dframe2017$pct_hispanic)
+qqline(dframe2017$pct_hispanic, col = "blue")
+shapiro.test(dframe2017$pct_hispanic)
+
+
+ggdensity(dframe2018$pct_hispanic, 
+          main = "Density plot of pct_hispanic",
+          xlab = "pct_hispanic")
+ggqqplot(dframe2018$pct_hispanic)
+qqnorm(dframe2018$pct_hispanic)
+qqline(dframe2018$pct_hispanic, col = "blue")
+shapiro.test(dframe2018$pct_hispanic)    
+
+
+ggdensity(dframe2019$pct_hispanic, 
+          main = "Density plot of pct_hispanic",
+          xlab = "pct_hispanic")
+ggqqplot(dframe2019$pct_hispanic)
+qqnorm(dframe2019$pct_hispanic)
+qqline(dframe2019$pct_hispanic, col = "blue")
+shapiro.test(dframe2019$pct_hispanic)
+
+ggdensity(dframe2020$pct_hispanic, 
+          main = "Density plot of pct_hispanic",
+          xlab = "pct_hispanic")
+ggqqplot(dframe2020$pct_hispanic)
+qqnorm(dframe2020$pct_hispanic)
+qqline(dframe2020$pct_hispanic, col = "blue")
+shapiro.test(dframe2020$pct_hispanic)
+
+ggdensity(dframe2021$pct_hispanic, 
+          main = "Density plot of pct_hispanic",
+          xlab = "pct_hispanic")
+ggqqplot(dframe2021$pct_hispanic)
+qqnorm(dframe2021$pct_hispanic)
+qqline(dframe2021$pct_hispanic, col = "blue")
+shapiro.test(dframe2021$pct_hispanic)
+```
+
+```{r norm, results='markup', eval=F}
+
+#
+#pct white
+
+ggdensity(dframe2016$pct_white, 
+          main = "Density plot of pct_white",
+          xlab = "pct_white")
+ggqqplot(dframe2016$pct_white)
+qqnorm(dframe2016$pct_white)
+qqline(dframe2016$pct_white, col = "blue")
+shapiro.test(dframe2016$pct_white)
+
+
+
+ggdensity(dframe2017$pct_white, 
+          main = "Density plot of pct_white",
+          xlab = "pct_white")
+ggqqplot(dframe2017$pct_white)
+qqnorm(dframe2017$pct_white)
+qqline(dframe2017$pct_white, col = "blue")
+shapiro.test(dframe2017$pct_white)
+
+
+ggdensity(dframe2018$pct_white, 
+          main = "Density plot of pct_white",
+          xlab = "pct_white")
+ggqqplot(dframe2018$pct_white)
+qqnorm(dframe2018$pct_white)
+qqline(dframe2018$pct_white, col = "blue")
+shapiro.test(dframe2018$pct_white)    
+
+
+ggdensity(dframe2019$pct_white, 
+          main = "Density plot of pct_white",
+          xlab = "pct_white")
+ggqqplot(dframe2019$pct_white)
+qqnorm(dframe2019$pct_white)
+qqline(dframe2019$pct_white, col = "blue")
+shapiro.test(dframe2019$pct_white)
+
+ggdensity(dframe2020$pct_white, 
+          main = "Density plot of pct_white",
+          xlab = "pct_white")
+ggqqplot(dframe2020$pct_white)
+qqnorm(dframe2020$pct_white)
+qqline(dframe2020$pct_white, col = "blue")
+shapiro.test(dframe2020$pct_white)
+
+ggdensity(dframe2021$pct_white, 
+          main = "Density plot of pct_white",
+          xlab = "pct_white")
+ggqqplot(dframe2021$pct_white)
+qqnorm(dframe2021$pct_white)
+qqline(dframe2021$pct_white, col = "blue")
+shapiro.test(dframe2021$pct_white)
+```
+
+```{r norm, results='markup', eval=F}
+
+#
+# pct female
+
+ggdensity(dframe2016$pct_female, 
+          main = "Density plot of pct_female",
+          xlab = "pct_female")
+ggqqplot(dframe2016$pct_female)
+qqnorm(dframe2016$pct_female)
+qqline(dframe2016$pct_female, col = "blue")
+shapiro.test(dframe2016$pct_female)
+
+
+
+ggdensity(dframe2017$pct_female, 
+          main = "Density plot of pct_female",
+          xlab = "pct_female")
+ggqqplot(dframe2017$pct_female)
+qqnorm(dframe2017$pct_female)
+qqline(dframe2017$pct_female, col = "blue")
+shapiro.test(dframe2017$pct_female)
+
+
+ggdensity(dframe2018$pct_female, 
+          main = "Density plot of pct_female",
+          xlab = "pct_female")
+ggqqplot(dframe2018$pct_female)
+qqnorm(dframe2018$pct_female)
+qqline(dframe2018$pct_female, col = "blue")
+shapiro.test(dframe2018$pct_female)    
+
+
+ggdensity(dframe2019$pct_female, 
+          main = "Density plot of pct_female",
+          xlab = "pct_female")
+ggqqplot(dframe2019$pct_female)
+qqnorm(dframe2019$pct_female)
+qqline(dframe2019$pct_female, col = "blue")
+shapiro.test(dframe2019$pct_female)
+
+ggdensity(dframe2020$pct_female, 
+          main = "Density plot of pct_female",
+          xlab = "pct_female")
+ggqqplot(dframe2020$pct_female)
+qqnorm(dframe2020$pct_female)
+qqline(dframe2020$pct_female, col = "blue")
+shapiro.test(dframe2020$pct_female)
+
+ggdensity(dframe2021$pct_female, 
+          main = "Density plot of pct_female",
+          xlab = "pct_female")
+ggqqplot(dframe2021$pct_female)
+qqnorm(dframe2021$pct_female)
+qqline(dframe2021$pct_female, col = "blue")
+shapiro.test(dframe2021$pct_female)
+
+```
+
+```{r norm, results='markup', eval=F}
+
+#
+# pct rural
+
+
+ggdensity(dframe2016$pct_rural, 
+          main = "Density plot of pct_rural",
+          xlab = "pct_rural")
+ggqqplot(dframe2016$pct_rural)
+qqnorm(dframe2016$pct_rural)
+qqline(dframe2016$pct_rural, col = "blue")
+shapiro.test(dframe2016$pct_rural)
+
+
+
+ggdensity(dframe2017$pct_rural, 
+          main = "Density plot of pct_rural",
+          xlab = "pct_rural")
+ggqqplot(dframe2017$pct_rural)
+qqnorm(dframe2017$pct_rural)
+qqline(dframe2017$pct_rural, col = "blue")
+shapiro.test(dframe2017$pct_rural)
+
+
+ggdensity(dframe2018$pct_rural, 
+          main = "Density plot of pct_rural",
+          xlab = "pct_rural")
+ggqqplot(dframe2018$pct_rural)
+qqnorm(dframe2018$pct_rural)
+qqline(dframe2018$pct_rural, col = "blue")
+shapiro.test(dframe2018$pct_rural)    
+
+
+ggdensity(dframe2019$pct_rural, 
+          main = "Density plot of pct_rural",
+          xlab = "pct_rural")
+ggqqplot(dframe2019$pct_rural)
+qqnorm(dframe2019$pct_rural)
+qqline(dframe2019$pct_rural, col = "blue")
+shapiro.test(dframe2019$pct_rural)
+
+ggdensity(dframe2020$pct_rural, 
+          main = "Density plot of pct_rural",
+          xlab = "pct_rural")
+ggqqplot(dframe2020$pct_rural)
+qqnorm(dframe2020$pct_rural)
+qqline(dframe2020$pct_rural, col = "blue")
+shapiro.test(dframe2020$pct_rural)
+
+ggdensity(dframe2021$pct_rural, 
+          main = "Density plot of pct_rural",
+          xlab = "pct_rural")
+ggqqplot(dframe2021$pct_rural)
+qqnorm(dframe2021$pct_rural)
+qqline(dframe2021$pct_rural, col = "blue")
+shapiro.test(dframe2021$pct_rural)
+
+```
+
+```{r norm, results='markup', eval=F}
+#Shapiro test for all the variables as per year 2016
+
+dframest16 = dframe2016[, c('mental_health_days', 'mental_distress_rate', 'inequality',"median_inc", "hs_grad", "college", "unempl", "child_poverty", "single_parent", "severe_housing", "food_index", "mh_providers", "pop_provider_ratio", "pop", "pct_below18", "pct_black", "pct_native_am", "pct_asian", "pct_hispanic", "pct_white", "pct_female", "pct_rural")]
+
+apply(dframest16, 2, shapiro.test)
+```
+
+```{r norm, results='markup', eval=F}
+#Shapiro test for all the variables as per year 2017
+
+dframest17 = dframe2017[, c('mental_health_days', 'mental_distress_rate', 'inequality',"median_inc", "hs_grad", "college", "college", "unempl", "child_poverty", "single_parent", "severe_housing", "food_index", "mh_providers", "pop_provider_ratio", "pop", "pct_below18", "pct_black", "pct_native_am", "pct_asian", "pct_hispanic", "pct_white", "pct_female", "pct_rural")]
+
+apply(dframest17, 2, shapiro.test)
+```
+
+```{r norm, results='markup', eval=F}
+#Shapiro test for all the variables as per year 2018
+
+dframest18 = dframe2018[, c('mental_health_days', 'mental_distress_rate', 'inequality',"median_inc", "hs_grad", "college", "college", "unempl", "child_poverty", "single_parent", "severe_housing", "food_index", "mh_providers", "pop_provider_ratio", "pop", "pct_below18", "pct_black", "pct_native_am", "pct_asian", "pct_hispanic", "pct_white", "pct_female", "pct_rural")]
+
+apply(dframest18, 2, shapiro.test)
+```
+
+```{r norm, results='markup', eval=F}
+#Shapiro test for all the variables as per year 2019
+
+dframest19 = dframe2019[, c('mental_health_days', 'mental_distress_rate', 'inequality',"median_inc", "hs_grad", "college", "college", "unempl", "child_poverty", "single_parent", "severe_housing", "food_index", "mh_providers", "pop_provider_ratio", "pop", "pct_below18", "pct_black", "pct_native_am", "pct_asian", "pct_hispanic", "pct_white", "pct_female", "pct_rural")]
+
+apply(dframest19, 2, shapiro.test)
+```
+
+```{r norm, results='markup', eval=F}
+#Shapiro test for all the variables as per year 2020
+
+dframest20 = dframe2020[, c('mental_health_days', 'mental_distress_rate', 'inequality',"median_inc", "hs_grad", "college", "college", "unempl", "child_poverty", "single_parent", "severe_housing", "food_index", "mh_providers", "pop_provider_ratio", "pop", "pct_below18", "pct_black", "pct_native_am", "pct_asian", "pct_hispanic", "pct_white", "pct_female", "pct_rural")]
+
+apply(dframest20, 2, shapiro.test)
+```
+
+```{r norm, results='markup', eval=F}
+#Shapiro test for all the variables as per year 2021
+
+dframest21 = dframe2021[, c('mental_health_days', 'mental_distress_rate', 'inequality',"median_inc", "hs_grad", "college", "college", "unempl", "child_poverty", "single_parent", "severe_housing", "food_index", "mh_providers", "pop_provider_ratio", "pop", "pct_below18", "pct_black", "pct_native_am", "pct_asian", "pct_hispanic", "pct_white", "pct_female", "pct_rural")]
+
+apply(dframest21, 2, shapiro.test)
 ```
 
 
