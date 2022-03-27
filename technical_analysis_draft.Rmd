@@ -28,6 +28,7 @@ library(corrplot)
 library(psych)
 library(kableExtra)
 library(ggpubr)
+library(Hmisc)
 ```
 
 
@@ -263,16 +264,16 @@ xkabledplyhead(summ_by_year_region, 8, title = "Table: Data grouped by Year and 
 
 ```{r dstats, results='markup'}
 #Summary Statistics of all Variables used in dframe dataset
-table<-describeBy(dframe)
-table %>%
+table1<-describeBy(dframe)
+table1 %>%
   kbl(caption="Table 1: Summary Statistics for Master Dataset",
        format= "html", col.names = c("Var Num.","Count","Mean","Std. Dev.","Median", "Trimmed Mean", "Mad", "Minimum", "Maximum","Range", "Skewness", "Kurtosis", "S.E."),
       align="r") %>%
    kable_minimal(full_width = F, html_font = "helvetica")
 #Summary Statistics of relevant Variables used in analysis below in dfram dataset
 dframe2<-subset(dframe, select = c("mental_health_days", "mental_distress_rate", "inequality", "median_inc", "hs_grad", "college", "unempl", "child_poverty","single_parent", "severe_housing", "food_index","mh_providers","pop_provider_ratio","pct_rural"))
-table<-describeBy(dframe2)
-table %>%
+table2<-describeBy(dframe2)
+table2 %>%
   kbl(caption="Table 1: Summary Statistics for Master Dataset",
        format= "html", col.names = c("Var Num.","Count","Mean","Std. Dev.","Median", "Trimmed Mean", "Mad", "Minimum", "Maximum","Range", "Skewness", "Kurtosis", "S.E."),
       align="r") %>%
@@ -1032,10 +1033,11 @@ chisq.test()
 
 aov(y ~ x, data=)
 
+sapply(dframe2, class)
 
-pairs()
-cor() ## correlation matrix
-corrplot()
+a<-pairs(dframe2))
+b<-cor(a) ## correlation matrix
+corrplot(dframe2)
 
 
 ```
