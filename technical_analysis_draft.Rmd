@@ -13,6 +13,7 @@ output:
   pdf_document:
     toc: yes
     toc_depth: '3'
+  runtime: shiny
 ---
 
 ```{r init, include=F}
@@ -24,7 +25,8 @@ library(data.table)
 #library(readr)
 library(lattice)
 library(corrplot)
-
+library(psych)
+library(kableExtra)
 ```
 
 
@@ -103,10 +105,14 @@ The variables in the dataset are:
 For more information, see [the measures online](https://www.countyhealthrankings.org/explore-health-rankings/measures-data-sources/2021-measures).
 
 
-```{r import, results='hide'}
+```{r import, results='hide', echo=F}
 
 # import csv as dataframe
+dframe1 <- data.frame(read.csv("data/processed/analytic_data_2016_2021.csv"))
+View(dframe1)
+
 dframe <- data.frame(read.csv("data/processed/analytic_data_2016_2021_with_regions.csv"))
+View(dframe)
 
 # convert variables to factor
 dframe$region <- factor(dframe$region)
@@ -126,7 +132,7 @@ summary(dframe)
 
 # look at county_ranked var; not all counties are ranked; also some aggregated data per state and country exist in the observations
 # =1 means they are ranked, =0 means unranked, and =NA is for state/national data
-# print(summary(dframe$county_ranked))
+print(summary(dframe$county_ranked))
 
 # subset of dataframe including only ranked counties
 ranked <- dframe %>% subset(county_ranked==1)
@@ -254,12 +260,22 @@ xkabledplyhead(summ_by_year_region, 8, title = "Table: Data grouped by Year and 
 
 **Assigned to:** Alex
 
-```{r dstats, results='markup', eval=F}
-
-summary()
-xkablesummary()
-
-
+```{r dstats, results='markup'}
+#Summary Statistics of all Variables used in dframe dataset
+table<-describeBy(dframe)
+table %>%
+  kbl(caption="Table 1: Summary Statistics for Master Dataset",
+       format= "html", col.names = c("Var Num.","Count","Mean","Std. Dev.","Median", "Trimmed Mean", "Mad", "Minimum", "Maximum","Range", "Skewness", "Kurtosis", "S.E."),
+      align="r") %>%
+   kable_minimal(full_width = F, html_font = "helvetica")
+#Summary Statistics of relevant Variables used in analysis below in dfram dataset
+dframe2<-subset(dframe, select = c("mental_health_days", "mental_distress_rate", "inequality", "median_inc", "hs_grad", "college", "unempl", "child_poverty","single_parent", "severe_housing", "food_index","mh_providers","pop_provider_ratio","pct_rural"))
+table<-describeBy(dframe2)
+table %>%
+  kbl(caption="Table 1: Summary Statistics for Master Dataset",
+       format= "html", col.names = c("Var Num.","Count","Mean","Std. Dev.","Median", "Trimmed Mean", "Mad", "Minimum", "Maximum","Range", "Skewness", "Kurtosis", "S.E."),
+      align="r") %>%
+   kable_minimal(full_width = F, html_font = "helvetica")
 ```
 
 
