@@ -857,11 +857,16 @@ For example, Chi Square tests, ANOVA analysis, Z-test or Z-interval, T-test or T
 
 ```{r corr, results='markup'}
 
+# slice dataframe to include only numeric variables
 ranked_num <- ranked[10:length(ranked)]
-corr_matrix <- cor(ranked_num[1:3]) ## correlation matrix
+
+# compute correlation matrix of numeric vars
+corr_matrix <- cor(ranked_num, use = "na.or.complete") ## specify use to deal with NA values
 corr_matrix
 
-corrplot(corr_matrix)
+# visualize correlation matrix
+corr_plot <- corrplot(corr_matrix)
+corr_plot
 
 ```
 
@@ -995,15 +1000,45 @@ The ANOVA test for poor mental health days produced an F-statistic of `r summary
 
 The ANOVA test for the frequent mental distress rate produced an F-statistic of `r summary_mh_rate[[1]][1,4]` with a p-value of `r summary_mh_rate[[1]][1,5]`. After rejecting the null, the Tukey results suggest that all regions, except the Northeast and the West, have significantly different means for `mental_distress_rate`.
 
+[INSERT something about why we're doing a chi-squared test]
 
-```{r, include=FALSE}
+```{r chitest, results='markup'}
 
-# Hypothesis Testing: Test the process of making decisions about the value of a population parameter
+# subset data
+ranked_subset <- ranked %>% subset(select = c(inequality,mental_health_days,mental_distress_rate))
+xkabledplyhead(ranked_subset, title = "Subset before Rounding")
 
-# difference in means
-# - rural vs urban (create binary indicator at 50%?)
-# - across report years (2017 to 2021)
-# - by region (ANOVA)
+# round values to limit the size of the contingency table
+# inequality and mh_rate have too many decimals that make it very expensive to calculate 
+ranked_subset$inequality <- round(ranked_subset$inequality, 1)
+ranked_subset$mental_health_days <- round(ranked_subset$mental_health_days, 1)
+ranked_subset$mental_distress_rate <- round(ranked_subset$mental_distress_rate, 2)
+xkabledplyhead(ranked_subset, title = "Subset after Rounding")
+
+# chi-squared test 1
+contable_days <- table(ranked_subset$inequality, ranked_subset$mental_health_days)
+chitest_days = chisq.test(contable_days)
+chitest_days
+
+# chi-squared test 2
+contable_rate <- table(ranked_subset$inequality, ranked_subset$mental_distress_rate)
+chitest_rate = chisq.test(contable_rate)
+chitest_rate
+
+```
+
+The $\chi^2$ test statistic between `inequality` and `mental_health_days` is `r chitest_days$statistic`, with a p-value of `r chitest_days$p.value` and `r chitest_days$parameter` degrees of freedom.
+
+The $\chi^2$ test statistic between `inequality` and `mental_distress_rate` is `r chitest_rate$statistic`, with a p-value of `r chitest_rate$p.value` and `r chitest_rate$parameter` degrees of freedom.
+
+[INSERT conclusion]
+
+```{r chitest_expected, eval=FALSE}
+
+# tabulate expected frequencies for each chi-squared test
+xkabledply(chitest_days$expected, title = "Expected frequencies: Income inequality vs. Poor mental health days", wide = T)
+
+xkabledply(chitest_rate$expected, title = "Expected frequencies: Income inequality vs. Frequent mental distress rate", wide = T)
 
 ```
 
@@ -1016,6 +1051,14 @@ The ANOVA test for the frequent mental distress rate produced an F-statistic of 
 **Assigned to:** TBD
 
 ```{r reg, results='markup', eval=F}
+
+# Hypothesis Testing: Test the process of making decisions about the value of a population parameter
+
+# difference in means
+# - rural vs urban (create binary indicator at 50%?)
+# - across report years (2017 to 2021)
+# - by region (ANOVA)
+
 
 lm()
 xkablevif()
