@@ -726,6 +726,7 @@ ranked[keep_var] %>%
 ##Assigned to: Xuan
 # In this part, in order to better show the relationship between the economic level and mental health of people, mental_distress_rate in different regions of the United States, I divided the United States into 4 regions by geographical method (for details, you can check this link below). I will analyze the four parts of "Northeast", "South", "West", "Midwest" separately.(https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf) In addition, I would like to say that there are many independent variables and dependent variables selected by our group, but in order to shorten the space and highlight the key points, I only select two independent variables and two dependent variable for analysis. The two independent variables that I selected are "Median household income" (median_inc) and "Income inequality" (inequality). The two dependent variable that I selected is "Poor mental health days" (mental_health_days) and "Frequent mental distress rate" (mental_distress_rate).
 dframe0NA <- na.omit(dframe)
+# In the above code, I remove all NA of the dframe and save it as dframe0NA.
 #View(dframe0NA)
 dframe2016 = subset(dframe0NA, year == 2016)
 dframe2017 = subset(dframe0NA, year == 2017)
@@ -733,15 +734,22 @@ dframe2018 = subset(dframe0NA, year == 2018)
 dframe2019 = subset(dframe0NA, year == 2019)
 dframe2020 = subset(dframe0NA, year == 2020)
 dframe2021 = subset(dframe0NA, year == 2021)
-#boxplot(dframe2016West$mental_health_days, main="The relationship between median_inc and mental_health_days", ylab="mental_health_days(days)",col='#0000FF')
+# In the above code, I divided dframe0NA into 6 subsets by year, from 2016 to 2021. This makes subsequent drawings easier.
+dframeNortheast = subset(dframe0NA, region == "Northeast")
+dframeSouth = subset(dframe0NA, region == "South")
+dframeWest = subset(dframe0NA, region == "West")
+dframeMidwest = subset(dframe0NA, region == "Midwest")
+# In the above code, I divided dframe0NA into 4 subsets by regions. This makes subsequent drawings easier.
 
 loadPkg("ggplot2")
 dframe$year <- factor(dframe$year)
+# In the above code, I set "year" as a variable. Frankly speaking, this step can be done earlier. In the below codes, because what I went to draw was some boxplots, which usually only represents one variable, I designed the code in order to be able to relate the variable to different regions (the U.S. is divided into four geographic regions). In each box plot, you can see the one variable in different regions.
 ```
 
 ```{r boxplots_median_inc, results='markup'}
 ##Assigned to: Xuan
 ##### Characterizations of the Median household income of four regions in the United States from 2016 to 2021.
+##### The following 6 photographs, show the median household income of 4 regions from 2016 to 2021 (6 years). So I mean, one photograph is related to one year. And the trend of these 6 photographs are same. It is easy to find that the median household income of northeast region is the biggest. Followed by west region. It's not difficult to understand, the northeast region has New York, the biggest city in US, the west region has LA, the second biggest city in US. In addition, the median household income of midwest region and south region are relatively low. But the gap between rich and poor in the midwest and south is relatively small.
 
 # Characterization of the Median household income of four regions in the United States in 2016.
 h1 <- ggplot(dframe2016, aes(x=region, y=median_inc)) + 
@@ -783,9 +791,110 @@ histplot1 <- grid.arrange(h1,h2,h3,h4,h5,h6, nrow=2, ncol=3)
 annotate_figure(histplot1, top = text_grob("The Characterization of Median Income by Region per Year", color = "black", face = "bold", size = 14))
 ```
 
+```{r boxplots_median_inc_region, results='markup'}
+##### Characterizations of the Median household income of four regions from 2016 to 2021, decided by regions.
+##### From the four photographs below, we can see that the trend of median household income in all 4 regions gradually upward from 2016 to 2021. For example, in south region, the median household income in 2016 was about $40,000, and by 2021, it was close to $50,000.
+
+# Characterization of the Median household income of northeast region from 2016 to 2021.
+ggplot(dframeNortheast, aes(x=year, y=median_inc)) +
+  geom_boxplot() +
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The trend of median_inc of northeast region from 2016 to 2021")
+
+# Characterization of the Median household income of south region from 2016 to 2021.
+ggplot(dframeSouth, aes(x=year, y=median_inc)) +
+  geom_boxplot() +
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The trend of median_inc of south region from 2016 to 2021")
+
+# Characterization of the Median household income of west region from 2016 to 2021.
+ggplot(dframeWest, aes(x=year, y=median_inc)) +
+  geom_boxplot() +
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The trend of median_inc of west region from 2016 to 2021")
+
+# Characterization of the Median household income of midwest region from 2016 to 2021.
+ggplot(dframeMidwest, aes(x=year, y=median_inc)) +
+  geom_boxplot() +
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The trend of median_inc of midwest region from 2016 to 2021")
+```
+
+```{r boxplots_inequality, results='markup'}
+##Assigned to: Xuan
+##### Characterizations of Income inequality of four regions in the United States from 2016 to 2021.
+##### The following 6 photographs, show the income inequality of 4 regions from 2016 to 2021 (6 years). So I mean, one photograph is related to one year. And the trend of these 6 photographs are same. From these 6 photographs, we can find that the income inequality of south region is biggest.This also happens to validate the six plots above for median household income. The South, which has the lowest median household income, is likely to have the greatest income inequality problem.
+
+# Characterization of Income inequality of four regions in the United States in 2016.
+ggplot(dframe2016, aes(x=region, y=inequality)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of Income inequality of four regions in 2016")
+
+# Characterization of Income inequality of four regions in the United States in 2017.
+ggplot(dframe2017, aes(x=region, y=inequality)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of Income inequality of four regions in 2017")
+
+# Characterization of Income inequality of four regions in the United States in 2018.
+ggplot(dframe2018, aes(x=region, y=inequality)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of Income inequality of four regions in 2018")
+
+# Characterization of Income inequality of four regions in the United States in 2019.
+ggplot(dframe2019, aes(x=region, y=inequality)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of Income inequality of four regions in 2019")
+
+# Characterization of Income inequality in four regions of the United States in 2020.
+ggplot(dframe2020, aes(x=region, y=inequality)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of Income inequality of four regions in 2020")
+
+# Characterization of Income inequality of four regions in the United States in 2021.
+ggplot(dframe2021, aes(x=region, y=inequality)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The Characterization of Income inequality of four regions in 2021")
+```
+
+```{r boxplots_inequality_region, results='markup'}
+##### Characterizations of the income inequality of four regions from 2016 to 2021, decided by regions.
+##### From the four photographs below, we can easily find that, no matter which region it is, the status of income inequality has not changed much from 2016 to 2021. For example, in the Northeast region, it has been around 4.4% for 6 consecutive years. This kind of data result could provide some advice for local governments to continue working to reduce or even eliminate income inequality.
+
+# Characterization of the income inequality of northeast region from 2016 to 2021.
+ggplot(dframeNortheast, aes(x=year, y=inequality)) +
+  geom_boxplot() +
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The trend of Income inequality of northeast region from 2016 to 2021")
+
+# Characterization of the income inequality of south region from 2016 to 2021.
+ggplot(dframeSouth, aes(x=year, y=inequality)) +
+  geom_boxplot() +
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The trend of Income inequality of south region from 2016 to 2021")
+
+# Characterization of the income inequality of west region from 2016 to 2021.
+ggplot(dframeWest, aes(x=year, y=inequality)) +
+  geom_boxplot() +
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The trend of Income inequality of west region from 2016 to 2021")
+
+# Characterization of the income inequality of midwest region from 2016 to 2021.
+ggplot(dframeMidwest, aes(x=year, y=inequality)) +
+  geom_boxplot() +
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="The trend of Income inequality of midwest region from 2016 to 2021")
+```
+
 ```{r boxplots_mh_days, results='markup'}
 ##Assigned to: Xuan
 ##### Characterizations of the Poor mental health days/month of four regions in the United States from 2016 to 2021.
+##### In the following 6 photographs, we can easily find that the south region has the biggest poor mental health days. This is consistent with our previous findings. The South has the lowest median household income of the four regions. So, people in the South are more likely to be unhappy.
 
 # Characterization of the Poor mental health days/month of four regions in the United States in 2016.
 h7<-ggplot(dframe2016, aes(x=region, y=mental_health_days)) + 
@@ -828,9 +937,40 @@ annotate_figure(histplot2, top = text_grob("The Characterization of Mentally Unh
 
 ```
 
-```{r boxplots_mh_rate, results='markup'}
+```{r boxplots_mh_days_region, results='markup'}
+##Assigned to: Xuan
+##### Characterizations of the Poor mental health days/month of 4 regions from 2016 to 2021
+##### From following 4 photographs, we can easily find that the poor mental health days gradually go up, no matter in which region. Combined with the results of the previous findings, even though the income of local people is increasing year by year, their unhappy time is still increasing. My guess is that income growth is not keeping up with local prices.
+
+# Characterization of the Poor mental health days/month of northeast region from 2016 to 2021.
+ggplot(dframeNortheast, aes(x=year, y=mental_health_days)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="mental unhealthy days/month of northeast region from 2016 to 2021")
+
+# Characterization of the Poor mental health days/month of south region from 2016 to 2021.
+ggplot(dframeSouth, aes(x=year, y=mental_health_days)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="mental unhealthy days/month of south region from 2016 to 2021")
+
+# Characterization of the Poor mental health days/month of west region from 2016 to 2021.
+ggplot(dframeWest, aes(x=year, y=mental_health_days)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="mental unhealthy days/month of west region from 2016 to 2021")
+
+# Characterization of the Poor mental health days/month of midwest region from 2016 to 2021.
+ggplot(dframeMidwest, aes(x=year, y=mental_health_days)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="mental unhealthy days/month of midwest region from 2016 to 2021")
+```
+
+```{r boxplots_md_rate, results='markup'}
 ##Assigned to: Xuan
 ##### Characterizations of the Frequent mental distress rate of four regions in the United States from 2016 to 2021.
+##### The following 6 photographs shows the similar results as the above "Characterizations of the Poor mental health days/month of four regions in the United States from 2016 to 2021". Stress, nervousness, and mentally unhealthy emotions are all related to income. The lower the income, the more stressful it is. Just like south region.
 
 # Characterization of the Frequent mental distress rate of four regions in the United States in 2016.
 h13<-ggplot(dframe2016, aes(x=region, y=mental_distress_rate)) + 
@@ -873,50 +1013,26 @@ annotate_figure(histplot3, top = text_grob("The Characterization of Frequent Men
 
 ```
 
-```{r boxplots_inequality, results='markup'}
+```{r boxplots_md_rate_region, results='markup'}
 ##Assigned to: Xuan
-##### Characterizations of Income inequality of four regions in the United States from 2016 to 2021.
+##### Characterizations of the Frequent mental distress rate of 4 regions from 2016 to 2021
+##### From following 4 photographs, we can easily find that the frequent mental distress rate gradually goes up, no matter in which region. Combined with the results of the previous findings, even though the income of local people is increasing year by year, it is still easy for then to feel stressed. My guess is that income growth is not keeping up with local prices. Maybe because of COVID-19, we can see that the trend from 2020 to 2021 is more obvious than previous years.
 
-# Characterization of Income inequality of four regions in the United States in 2016.
-h19<-ggplot(dframe2016, aes(x=region, y=inequality)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of Income inequality of four regions in 2016")
+  labs(title="Frequent mental distress rate of northeast region from 2016 to 2021")
 
-# Characterization of Income inequality of four regions in the United States in 2017.
-h20<-ggplot(dframe2017, aes(x=region, y=inequality)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of Income inequality of four regions in 2017")
+  labs(title="Frequent mental distress rate of south region from 2016 to 2021")
 
-# Characterization of Income inequality of four regions in the United States in 2018.
-h21<-ggplot(dframe2018, aes(x=region, y=inequality)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of Income inequality of four regions in 2018")
+  labs(title="Frequent mental distress rate of west region from 2016 to 2021")
 
-# Characterization of Income inequality of four regions in the United States in 2019.
-h22<-ggplot(dframe2019, aes(x=region, y=inequality)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of Income inequality of four regions in 2019")
-
-# Characterization of Income inequality in four regions of the United States in 2020.
-h23<-ggplot(dframe2020, aes(x=region, y=inequality)) + 
-  geom_boxplot() + 
-  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of Income inequality of four regions in 2020")
-
-# Characterization of Income inequality of four regions in the United States in 2021.
-h24<-ggplot(dframe2021, aes(x=region, y=inequality)) + 
-  geom_boxplot() + 
-  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="2021")
-
-
-histplot4 <- grid.arrange(h19,h20,h21,h22,h21,h24, nrow=2, ncol=3)
-annotate_figure(histplot3, top = text_grob("The Characterization of Income Inequality by Region per Year", color = "black", face = "bold", size = 14))
-
+  labs(title="Frequent mental distress rate of midwest region from 2016 to 2021")
 ```
 
 ## Measures of Variation
@@ -928,75 +1044,53 @@ Variance, standard deviation, etc.
 
 ```{r variance, results='markup'}
 
-var(dframe0NA$median_inc)
-var(dframe0NA$inequality)
-var(dframe0NA$mental_health_days)
-var(dframe0NA$mental_distress_rate)
+# Variance, standard of median_inc of different region from 2016 to 2021.
+var(dframeNortheast$median_inc)
+var(dframeSouth$median_inc)
+var(dframeWest$median_inc)
+var(dframeMidwest$median_inc)
 
-sd(dframe0NA$median_inc)
-sd(dframe0NA$inequality)
-sd(dframe0NA$mental_health_days)
-sd(dframe0NA$mental_distress_rate)
+sd(dframeNortheast$median_inc)
+sd(dframeSouth$median_inc)
+sd(dframeWest$median_inc)
+sd(dframeMidwest$median_inc)
+#From above data, we can see the Northeast region's people has the largest gap between the rich and the poor, and the Midwest has the smallest gap.
 
-# Variance, standard of selected independent variables and dependent variables in 2016
-var(dframe2016$median_inc)
-var(dframe2016$inequality)
-var(dframe2016$mental_health_days)
-var(dframe2016$mental_distress_rate)
-sd(dframe2016$median_inc)
-sd(dframe2016$inequality)
-sd(dframe2016$mental_health_days)
-sd(dframe2016$mental_distress_rate)
+# Variance, standard of inequality of different region from 2016 to 2021.
+var(dframeNortheast$inequality)
+var(dframeSouth$inequality)
+var(dframeWest$inequality)
+var(dframeMidwest$inequality)
 
-# Variance, standard of selected independent variables and dependent variables in 2017
-var(dframe2017$median_inc)
-var(dframe2017$inequality)
-var(dframe2017$mental_health_days)
-var(dframe2017$mental_distress_rate)
-sd(dframe2017$median_inc)
-sd(dframe2017$inequality)
-sd(dframe2017$mental_health_days)
-sd(dframe2017$mental_distress_rate)
+sd(dframeNortheast$inequality)
+sd(dframeSouth$inequality)
+sd(dframeWest$inequality)
+sd(dframeMidwest$inequality)
+#From above data, we can see the South region's people has the largest income inequality.
 
-# Variance, standard of selected independent variables and dependent variables in 2018
-var(dframe2018$median_inc)
-var(dframe2018$inequality)
-var(dframe2018$mental_health_days)
-var(dframe2018$mental_distress_rate)
-sd(dframe2018$median_inc)
-sd(dframe2018$inequality)
-sd(dframe2018$mental_health_days)
-sd(dframe2018$mental_distress_rate)
+# Variance, standard of mental_distress_rate of different region from 2016 to 2021.
+var(dframeNortheast$mental_distress_rate)
+var(dframeSouth$mental_distress_rate)
+var(dframeWest$mental_distress_rate)
+var(dframeMidwest$mental_distress_rate)
 
-# Variance, standard of selected independent variables and dependent variables in 2019
-var(dframe2019$median_inc)
-var(dframe2019$inequality)
-var(dframe2019$mental_health_days)
-var(dframe2019$mental_distress_rate)
-sd(dframe2019$median_inc)
-sd(dframe2019$inequality)
-sd(dframe2019$mental_health_days)
-sd(dframe2019$mental_distress_rate)
+sd(dframeNortheast$mental_distress_rate)
+sd(dframeSouth$mental_distress_rate)
+sd(dframeWest$mental_distress_rate)
+sd(dframeMidwest$mental_distress_rate)
+#From above data, we can see the South region's people has the largest mental distress (maybe because of low income), and the Northeast has the smallest mental distress (maybe because they have much more money).
 
-# Variance, standard of selected independent variables and dependent variables in 2020
-var(dframe2020$median_inc)
-var(dframe2020$inequality)
-var(dframe2020$mental_health_days)
-var(dframe2020$mental_distress_rate)
-sd(dframe2020$median_inc)
-sd(dframe2020$inequality)
-sd(dframe2020$mental_health_days)
-sd(dframe2020$mental_distress_rate)
+# Variance, standard of mental_health_days of different region from 2016 to 2021.
+var(dframeNortheast$mental_health_days)
+var(dframeSouth$mental_health_days)
+var(dframeWest$mental_health_days)
+var(dframeMidwest$mental_health_days)
 
-# Variance, standard of selected independent variables and dependent variables in 2021
-var(dframe2021$median_inc)
-var(dframe2021$inequality)
-var(dframe2021$mental_health_days)
-var(dframe2021$mental_distress_rate)
-sd(dframe2021$median_inc)
-sd(dframe2021$inequality)
-sd(dframe2021$mental_health_days)
-sd(dframe2021$mental_distress_rate)
+sd(dframeNortheast$mental_health_days)
+sd(dframeSouth$mental_health_days)
+sd(dframeWest$mental_health_days)
+sd(dframeMidwest$mental_health_days)
+#From above data, we can see the South region's people has the largest mental unhealthy days/month (maybe because of low income), and the Northeast has the smallest mental unhealthy days/month (maybe because they have much more money).
 
 ```
 
