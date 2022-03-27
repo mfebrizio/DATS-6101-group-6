@@ -297,6 +297,7 @@ loadPkg("patchwork") ## for combining graphs
 loadPkg("purrr")
 loadPkg("tidyr")
 loadPkg("gridExtra")
+loadPkg("ggpubr")
 
 ```
 
@@ -1127,7 +1128,14 @@ sd(dframeMidwest$mental_health_days)
 
 ```
 
+[GO back and fill in inline R]
+From above data, we can see the Northeast region's people has the largest gap between the rich and the poor, and the Midwest has the smallest gap.
 
+From above data, we can see the South region's people has the largest income inequality.
+
+From above data, we can see the South region's people has the largest mental distress (maybe because of low income), and the Northeast has the smallest mental distress (maybe because they have much more money).
+
+From above data, we can see the South region's people has the largest mental unhealthy days/month (maybe because of low income), and the Northeast has the smallest mental unhealthy days/month (maybe because they have much more money).
 
 
 ## Normality tests
@@ -1135,11 +1143,7 @@ sd(dframeMidwest$mental_health_days)
 
 **Assigned to:** Shumel
 
-```{r norm, results='markup', eval=F}
-
-
-library("dplyr")
-library("ggpubr")
+```{r norm_a, results='markup', warning=FALSE}
 
 # density plot of all the variable for every year
 
@@ -1164,9 +1168,11 @@ ggplot(dframe, aes(x = pct_asian , color = year, fill = year)) + geom_density(al
 ggplot(dframe, aes(x = pct_hispanic , color = year, fill = year)) + geom_density(alpha = 0.5)
 ggplot(dframe, aes(x = pct_white , color = year, fill = year)) + geom_density(alpha = 0.5)
 ggplot(dframe, aes(x = pct_rural , color = year, fill = year)) + geom_density(alpha = 0.5)
+
 ```
-```{r norm, results='markup', eval=F}
-library("ggpubr")
+
+```{r norm_b, warning=FALSE, results='markup'}
+
 # normality test of as per year
 #mental distress rate
 
@@ -1223,10 +1229,9 @@ shapiro.test(dframe2021$mental_distress_rate)
 
 ```
 
-```{r norm, results='markup', eval=F}
 
+```{r norm_c, results='markup', warning=FALSE}
 
-#
 # mental health days
 
 ggdensity(dframe2016$mental_health_days, 
@@ -1283,7 +1288,7 @@ shapiro.test(dframe2021$mental_health_days)
 
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm_d, results='markup', warning=FALSE}
 
 #
 # inequality
@@ -1342,7 +1347,7 @@ shapiro.test(dframe2021$inequality)
 
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm_e, results='markup', warning=FALSE}
 
 #
 # median inc
@@ -1401,7 +1406,8 @@ shapiro.test(dframe2021$median_inc)
 
 ```
 
-```{r norm, results='markup', eval=F}
+
+```{r norm_f, results='markup', warning=FALSE}
 
 #
 # hs grad
@@ -1460,7 +1466,7 @@ shapiro.test(dframe2021$hs_grad)
 
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm_g, results='markup', warning=F, include=F}
 
 #
 # college
@@ -1519,7 +1525,7 @@ shapiro.test(dframe2021$college)
 
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm, results='markup', include=F}
 
 #
 #unempl
@@ -1578,7 +1584,7 @@ qqline(dframe2021$unempl, col = "blue")
 shapiro.test(dframe2021$unempl)
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm, results='markup', include=F}
 
 
 #
@@ -1638,7 +1644,7 @@ qqline(dframe2021$child_poverty, col = "blue")
 shapiro.test(dframe2021$child_poverty)
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm, results='markup', include=F}
 
 #
 # single parent
@@ -1697,7 +1703,7 @@ qqline(dframe2021$single_parent, col = "blue")
 shapiro.test(dframe2021$single_parent)
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm, results='markup', include=F}
 
 #
 # Severe housing
@@ -1756,7 +1762,7 @@ qqline(dframe2021$severe_housing, col = "blue")
 shapiro.test(dframe2021$severe_housing)
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm, results='markup', include=F}
 
 #
 #food index
@@ -1814,7 +1820,7 @@ qqline(dframe2021$food_index, col = "blue")
 shapiro.test(dframe2021$food_index)
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm, results='markup', include=F}
 
 #
 # mh provider
@@ -1873,7 +1879,7 @@ qqline(dframe2021$mh_providers, col = "blue")
 shapiro.test(dframe2021$mh_providers)
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm, results='markup', include=F}
 
 #
 #pop_provider_ratio
@@ -1932,7 +1938,7 @@ qqline(dframe2021$pop_provider_ratio, col = "blue")
 shapiro.test(dframe2021$pop_provider_ratio)
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm, results='markup', eval=F, include=F}
 
 #
 # pop
@@ -1991,7 +1997,7 @@ qqline(dframe2021$pop, col = "blue")
 shapiro.test(dframe2021$pop)
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm, results='markup', eval=F, include=FALSE}
 
 #
 # pct_below18
@@ -2050,7 +2056,7 @@ qqline(dframe2021$pct_below18, col = "blue")
 shapiro.test(dframe2021$pct_below18)
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm, results='markup', eval=F, include=FALSE}
 
 
 #
@@ -2109,7 +2115,7 @@ qqline(dframe2021$pct_black, col = "blue")
 shapiro.test(dframe2021$pct_black)
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm, results='markup', eval=F, include=FALSE}
 
 #
 # pct native american
@@ -2169,7 +2175,7 @@ shapiro.test(dframe2021$pct_native_am)
 
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm, results='markup', eval=F, include=FALSE}
 
 #
 # pct asian
@@ -2227,7 +2233,7 @@ qqline(dframe2021$pct_asian, col = "blue")
 shapiro.test(dframe2021$pct_asian)
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm, results='markup', eval=F, include=FALSE}
 
 #
 # pct hispanic
@@ -2285,7 +2291,7 @@ qqline(dframe2021$pct_hispanic, col = "blue")
 shapiro.test(dframe2021$pct_hispanic)
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm, results='markup', eval=F, include=FALSE}
 
 #
 #pct white
@@ -2343,7 +2349,7 @@ qqline(dframe2021$pct_white, col = "blue")
 shapiro.test(dframe2021$pct_white)
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm, results='markup', eval=F, include=FALSE}
 
 #
 # pct female
@@ -2402,7 +2408,7 @@ shapiro.test(dframe2021$pct_female)
 
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm, results='markup', eval=F, include=FALSE}
 
 #
 # pct rural
@@ -2462,7 +2468,7 @@ shapiro.test(dframe2021$pct_rural)
 
 ```
 
-```{r norm, results='markup', eval=F}
+```{r norm_shapiro, results='markup', eval=F}
 #Shapiro test for all the variables as per year 2016
 
 dframest16 = dframe2016[, c('mental_health_days', 'mental_distress_rate', 'inequality',"median_inc", "hs_grad", "college", "unempl", "child_poverty", "single_parent", "severe_housing", "food_index", "mh_providers", "pop_provider_ratio", "pop", "pct_below18", "pct_black", "pct_native_am", "pct_asian", "pct_hispanic", "pct_white", "pct_female", "pct_rural")]
