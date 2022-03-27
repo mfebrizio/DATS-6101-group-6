@@ -118,7 +118,7 @@ dframe$county_ranked <- factor(dframe$county_ranked)
 
 # check structure of data
 str(dframe)
-summary(dframe)
+#summary(dframe)
 
 ```
 
@@ -158,6 +158,9 @@ for (df in df_annual_list) {
   
 }
 
+# sort dataframe
+ranked <- ranked[order(ranked$year, ranked$region, ranked$division, ranked$statecode, ranked$countycode), ]
+
 # view head and tail of ranked data
 xkabledplyhead(ranked, 2, title = "Table: First 2 Rows of Ranked Data")
 xkabledplytail(ranked, 2, title = "Table: Last 2 Rows of Ranked Data")
@@ -176,7 +179,7 @@ Next, we grouped the data by year and state and calculated population-weighted m
 
 Finally, we grouped the data by region, giving us a sense of the size of the 4 census regions: the South contains the most states and counties and has the largest population, while the Northeast is the smallest on these measures. The Northeast has highest measured inequality, and the Midwest has the lowest. The mental health variables are highest (i.e., worst) in the South and lowest in the West. These general trends hold up when grouping by year and region. These differences suggest that comparing the relationship between the variables across regions would be worthwhile.
 
-```{r ranked, results='markup', message=FALSE}
+```{r ranked, results='markup'}
 
 # groupby year
 ranked_by_year <- ranked %>% group_by(year)
@@ -852,18 +855,13 @@ qqline()
 
 For example, Chi Square tests, ANOVA analysis, Z-test or Z-interval, T-test or T-interval, etc.
 
-```{r corr, results='markup', eval=F}
+```{r corr, results='markup'}
 
-t.test()
+ranked_num <- ranked[10:length(ranked)]
+corr_matrix <- cor(ranked_num[1:3]) ## correlation matrix
+corr_matrix
 
-
-aov(y ~ x, data=)
-
-
-pairs()
-cor() ## correlation matrix
-corrplot()
-
+corrplot(corr_matrix)
 
 ```
 
@@ -998,30 +996,14 @@ The ANOVA test for poor mental health days produced an F-statistic of `r summary
 The ANOVA test for the frequent mental distress rate produced an F-statistic of `r summary_mh_rate[[1]][1,4]` with a p-value of `r summary_mh_rate[[1]][1,5]`. After rejecting the null, the Tukey results suggest that all regions, except the Northeast and the West, have significantly different means for `mental_distress_rate`.
 
 
-Next, we conducted a $\chi^2$ test of independence to see whether our dependent and independent var are independent
-
-
-```{r chi_test, results='markup'}
-
-# create contingency table
-contable = table(ranked$inequality, ranked$mental_health_days)
-xkabledply(contable, title="Contingency table for Inequality vs. Poor Mental Health Days")
-
-# chi-squared test
-chitest <- chisq.test(contable)
-chitest
-
-
-
+```{r, include=FALSE}
 
 # Hypothesis Testing: Test the process of making decisions about the value of a population parameter
 
 # difference in means
 # - rural vs urban (create binary indicator at 50%?)
 # - across report years (2017 to 2021)
-# - by region (ANOVA or chi-sq??)
-
-
+# - by region (ANOVA)
 
 ```
 
