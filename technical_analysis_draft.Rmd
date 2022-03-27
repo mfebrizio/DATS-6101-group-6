@@ -22,7 +22,7 @@ runtime: shiny
 library(ezids)
 library(dplyr)
 library(data.table)
-#library(readr)
+library(readr)
 library(lattice)
 library(corrplot)
 library(psych)
