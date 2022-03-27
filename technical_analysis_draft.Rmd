@@ -1018,18 +1018,26 @@ annotate_figure(histplot3, top = text_grob("The Characterization of Frequent Men
 ##### Characterizations of the Frequent mental distress rate of 4 regions from 2016 to 2021
 ##### From following 4 photographs, we can easily find that the frequent mental distress rate gradually goes up, no matter in which region. Combined with the results of the previous findings, even though the income of local people is increasing year by year, it is still easy for then to feel stressed. My guess is that income growth is not keeping up with local prices. Maybe because of COVID-19, we can see that the trend from 2020 to 2021 is more obvious than previous years.
 
+# Characterization of the Frequent mental distress rate of northeast region from 2016 to 2021.
+ ggplot(dframeNortheast, aes(x=year, y=mental_distress_rate)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
   labs(title="Frequent mental distress rate of northeast region from 2016 to 2021")
 
+# Characterization of the Frequent mental distress rate of south region from 2016 to 2021.
+ ggplot(dframeSouth, aes(x=year, y=mental_distress_rate)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
   labs(title="Frequent mental distress rate of south region from 2016 to 2021")
 
+# Characterization of the Frequent mental distress rate of west region from 2016 to 2021.
+ ggplot(dframeWest, aes(x=year, y=mental_distress_rate)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
   labs(title="Frequent mental distress rate of west region from 2016 to 2021")
 
+# Characterization of the Frequent mental distress rate of midwest region from 2016 to 2021.
+ ggplot(dframeMidwest, aes(x=year, y=mental_distress_rate)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
   labs(title="Frequent mental distress rate of midwest region from 2016 to 2021")
