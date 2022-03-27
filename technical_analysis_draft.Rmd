@@ -27,6 +27,7 @@ library(lattice)
 library(corrplot)
 library(psych)
 library(kableExtra)
+library(ggpubr)
 ```
 
 
@@ -742,40 +743,44 @@ dframe$year <- factor(dframe$year)
 ##### Characterizations of the Median household income of four regions in the United States from 2016 to 2021.
 
 # Characterization of the Median household income of four regions in the United States in 2016.
-ggplot(dframe2016, aes(x=region, y=median_inc)) + 
+h1 <- ggplot(dframe2016, aes(x=region, y=median_inc)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of median_inc of four regions in 2016")
+  labs(title="2016")
 
 # Characterization of the Median household income of four regions in the United States in 2017.
-ggplot(dframe2017, aes(x=region, y=median_inc)) + 
+h2 <-ggplot(dframe2017, aes(x=region, y=median_inc)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of median_inc of four regions in 2017")
+  labs(title="2017")
 
 # Characterization of the Median household income of four regions in the United States in 2018.
-ggplot(dframe2018, aes(x=region, y=median_inc)) + 
+h3 <-ggplot(dframe2018, aes(x=region, y=median_inc)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of median_inc of four regions in 2018")
+  labs(title="2018")
 
 # Characterization of the Median household income of four regions in the United States in 2019.
-ggplot(dframe2019, aes(x=region, y=median_inc)) + 
+h4 <-ggplot(dframe2019, aes(x=region, y=median_inc)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of median_inc of four regions in 2019")
+  labs(title="2019")
 
 # Characterization of the Median household income of four regions in the United States in 2020.
-ggplot(dframe2020, aes(x=region, y=median_inc)) + 
+h5 <-ggplot(dframe2020, aes(x=region, y=median_inc)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of median_inc of four regions in 2020")
+  labs(title="2020")
 
 # Characterization of the Median household income of four regions in the United States in 2021.
-ggplot(dframe2021, aes(x=region, y=median_inc)) + 
+h6 <-ggplot(dframe2021, aes(x=region, y=median_inc)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of median_inc of four regions in 2021")
+  labs(title="2021")
+
+histplot1 <- grid.arrange(h1,h2,h3,h4,h5,h6, nrow=2, ncol=3)
+annotate_figure(histplot1, top = text_grob("The Characterization of Median Income by Region per Year", color = "black", face = "bold", size = 14))
+
 ```
 
 ```{r boxplots_mh_days, results='markup'}
@@ -858,6 +863,10 @@ ggplot(dframe2021, aes(x=region, y=mental_distress_rate)) +
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
   labs(title="The Characterization of Frequent mental distress rate/month of four regions in 2021")
+
+histplot <- grid.arrange(c1,c2, nrow=1, ncol=2)
+
+
 ```
 
 ```{r boxplots_inequality, results='markup'}
