@@ -2504,11 +2504,16 @@ chisq.test()
 
 aov(y ~ x, data=)
 
+View(dframe2)
+
+
 sapply(dframe2, class)
 
-a<-pairs(dframe2))
+pairs(dframe2)
+
 b<-cor(a) ## correlation matrix
-corrplot(dframe2)
+corr_dframe <- cor(as.matrix(dframe2))
+corrplot(dframe2, method="number")
 
 
 ```
