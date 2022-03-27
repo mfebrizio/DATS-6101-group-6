@@ -13,7 +13,7 @@ output:
   pdf_document:
     toc: yes
     toc_depth: '3'
-  runtime: shiny
+runtime: shiny
 ---
 
 ```{r init, include=F}
@@ -313,7 +313,7 @@ p2 <- ggplot(summ_by_year, aes(x=year)) +
   geom_line(aes(y = wmean_mh_rate), lwd=1) + 
   expand_limits(y=c(0,.2)) +
   labs(title = "Frequent Mental Distress Rate", 
-       x = "Report Year", y = "Percentage of adults") + 
+       x = "Report Year", y = "Percentage of Adults") + 
   theme_minimal()
 
 # combine plots using patchwork package
@@ -338,11 +338,14 @@ p5 <- ggplot(summ_by_year, aes(x=year)) +
   geom_line(aes(y = wmean_unempl), lwd=1) + 
   expand_limits(y=c(0,.10)) +
   labs(title = "Unemployment Rate", 
-       x = "Report Year", y = "Percent unemployed") +
+       x = "Report Year", y = "Percent Unemployed") +
   theme_minimal()
 
 # combine plots
 p3 / (p4 + p5)
+
+grid.arrange(p1,p2, nrow=1, ncol=2)
+grid.arrange(p3,p4,p5, nrow=1, ncol=3)
 
 ```
 
@@ -362,35 +365,35 @@ There is not much of a correlation between the mental health outcomes and the ra
 # color = median income
 color_value <- "Median Inc. ($T)"
 
-ggplot(ranked, aes(y=mental_health_days, x=inequality, color=median_inc/1000)) + 
+c1 <- ggplot(ranked, aes(y=mental_health_days, x=inequality, color=median_inc/1000)) + 
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +  ## Add linear regression line
   labs(title = "Scatterplot of Poor Mental Health Days vs. Inequality",
-       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+       y = 'Poor Mental Health Days per 30', x = 'Income Inequality Rate', 
        color = color_value)
 
-ggplot(ranked, aes(y=mental_distress_rate, x=inequality, color=median_inc/1000)) + 
+c2 <- ggplot(ranked, aes(y=mental_distress_rate, x=inequality, color=median_inc/1000)) + 
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
   labs(title = "Scatterplot of Frequent Distress vs. Inequality",
-       y = 'Mental distress rate', x = 'Income inequality rate', 
+       y = 'Mental Distress Rate', x = 'Income Inequality Rate', 
        color = color_value)
 
 # color = % rural
 color_value <- "% Rural Pop."
 
-ggplot(ranked, aes(y=mental_health_days, x=inequality, color=pct_rural)) + 
+c3 <- ggplot(ranked, aes(y=mental_health_days, x=inequality, color=pct_rural)) + 
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +  ## Add linear regression line
   labs(title = "Scatterplot of Poor Mental Health Days vs. Inequality",
-       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+       y = 'Poor Mental Health Days per 30', x = 'Income Inequality Rate', 
        color = color_value)
 
-ggplot(ranked, aes(y=mental_distress_rate, x=inequality, color=pct_rural)) + 
+c4 <- ggplot(ranked, aes(y=mental_distress_rate, x=inequality, color=pct_rural)) + 
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
   labs(title = "Scatterplot of Frequent Distress vs. Inequality",
-       y = 'Mental distress rate', x = 'Income inequality rate', 
+       y = 'Mental Distress Rate', x = 'Income Inequality Rate', 
        color = color_value)
 
 
@@ -399,19 +402,24 @@ ggplot(ranked, aes(y=mental_distress_rate, x=inequality, color=pct_rural)) +
 # color = % rural
 color_value <- "% Rural Pop."
 
-ggplot(ranked, aes(y=mental_health_days, x=pop_provider_ratio, color=pct_rural)) + 
+c5 <- ggplot(ranked, aes(y=mental_health_days, x=pop_provider_ratio, color=pct_rural)) + 
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
   labs(title = "Scatterplot of Poor Mental Health Days vs. Mental Health Providers",
-       y = 'Mental distress rate', x = 'Ratio population : providers', 
+       y = 'Mental Distress Rate', x = 'Ratio Population : Providers', 
        color = color_value)
 
-ggplot(ranked, aes(y=mental_distress_rate, x=pop_provider_ratio, color=pct_rural)) + 
+c6 <- ggplot(ranked, aes(y=mental_distress_rate, x=pop_provider_ratio, color=pct_rural)) + 
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
   labs(title = "Scatterplot of Frequent Distress vs. Mental Health Providers",
-       y = 'Mental distress rate', x = 'Ratio population : providers', 
+       y = 'Mental Distress Rate', x = 'Ratio Population : Providers', 
        color = color_value)
+
+
+grid.arrange(c1,c2, nrow=1, ncol=2)
+grid.arrange(c3,c4, nrow=1, ncol=2)
+grid.arrange(c5,c6, nrow=1, ncol=2)
 
 ```
 
@@ -566,17 +574,17 @@ color_value <- "Region"
 
 p1 <- ggplot(ranked, aes(y=mental_health_days, x=inequality, color = factor(region))) + 
   geom_point(show.legend = F) +
-  labs(title = paste("(a) per 30 days"),
-       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+  labs(title = paste("(a) Per 30 days"),
+       y = 'Poor Mental Health days per 30', x = 'Income Inequality Rate', 
        color = color_value)
 
 p2 <- ggplot(ranked, aes(y=mental_distress_rate, x=inequality, color = factor(region))) + 
   geom_point() + 
-  labs(title = paste("(b) percentage"),
-       y = 'Frequent distress rate', x = 'Income inequality rate', 
+  labs(title = paste("(b) Percentage"),
+       y = 'Frequent Distress Rate', x = 'Income Inequality Rate', 
        color = color_value)
 
-p_all <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental health variables vs. Income inequality, 2016-2021")
+p_all <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental Health Variables vs. Income Inequality, 2016-2021")
 p_all
 
 
@@ -587,33 +595,33 @@ p_all
 # 2016
 p1 <- ggplot(ranked16, aes(y=mental_health_days, x=inequality, color = factor(region))) + 
   geom_point(show.legend = F) +
-  labs(title = "(a) per 30 days",
-       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+  labs(title = "(a) Per 30 days",
+       y = 'Poor Mental Health Days per 30', x = 'Income Inequality Rate', 
        color = color_value)
 
 p2 <- ggplot(ranked16, aes(y=mental_distress_rate, x=inequality, color = factor(region))) + 
   geom_point() + 
-  labs(title = "(b) percentage",
-       y = 'Frequent distress rate', x = 'Income inequality rate', 
+  labs(title = "(b) Percentage",
+       y = 'Frequent Distress Rate', x = 'Income Inequality Rate', 
        color = color_value)
 
-p16 <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental health variables vs. Income inequality, 2016")
+p16 <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental Health Variables vs. Income Inequality, 2016")
 p16
 
 # 2021
 p1 <- ggplot(ranked21, aes(y=mental_health_days, x=inequality, color = factor(region))) + 
   geom_point(show.legend = F) +
-  labs(title = "(a) per 30 days",
-       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+  labs(title = "(a) Per 30 days",
+       y = 'Poor Mental Health Days per 30', x = 'Income Inequality Rate', 
        color = color_value)
 
 p2 <- ggplot(ranked21, aes(y=mental_distress_rate, x=inequality, color = factor(region))) + 
   geom_point() + 
-  labs(title = "(b) percentage",
-       y = 'Frequent distress rate', x = 'Income inequality rate', 
+  labs(title = "(b) Percentage",
+       y = 'Frequent Distress Rate', x = 'Income Inequality Rate', 
        color = color_value)
 
-p21 <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental health variables vs. Income inequality, 2021")
+p21 <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental Health Variables vs. Income Inequality, 2021")
 p21
 
 
@@ -621,17 +629,17 @@ p21
 # let's check 2017
 p1 <- ggplot(ranked17, aes(y=mental_health_days, x=inequality, color = factor(region))) + 
   geom_point(show.legend = F) +
-  labs(title = "(a) per 30 days",
-       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+  labs(title = "(a) Per 30 days",
+       y = 'Poor Mental Health Days per 30', x = 'Income Inequality Rate', 
        color = color_value)
 
 p2 <- ggplot(ranked17, aes(y=mental_distress_rate, x=inequality, color = factor(region))) + 
   geom_point() + 
-  labs(title = "(b) percentage",
-       y = 'Frequent distress rate', x = 'Income inequality rate', 
+  labs(title = "(b) Percentage",
+       y = 'Frequent Distress Rate', x = 'Income Inequality Rate', 
        color = color_value)
 
-p17 <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental health variables vs. Income inequality, 2017")
+p17 <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental Health Variables vs. Income Inequality, 2017")
 p17
 
 
@@ -653,14 +661,14 @@ ggplot(summ_by_year_state, aes(y=wmean_mh_days, x=wmean_inequality, color=wmean_
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
   labs(title = "Scatterplot of Population-weighted Means by State",
-       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+       y = 'Poor Mental Health Days per 30', x = 'Income Inequality Rate', 
        color = color_value)
 
 ggplot(summ_by_year_state, aes(y=wmean_mh_rate, x=wmean_inequality, color=wmean_medinc/1000)) + 
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
   labs(title = "Scatterplot of Population-weighted Means by State",
-       y = 'Mental distress rate', x = 'Income inequality rate', 
+       y = 'Mental Distress Rate', x = 'Income Inequality Rate', 
        color = color_value)
 
 # medians by state
@@ -670,14 +678,14 @@ ggplot(summ_by_year_state, aes(y=med_mh_days, x=med_inequality, color=med_medinc
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +  ## Add linear regression line
   labs(title = "Scatterplot of Medians by State",
-       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+       y = 'Poor Mental Health Days per 30', x = 'Income Inequality Rate', 
        color = color_value)
 
 ggplot(summ_by_year_state, aes(y=med_mh_rate, x=med_inequality, color=med_medinc/1000)) + 
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
   labs(title = "Scatterplot of Medians by State",
-       y = 'Mental distress rate', x = 'Income inequality rate', 
+       y = 'Mental Distress Rate', x = 'Income Inequality Rate', 
        color = color_value)
 
 
