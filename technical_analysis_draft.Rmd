@@ -1002,6 +1002,13 @@ The ANOVA test for the frequent mental distress rate produced an F-statistic of 
 
 [INSERT something about why we're doing a chi-squared test]
 
+can also conduct test of independence to see whether our dependent and independent var are independent
+- round values so it's not a huge matrix
+- Test of Independence and Homogeneity - we use this to test if two variables are "independent"
+H0: vars are independent. 
+H1: They are NOT independent.
+
+
 ```{r chitest, results='markup'}
 
 # subset data
@@ -1042,29 +1049,22 @@ xkabledply(chitest_rate$expected, title = "Expected frequencies: Income inequali
 
 ```
 
+[INSERT overall conclusion]
 
-
-
-## Linear Modeling and Regression
-*When applicable. Might not need at all.*
-
-**Assigned to:** TBD
-
-```{r reg, results='markup', eval=F}
+```{r to_add, include=F, eval=F}
 
 # Hypothesis Testing: Test the process of making decisions about the value of a population parameter
 
 # difference in means
 # - rural vs urban (create binary indicator at 50%?)
 # - across report years (2017 to 2021)
-# - by region (ANOVA)
 
 
-lm()
-xkablevif()
-anova()
-xkabledply()
+# Linear Modeling and Regression
 
+# - lm()
+# - xkablevif()
+# - anova()
+# - xkabledply()
 
 ```
-
