@@ -22,11 +22,13 @@ output:
 library(ezids)
 library(dplyr)
 library(data.table)
-#library(readr)
+library(readr)
 library(lattice)
 library(corrplot)
 library(psych)
 library(kableExtra)
+library(ggpubr)
+library(Hmisc)
 ```
 
 
@@ -262,16 +264,16 @@ xkabledplyhead(summ_by_year_region, 8, title = "Table: Data grouped by Year and 
 
 ```{r dstats, results='markup'}
 #Summary Statistics of all Variables used in dframe dataset
-table<-describeBy(dframe)
-table %>%
+table1<-describeBy(dframe)
+table1 %>%
   kbl(caption="Table 1: Summary Statistics for Master Dataset",
        format= "html", col.names = c("Var Num.","Count","Mean","Std. Dev.","Median", "Trimmed Mean", "Mad", "Minimum", "Maximum","Range", "Skewness", "Kurtosis", "S.E."),
       align="r") %>%
    kable_minimal(full_width = F, html_font = "helvetica")
 #Summary Statistics of relevant Variables used in analysis below in dfram dataset
 dframe2<-subset(dframe, select = c("mental_health_days", "mental_distress_rate", "inequality", "median_inc", "hs_grad", "college", "unempl", "child_poverty","single_parent", "severe_housing", "food_index","mh_providers","pop_provider_ratio","pct_rural"))
-table<-describeBy(dframe2)
-table %>%
+table2<-describeBy(dframe2)
+table2 %>%
   kbl(caption="Table 1: Summary Statistics for Master Dataset",
        format= "html", col.names = c("Var Num.","Count","Mean","Std. Dev.","Median", "Trimmed Mean", "Mad", "Minimum", "Maximum","Range", "Skewness", "Kurtosis", "S.E."),
       align="r") %>%
@@ -313,7 +315,7 @@ p2 <- ggplot(summ_by_year, aes(x=year)) +
   geom_line(aes(y = wmean_mh_rate), lwd=1) + 
   expand_limits(y=c(0,.2)) +
   labs(title = "Frequent Mental Distress Rate", 
-       x = "Report Year", y = "Percentage of adults") + 
+       x = "Report Year", y = "Percentage of Adults") + 
   theme_minimal()
 
 # combine plots using patchwork package
@@ -338,11 +340,14 @@ p5 <- ggplot(summ_by_year, aes(x=year)) +
   geom_line(aes(y = wmean_unempl), lwd=1) + 
   expand_limits(y=c(0,.10)) +
   labs(title = "Unemployment Rate", 
-       x = "Report Year", y = "Percent unemployed") +
+       x = "Report Year", y = "Percent Unemployed") +
   theme_minimal()
 
 # combine plots
 p3 / (p4 + p5)
+
+grid.arrange(p1,p2, nrow=1, ncol=2)
+grid.arrange(p3,p4,p5, nrow=1, ncol=3)
 
 ```
 
@@ -362,35 +367,35 @@ There is not much of a correlation between the mental health outcomes and the ra
 # color = median income
 color_value <- "Median Inc. ($T)"
 
-ggplot(ranked, aes(y=mental_health_days, x=inequality, color=median_inc/1000)) + 
+c1 <- ggplot(ranked, aes(y=mental_health_days, x=inequality, color=median_inc/1000)) + 
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +  ## Add linear regression line
   labs(title = "Scatterplot of Poor Mental Health Days vs. Inequality",
-       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+       y = 'Poor Mental Health Days per 30', x = 'Income Inequality Rate', 
        color = color_value)
 
-ggplot(ranked, aes(y=mental_distress_rate, x=inequality, color=median_inc/1000)) + 
+c2 <- ggplot(ranked, aes(y=mental_distress_rate, x=inequality, color=median_inc/1000)) + 
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
   labs(title = "Scatterplot of Frequent Distress vs. Inequality",
-       y = 'Mental distress rate', x = 'Income inequality rate', 
+       y = 'Mental Distress Rate', x = 'Income Inequality Rate', 
        color = color_value)
 
 # color = % rural
 color_value <- "% Rural Pop."
 
-ggplot(ranked, aes(y=mental_health_days, x=inequality, color=pct_rural)) + 
+c3 <- ggplot(ranked, aes(y=mental_health_days, x=inequality, color=pct_rural)) + 
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +  ## Add linear regression line
   labs(title = "Scatterplot of Poor Mental Health Days vs. Inequality",
-       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+       y = 'Poor Mental Health Days per 30', x = 'Income Inequality Rate', 
        color = color_value)
 
-ggplot(ranked, aes(y=mental_distress_rate, x=inequality, color=pct_rural)) + 
+c4 <- ggplot(ranked, aes(y=mental_distress_rate, x=inequality, color=pct_rural)) + 
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
   labs(title = "Scatterplot of Frequent Distress vs. Inequality",
-       y = 'Mental distress rate', x = 'Income inequality rate', 
+       y = 'Mental Distress Rate', x = 'Income Inequality Rate', 
        color = color_value)
 
 
@@ -399,19 +404,24 @@ ggplot(ranked, aes(y=mental_distress_rate, x=inequality, color=pct_rural)) +
 # color = % rural
 color_value <- "% Rural Pop."
 
-ggplot(ranked, aes(y=mental_health_days, x=pop_provider_ratio, color=pct_rural)) + 
+c5 <- ggplot(ranked, aes(y=mental_health_days, x=pop_provider_ratio, color=pct_rural)) + 
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
   labs(title = "Scatterplot of Poor Mental Health Days vs. Mental Health Providers",
-       y = 'Mental distress rate', x = 'Ratio population : providers', 
+       y = 'Mental Distress Rate', x = 'Ratio Population : Providers', 
        color = color_value)
 
-ggplot(ranked, aes(y=mental_distress_rate, x=pop_provider_ratio, color=pct_rural)) + 
+c6 <- ggplot(ranked, aes(y=mental_distress_rate, x=pop_provider_ratio, color=pct_rural)) + 
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
   labs(title = "Scatterplot of Frequent Distress vs. Mental Health Providers",
-       y = 'Mental distress rate', x = 'Ratio population : providers', 
+       y = 'Mental Distress Rate', x = 'Ratio Population : Providers', 
        color = color_value)
+
+
+grid.arrange(c1,c2, nrow=1, ncol=2)
+grid.arrange(c3,c4, nrow=1, ncol=2)
+grid.arrange(c5,c6, nrow=1, ncol=2)
 
 ```
 
@@ -566,17 +576,17 @@ color_value <- "Region"
 
 p1 <- ggplot(ranked, aes(y=mental_health_days, x=inequality, color = factor(region))) + 
   geom_point(show.legend = F) +
-  labs(title = paste("(a) per 30 days"),
-       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+  labs(title = paste("(a) Per 30 days"),
+       y = 'Poor Mental Health days per 30', x = 'Income Inequality Rate', 
        color = color_value)
 
 p2 <- ggplot(ranked, aes(y=mental_distress_rate, x=inequality, color = factor(region))) + 
   geom_point() + 
-  labs(title = paste("(b) percentage"),
-       y = 'Frequent distress rate', x = 'Income inequality rate', 
+  labs(title = paste("(b) Percentage"),
+       y = 'Frequent Distress Rate', x = 'Income Inequality Rate', 
        color = color_value)
 
-p_all <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental health variables vs. Income inequality, 2016-2021")
+p_all <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental Health Variables vs. Income Inequality, 2016-2021")
 p_all
 
 
@@ -587,33 +597,33 @@ p_all
 # 2016
 p1 <- ggplot(ranked16, aes(y=mental_health_days, x=inequality, color = factor(region))) + 
   geom_point(show.legend = F) +
-  labs(title = "(a) per 30 days",
-       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+  labs(title = "(a) Per 30 days",
+       y = 'Poor Mental Health Days per 30', x = 'Income Inequality Rate', 
        color = color_value)
 
 p2 <- ggplot(ranked16, aes(y=mental_distress_rate, x=inequality, color = factor(region))) + 
   geom_point() + 
-  labs(title = "(b) percentage",
-       y = 'Frequent distress rate', x = 'Income inequality rate', 
+  labs(title = "(b) Percentage",
+       y = 'Frequent Distress Rate', x = 'Income Inequality Rate', 
        color = color_value)
 
-p16 <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental health variables vs. Income inequality, 2016")
+p16 <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental Health Variables vs. Income Inequality, 2016")
 p16
 
 # 2021
 p1 <- ggplot(ranked21, aes(y=mental_health_days, x=inequality, color = factor(region))) + 
   geom_point(show.legend = F) +
-  labs(title = "(a) per 30 days",
-       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+  labs(title = "(a) Per 30 days",
+       y = 'Poor Mental Health Days per 30', x = 'Income Inequality Rate', 
        color = color_value)
 
 p2 <- ggplot(ranked21, aes(y=mental_distress_rate, x=inequality, color = factor(region))) + 
   geom_point() + 
-  labs(title = "(b) percentage",
-       y = 'Frequent distress rate', x = 'Income inequality rate', 
+  labs(title = "(b) Percentage",
+       y = 'Frequent Distress Rate', x = 'Income Inequality Rate', 
        color = color_value)
 
-p21 <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental health variables vs. Income inequality, 2021")
+p21 <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental Health Variables vs. Income Inequality, 2021")
 p21
 
 
@@ -621,17 +631,17 @@ p21
 # let's check 2017
 p1 <- ggplot(ranked17, aes(y=mental_health_days, x=inequality, color = factor(region))) + 
   geom_point(show.legend = F) +
-  labs(title = "(a) per 30 days",
-       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+  labs(title = "(a) Per 30 days",
+       y = 'Poor Mental Health Days per 30', x = 'Income Inequality Rate', 
        color = color_value)
 
 p2 <- ggplot(ranked17, aes(y=mental_distress_rate, x=inequality, color = factor(region))) + 
   geom_point() + 
-  labs(title = "(b) percentage",
-       y = 'Frequent distress rate', x = 'Income inequality rate', 
+  labs(title = "(b) Percentage",
+       y = 'Frequent Distress Rate', x = 'Income Inequality Rate', 
        color = color_value)
 
-p17 <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental health variables vs. Income inequality, 2017")
+p17 <- p1 + p2 + plot_annotation(title = "Scatterplot of Mental Health Variables vs. Income Inequality, 2017")
 p17
 
 
@@ -653,14 +663,14 @@ ggplot(summ_by_year_state, aes(y=wmean_mh_days, x=wmean_inequality, color=wmean_
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
   labs(title = "Scatterplot of Population-weighted Means by State",
-       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+       y = 'Poor Mental Health Days per 30', x = 'Income Inequality Rate', 
        color = color_value)
 
 ggplot(summ_by_year_state, aes(y=wmean_mh_rate, x=wmean_inequality, color=wmean_medinc/1000)) + 
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
   labs(title = "Scatterplot of Population-weighted Means by State",
-       y = 'Mental distress rate', x = 'Income inequality rate', 
+       y = 'Mental Distress Rate', x = 'Income Inequality Rate', 
        color = color_value)
 
 # medians by state
@@ -670,14 +680,14 @@ ggplot(summ_by_year_state, aes(y=med_mh_days, x=med_inequality, color=med_medinc
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +  ## Add linear regression line
   labs(title = "Scatterplot of Medians by State",
-       y = 'Poor mental health days per 30', x = 'Income inequality rate', 
+       y = 'Poor Mental Health Days per 30', x = 'Income Inequality Rate', 
        color = color_value)
 
 ggplot(summ_by_year_state, aes(y=med_mh_rate, x=med_inequality, color=med_medinc/1000)) + 
   geom_point() +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
   labs(title = "Scatterplot of Medians by State",
-       y = 'Mental distress rate', x = 'Income inequality rate', 
+       y = 'Mental Distress Rate', x = 'Income Inequality Rate', 
        color = color_value)
 
 
@@ -734,40 +744,43 @@ dframe$year <- factor(dframe$year)
 ##### Characterizations of the Median household income of four regions in the United States from 2016 to 2021.
 
 # Characterization of the Median household income of four regions in the United States in 2016.
-ggplot(dframe2016, aes(x=region, y=median_inc)) + 
+h1 <- ggplot(dframe2016, aes(x=region, y=median_inc)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of median_inc of four regions in 2016")
+  labs(title="2016")
 
 # Characterization of the Median household income of four regions in the United States in 2017.
-ggplot(dframe2017, aes(x=region, y=median_inc)) + 
+h2 <-ggplot(dframe2017, aes(x=region, y=median_inc)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of median_inc of four regions in 2017")
+  labs(title="2017")
 
 # Characterization of the Median household income of four regions in the United States in 2018.
-ggplot(dframe2018, aes(x=region, y=median_inc)) + 
+h3 <-ggplot(dframe2018, aes(x=region, y=median_inc)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of median_inc of four regions in 2018")
+  labs(title="2018")
 
 # Characterization of the Median household income of four regions in the United States in 2019.
-ggplot(dframe2019, aes(x=region, y=median_inc)) + 
+h4 <-ggplot(dframe2019, aes(x=region, y=median_inc)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of median_inc of four regions in 2019")
+  labs(title="2019")
 
 # Characterization of the Median household income of four regions in the United States in 2020.
-ggplot(dframe2020, aes(x=region, y=median_inc)) + 
+h5 <-ggplot(dframe2020, aes(x=region, y=median_inc)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of median_inc of four regions in 2020")
+  labs(title="2020")
 
 # Characterization of the Median household income of four regions in the United States in 2021.
-ggplot(dframe2021, aes(x=region, y=median_inc)) + 
+h6 <-ggplot(dframe2021, aes(x=region, y=median_inc)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of median_inc of four regions in 2021")
+  labs(title="2021")
+
+histplot1 <- grid.arrange(h1,h2,h3,h4,h5,h6, nrow=2, ncol=3)
+annotate_figure(histplot1, top = text_grob("The Characterization of Median Income by Region per Year", color = "black", face = "bold", size = 14))
 ```
 
 ```{r boxplots_mh_days, results='markup'}
@@ -775,40 +788,44 @@ ggplot(dframe2021, aes(x=region, y=median_inc)) +
 ##### Characterizations of the Poor mental health days/month of four regions in the United States from 2016 to 2021.
 
 # Characterization of the Poor mental health days/month of four regions in the United States in 2016.
-ggplot(dframe2016, aes(x=region, y=mental_health_days)) + 
+h7<-ggplot(dframe2016, aes(x=region, y=mental_health_days)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of mental unhealthy days/month of four regions in 2016")
+  labs(title="2016")
 
 # Characterization of the Poor mental health days/month of four regions in the United States in 2017.
-ggplot(dframe2017, aes(x=region, y=mental_health_days)) + 
+h8<-ggplot(dframe2017, aes(x=region, y=mental_health_days)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of mental unhealthy days/month of four regions in 2017")
+  labs(title="2017")
 
 # Characterization of the Poor mental health days/month of four regions in the United States in 2018.
-ggplot(dframe2018, aes(x=region, y=mental_health_days)) + 
+h9<-ggplot(dframe2018, aes(x=region, y=mental_health_days)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of mental unhealthy days/month of four regions in 2018")
+  labs(title="2018")
 
 # Characterization of the Poor mental health days/month of four regions in the United States in 2019.
-ggplot(dframe2019, aes(x=region, y=mental_health_days)) + 
+h10<-ggplot(dframe2019, aes(x=region, y=mental_health_days)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of mental unhealthy days/month of four regions in 2019")
+  labs(title="2019")
 
 # Characterization of the Poor mental health days/month of four regions in the United States in 2020.
-ggplot(dframe2020, aes(x=region, y=mental_health_days)) + 
+h11<-ggplot(dframe2020, aes(x=region, y=mental_health_days)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of mental unhealthy days/month of four regions in 2020")
+  labs(title="2020")
 
 # Characterization of the Poor mental health days/month of four regions in the United States in 2021.
-ggplot(dframe2021, aes(x=region, y=mental_health_days)) + 
+h12<-ggplot(dframe2021, aes(x=region, y=mental_health_days)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of mental unhealthy days/month of four regions in 2021")
+  labs(title="2021")
+
+histplot2 <- grid.arrange(h7,h8,h9,h10,h11,h12, nrow=2, ncol=3)
+annotate_figure(histplot2, top = text_grob("The Characterization of Mentally Unhealthy Days/Month by Region per Year", color = "black", face = "bold", size = 14))
+
 ```
 
 ```{r boxplots_mh_rate, results='markup'}
@@ -816,40 +833,44 @@ ggplot(dframe2021, aes(x=region, y=mental_health_days)) +
 ##### Characterizations of the Frequent mental distress rate of four regions in the United States from 2016 to 2021.
 
 # Characterization of the Frequent mental distress rate of four regions in the United States in 2016.
-ggplot(dframe2016, aes(x=region, y=mental_distress_rate)) + 
+h13<-ggplot(dframe2016, aes(x=region, y=mental_distress_rate)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of Frequent mental distress rate/month of four regions in 2016")
+  labs(title="2016")
 
 # Characterization of the Frequent mental distress rate of four regions in the United States in 2017.
-ggplot(dframe2017, aes(x=region, y=mental_distress_rate)) + 
+h14<-ggplot(dframe2017, aes(x=region, y=mental_distress_rate)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of Frequent mental distress rate/month of four regions in 2017")
+  labs(title="2017")
 
 # Characterization of the Frequent mental distress rate of four regions in the United States in 2018.
-ggplot(dframe2018, aes(x=region, y=mental_distress_rate)) + 
+h15<-ggplot(dframe2018, aes(x=region, y=mental_distress_rate)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of Frequent mental distress rate/month of four regions in 2018")
+  labs(title="2018")
 
 # Characterization of the Frequent mental distress rate of four regions in the United States in 2019.
-ggplot(dframe2019, aes(x=region, y=mental_distress_rate)) + 
+h16<-ggplot(dframe2019, aes(x=region, y=mental_distress_rate)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of Frequent mental distress rate/month of four regions in 2019")
+  labs(title="2019")
 
 # Characterization of the Frequent mental distress rate of four regions in the United States in 2020.
-ggplot(dframe2020, aes(x=region, y=mental_distress_rate)) + 
+h17<-ggplot(dframe2020, aes(x=region, y=mental_distress_rate)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of Frequent mental distress rate/month of four regions in 2020")
+  labs(title="2020")
 
 # Characterization of the Frequent mental distress rate of four regions in the United States in 2021.
-ggplot(dframe2021, aes(x=region, y=mental_distress_rate)) + 
+h18<-ggplot(dframe2021, aes(x=region, y=mental_distress_rate)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of Frequent mental distress rate/month of four regions in 2021")
+  labs(title="2021")
+
+histplot3 <- grid.arrange(h13,h14,h15,h15,h17,h18, nrow=2, ncol=3)
+annotate_figure(histplot3, top = text_grob("The Characterization of Frequent Mental Distress Rate by Region per Year", color = "black", face = "bold", size = 14))
+
 ```
 
 ```{r boxplots_inequality, results='markup'}
@@ -857,40 +878,45 @@ ggplot(dframe2021, aes(x=region, y=mental_distress_rate)) +
 ##### Characterizations of Income inequality of four regions in the United States from 2016 to 2021.
 
 # Characterization of Income inequality of four regions in the United States in 2016.
-ggplot(dframe2016, aes(x=region, y=inequality)) + 
+h19<-ggplot(dframe2016, aes(x=region, y=inequality)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
   labs(title="The Characterization of Income inequality of four regions in 2016")
 
 # Characterization of Income inequality of four regions in the United States in 2017.
-ggplot(dframe2017, aes(x=region, y=inequality)) + 
+h20<-ggplot(dframe2017, aes(x=region, y=inequality)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
   labs(title="The Characterization of Income inequality of four regions in 2017")
 
 # Characterization of Income inequality of four regions in the United States in 2018.
-ggplot(dframe2018, aes(x=region, y=inequality)) + 
+h21<-ggplot(dframe2018, aes(x=region, y=inequality)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
   labs(title="The Characterization of Income inequality of four regions in 2018")
 
 # Characterization of Income inequality of four regions in the United States in 2019.
-ggplot(dframe2019, aes(x=region, y=inequality)) + 
+h22<-ggplot(dframe2019, aes(x=region, y=inequality)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
   labs(title="The Characterization of Income inequality of four regions in 2019")
 
 # Characterization of Income inequality in four regions of the United States in 2020.
-ggplot(dframe2020, aes(x=region, y=inequality)) + 
+h23<-ggplot(dframe2020, aes(x=region, y=inequality)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
   labs(title="The Characterization of Income inequality of four regions in 2020")
 
 # Characterization of Income inequality of four regions in the United States in 2021.
-ggplot(dframe2021, aes(x=region, y=inequality)) + 
+h24<-ggplot(dframe2021, aes(x=region, y=inequality)) + 
   geom_boxplot() + 
   geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
-  labs(title="The Characterization of Income inequality of four regions in 2021")
+  labs(title="2021")
+
+
+histplot4 <- grid.arrange(h19,h20,h21,h22,h21,h24, nrow=2, ncol=3)
+annotate_figure(histplot3, top = text_grob("The Characterization of Income Inequality by Region per Year", color = "black", face = "bold", size = 14))
+
 ```
 
 ## Measures of Variation
@@ -1007,10 +1033,11 @@ chisq.test()
 
 aov(y ~ x, data=)
 
+sapply(dframe2, class)
 
-pairs()
-cor() ## correlation matrix
-corrplot()
+a<-pairs(dframe2))
+b<-cor(a) ## correlation matrix
+corrplot(dframe2)
 
 
 ```
