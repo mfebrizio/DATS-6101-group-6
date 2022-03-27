@@ -126,7 +126,7 @@ dframe$county_ranked <- factor(dframe$county_ranked)
 
 # check structure of data
 str(dframe)
-summary(dframe)
+#summary(dframe)
 
 ```
 
@@ -166,6 +166,9 @@ for (df in df_annual_list) {
   
 }
 
+# sort dataframe
+ranked <- ranked[order(ranked$year, ranked$region, ranked$division, ranked$statecode, ranked$countycode), ]
+
 # view head and tail of ranked data
 xkabledplyhead(ranked, 2, title = "Table: First 2 Rows of Ranked Data")
 xkabledplytail(ranked, 2, title = "Table: Last 2 Rows of Ranked Data")
@@ -184,7 +187,7 @@ Next, we grouped the data by year and state and calculated population-weighted m
 
 Finally, we grouped the data by region, giving us a sense of the size of the 4 census regions: the South contains the most states and counties and has the largest population, while the Northeast is the smallest on these measures. The Northeast has highest measured inequality, and the Midwest has the lowest. The mental health variables are highest (i.e., worst) in the South and lowest in the West. These general trends hold up when grouping by year and region. These differences suggest that comparing the relationship between the variables across regions would be worthwhile.
 
-```{r ranked, results='markup', message=FALSE}
+```{r ranked, results='markup'}
 
 # groupby year
 ranked_by_year <- ranked %>% group_by(year)
@@ -2495,21 +2498,27 @@ apply(dframest21, 2, shapiro.test)
 
 For example, Chi Square tests, ANOVA analysis, Z-test or Z-interval, T-test or T-interval, etc.
 
-```{r corr, results='markup', eval=F}
+```{r corr, results='markup'}
 
-t.test()
+# slice dataframe to include only numeric variables
+ranked_num <- ranked[10:length(ranked)]
 
-table() ## creates contingency table
-chisq.test()
+# compute correlation matrix of numeric vars
+corr_matrix <- cor(ranked_num, use = "na.or.complete") ## specify use to deal with NA values
+corr_matrix
 
-aov(y ~ x, data=)
+# visualize correlation matrix
+corr_plot <- corrplot(corr_matrix)
+corr_plot
 
-sapply(dframe2, class)
 
-a<-pairs(dframe2))
-b<-cor(a) ## correlation matrix
-corrplot(dframe2)
+#aov(y ~ x, data=)
 
+#sapply(dframe2, class)
+
+#a<-pairs(dframe2))
+#b<-cor(a) ## correlation matrix
+#corrplot(dframe2)
 
 ```
 
@@ -2597,35 +2606,117 @@ Region | Variable | 99% conf.int |
 `r ci_list[[1]][15]` | `r ci_list[[2]][15]` | `r ci_list[[3]][15]` |
 ***
 
+We also want to compare the mean values of `inequality`, `mental_health_days`, and `mental_distress_rate` across regions. Since there are 4 regions, we cannot use a 2-sample t-test. Instead, we conducted ANOVA tests for each variable with data for different regions as the samples. [Insert something about assumptions such as normality.]
 
-```{r}
+```{r anova_inequality, results='markup'}
+
+# anova test for inequality
+aov_in <- aov(inequality ~ region, data = ranked)
+
+summary_in <- summary(aov_in)
+
+xkabledply(aov_in, title = "ANOVA results: Income inequality by Region")
+
+tukey_in <- TukeyHSD(aov_in)
+tukey_in
+
+```
+
+The ANOVA test for income inequality produced an F-statistic of `r summary_in[[1]][1,4]` with a p-value of `r summary_in[[1]][1,5]`. We reject the null hypothesis because the p-value is below a significance level of 0.05, and accept the alternative hypothesis that the means of the regions are not all the same. We followed up with a post-hoc test to determine which groups are significantly different from the others. The Tukey HSD results indicate that all regions are significantly different from each other!
+
+```{r anova_mh, results='markup'}
+
+# mental health days
+aov_mh_days <- aov(mental_health_days ~ region, data = ranked)
+
+summary_mh_days <- summary(aov_mh_days)
+
+xkabledply(aov_mh_days, title = "ANOVA results: Poor Mental Health Days by Region")
+
+tukey_mh_days <- TukeyHSD(aov_mh_days)
+tukey_mh_days
+
+# frequent mental distress rate
+aov_mh_rate <- aov(mental_distress_rate ~ region, data = ranked)
+
+summary_mh_rate <- summary(aov_mh_rate)
+
+xkabledply(aov_mh_rate, title = "ANOVA results: Frequent Mental Distress by Region")
+
+tukey_mh_rate <- TukeyHSD(aov_mh_rate)
+tukey_mh_rate
+
+```
+
+The ANOVA test for poor mental health days produced an F-statistic of `r summary_mh_days[[1]][1,4]` with a p-value of `r summary_mh_days[[1]][1,5]`. Again, we reject the null hypothesis and followed up with a post-hoc Tukey HSD. The Tukey results indicate that all regions have significantly different means for `mental_health_days`.
+
+The ANOVA test for the frequent mental distress rate produced an F-statistic of `r summary_mh_rate[[1]][1,4]` with a p-value of `r summary_mh_rate[[1]][1,5]`. After rejecting the null, the Tukey results suggest that all regions, except the Northeast and the West, have significantly different means for `mental_distress_rate`.
+
+[INSERT something about why we're doing a chi-squared test]
+
+can also conduct test of independence to see whether our dependent and independent var are independent
+- round values so it's not a huge matrix
+- Test of Independence and Homogeneity - we use this to test if two variables are "independent"
+H0: vars are independent. 
+H1: They are NOT independent.
+
+
+```{r chitest, results='markup'}
+
+# subset data
+ranked_subset <- ranked %>% subset(select = c(inequality,mental_health_days,mental_distress_rate))
+xkabledplyhead(ranked_subset, title = "Subset before Rounding")
+
+# round values to limit the size of the contingency table
+# inequality and mh_rate have too many decimals that make it very expensive to calculate 
+ranked_subset$inequality <- round(ranked_subset$inequality, 1)
+ranked_subset$mental_health_days <- round(ranked_subset$mental_health_days, 1)
+ranked_subset$mental_distress_rate <- round(ranked_subset$mental_distress_rate, 2)
+xkabledplyhead(ranked_subset, title = "Subset after Rounding")
+
+# chi-squared test 1
+contable_days <- table(ranked_subset$inequality, ranked_subset$mental_health_days)
+chitest_days = chisq.test(contable_days)
+chitest_days
+
+# chi-squared test 2
+contable_rate <- table(ranked_subset$inequality, ranked_subset$mental_distress_rate)
+chitest_rate = chisq.test(contable_rate)
+chitest_rate
+
+```
+
+The $\chi^2$ test statistic between `inequality` and `mental_health_days` is `r chitest_days$statistic`, with a p-value of `r chitest_days$p.value` and `r chitest_days$parameter` degrees of freedom.
+
+The $\chi^2$ test statistic between `inequality` and `mental_distress_rate` is `r chitest_rate$statistic`, with a p-value of `r chitest_rate$p.value` and `r chitest_rate$parameter` degrees of freedom.
+
+[INSERT conclusion]
+
+```{r chitest_expected, eval=FALSE}
+
+# tabulate expected frequencies for each chi-squared test
+xkabledply(chitest_days$expected, title = "Expected frequencies: Income inequality vs. Poor mental health days", wide = T)
+
+xkabledply(chitest_rate$expected, title = "Expected frequencies: Income inequality vs. Frequent mental distress rate", wide = T)
+
+```
+
+[INSERT overall conclusion]
+
+```{r to_add, include=F, eval=F}
 
 # Hypothesis Testing: Test the process of making decisions about the value of a population parameter
 
 # difference in means
 # - rural vs urban (create binary indicator at 50%?)
 # - across report years (2017 to 2021)
-# - by region (ANOVA or chi-sq??)
 
 
+# Linear Modeling and Regression
 
-```
-
-
-
-
-## Linear Modeling and Regression
-*When applicable. Might not need at all.*
-
-**Assigned to:** TBD
-
-```{r reg, results='markup', eval=F}
-
-lm()
-xkablevif()
-anova()
-xkabledply()
-
+# - lm()
+# - xkablevif()
+# - anova()
+# - xkabledply()
 
 ```
-
