@@ -1283,54 +1283,34 @@ The ANOVA test for poor mental health days produced an F-statistic of `r summary
 
 The ANOVA test for the frequent mental distress rate produced an F-statistic of `r summary_mh_rate[[1]][1,4]` with a p-value of `r summary_mh_rate[[1]][1,5]`. After rejecting the null, the Tukey results suggest that all regions, except the Northeast and the West, have significantly different means for `mental_distress_rate`.
 
-We can also conduct a chi-squared test of independence to see whether the mental health variables are "independent" from income inequality. We rounded the values to 1 or 2 decimal places to limit the size of the contingency table.
+We can also conduct a Spearman's rank test to see whether the mental health variables are independent from income inequality and median income.
 
-```{r chitest, results='markup'}
+```{r spearman, results='markup'}
 
-# subset data
-ranked_subset <- ranked %>% subset(select = c(inequality,mental_health_days,mental_distress_rate))
-xkabledplyhead(ranked_subset, title = "Subset before Rounding (First 5 Rows)")
+spearman_ineq_v_days <- cor.test(ranked$inequality, ranked$mental_health_days, method="spearman", exact=F)
+spearman_medinc_v_days
 
-# round values to limit the size of the contingency table
-# inequality and mh_rate have too many decimals that make it very expensive to calculate 
-ranked_subset$inequality <- round(ranked_subset$inequality, 1)
-ranked_subset$mental_health_days <- round(ranked_subset$mental_health_days, 1)
-ranked_subset$mental_distress_rate <- round(ranked_subset$mental_distress_rate, 2)
-xkabledplyhead(ranked_subset, title = "Subset after Rounding (First 5 Rows)")
+spearman_ineq_v_rate <- cor.test(ranked$inequality, ranked$mental_distress_rate, method="spearman", exact=F)
+spearman_medinc_v_rate
 
-# chi-squared test 1
-contable_inequality_vs_days <- table(ranked_subset$inequality, ranked_subset$mental_health_days)
-chitest_days = chisq.test(contable_inequality_vs_days)
-chitest_days
+spearman_medinc_v_days <- cor.test(ranked$median_inc, ranked$mental_health_days, method="spearman", exact=F)
+spearman_medinc_v_days
 
-# chi-squared test 2
-contable_inequality_vs_rate <- table(ranked_subset$inequality, ranked_subset$mental_distress_rate)
-chitest_rate = chisq.test(contable_inequality_vs_rate)
-chitest_rate
+spearman_medinc_v_rate <- cor.test(ranked$median_inc, ranked$mental_distress_rate, method="spearman", exact=F)
+spearman_medinc_v_rate
 
 ```
 
-The $\chi^2$ test statistic between `inequality` and `mental_health_days` is `r chitest_days$statistic`, with a p-value of `r chitest_days$p.value` and `r chitest_days$parameter` degrees of freedom.
-
-The $\chi^2$ test statistic between `inequality` and `mental_distress_rate` is `r chitest_rate$statistic`, with a p-value of `r chitest_rate$p.value` and `r chitest_rate$parameter` degrees of freedom.
-
-Based on the small p-values below 0.05, we can reject the null hypothesis that the variables are independent and accept the alternative hypothesis that they are not independent. These findings suggest that there is a real relationship between mental health and income inequality.
-
-The chi-squared tests are summarized in the following table:
+The Spearman correlation tests are summarized in the following table:
 
 ***
-Model | $\chi^2$ | p-value | Degrees of Freedom |
-------|----------|---------|--------------------|
-`inequality` ~ `mental_health_days` | `r chitest_days$statistic` | `r chitest_days$p.value` | `r chitest_days$parameter` |
-`inequality` ~ `mental_distress_rate` | `r chitest_rate$statistic` | `r chitest_rate$p.value` | `r chitest_rate$parameter` |
+Variables | rho | p-value |
+------|----------|---------|
+`inequality` vs. `mental_health_days` | `r spearman_ineq_v_days$estimate` | `r spearman_medinc_v_days$p.value` |
+`inequality` vs. `mental_distress_rate` | `r spearman_ineq_v_rate$estimate` | `r spearman_ineq_v_days$p.value` |
+`median_inc` vs. `mental_health_days` | `r spearman_medinc_v_days$estimate` | `r spearman_medinc_v_days$p.value` |
+`median_inc` vs. `mental_distress_rate` | `r spearman_medinc_v_rate$estimate` | `r spearman_medinc_v_rate$p.value` |
 ***
 
-```{r chitest_expected, eval=FALSE, include=FALSE}
-
-# tabulate expected frequencies for each chi-squared test
-xkabledply(chitest_days$expected, title = "Expected frequencies: Income inequality vs. Poor mental health days", wide = T)
-
-xkabledply(chitest_rate$expected, title = "Expected frequencies: Income inequality vs. Frequent mental distress rate", wide = T)
-
-```
+Based on the small p-values below 0.05, we can reject the null hypothesis and conclude that the correlations between the variables are significantly different from zero These findings suggest that there is a real relationship between mental health and income inequality.
 
