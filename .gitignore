@@ -40,3 +40,4 @@ rsconnect/
 
 # Mac OS specific files 
 .DS_Store
+.idea
