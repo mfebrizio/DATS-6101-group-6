@@ -1237,7 +1237,74 @@ Region | Variable | 99% conf.int |
 `r ci_list[[1]][15]` | `r ci_list[[2]][15]` | `r ci_list[[3]][15]` |
 ***
 
-Based on visual inspection, the mean values of the variables seem different depending on the region. This is consistent with our earlier exploratory data analysis using boxplots. Using hypothesis tests to compare the mean values of `inequality`, `mental_health_days`, and `mental_distress_rate` across regions will give us greater clarity. Since there are 4 regions, we cannot use a 2-sample t-test. Instead, we conducted ANOVA tests for each variable with data for different regions as the samples. [Insert something about assumptions such as normality.]
+Based on visual inspection, the mean values of the variables seem different depending on the region. This is consistent with our earlier exploratory data analysis using boxplots. Using hypothesis tests to compare the mean values of `inequality`, `mental_health_days`, and `mental_distress_rate` across regions will give us greater clarity. Since there are 4 regions, we cannot use a 2-sample t-test. Instead, we conducted ANOVA tests for each variable with data for different regions as the samples.
+
+Before conducting the ANOVA tests, we assessed the normality and variances of the variables. In general, the distributions are relatively consistent across each region and the variances do not seem to differ substantially.
+
+```{r anova_norm, results='markup', warning=F}
+
+g1 <- ggplot(ranked_MW, aes(x=mental_health_days)) + geom_histogram() #+ ggtitle("")
+
+g2 <- ggplot(ranked_MW, aes(x=mental_distress_rate)) + geom_histogram() + ggtitle("")
+
+g3 <- ggplot(ranked_MW, aes(x=inequality)) + geom_histogram() + ggtitle("")
+
+MW <- g1 + g2 + g3 + plot_annotation(title = "Midwest")
+
+g1 <- ggplot(ranked_WE, aes(x=mental_health_days)) + geom_histogram() + ggtitle("")
+
+g2 <- ggplot(ranked_WE, aes(x=mental_distress_rate)) + geom_histogram() + ggtitle("")
+
+g3 <- ggplot(ranked_WE, aes(x=inequality)) + geom_histogram() + ggtitle("")
+
+WE <- g1 + g2 + g3 + plot_annotation(title = "West")
+
+g1 <- ggplot(ranked_NE, aes(x=mental_health_days)) + geom_histogram() + ggtitle("")
+
+g2 <- ggplot(ranked_NE, aes(x=mental_distress_rate)) + geom_histogram() + ggtitle("")
+
+g3 <- ggplot(ranked_NE, aes(x=inequality)) + geom_histogram() + ggtitle("")
+
+NE <- g1 + g2 + g3 +  plot_annotation(title = "Northeast")
+
+g1 <- ggplot(ranked_SO, aes(x=mental_health_days)) + geom_histogram() + ggtitle("")
+
+g2 <- ggplot(ranked_SO, aes(x=mental_distress_rate)) + geom_histogram() + ggtitle("")
+
+g3 <- ggplot(ranked_SO, aes(x=inequality)) + geom_histogram() + ggtitle("")
+
+SO <- g1 + g2 + g3 + plot_annotation(title = "South")
+
+MW
+
+WE
+
+NE
+
+SO
+
+```
+
+```{r anova_var, include=F}
+
+# Checking for equal Variance across regions
+var(ranked_MW$mental_health_days, na.rm=TRUE)
+var(ranked_MW$mental_distress_rate, na.rm=TRUE)
+var(ranked_MW$inequality, na.rm =TRUE)
+
+var(ranked_WE$mental_health_days, na.rm=TRUE)
+var(ranked_WE$mental_distress_rate, na.rm=TRUE)
+var(ranked_WE$inequality, na.rm=TRUE)
+
+var(ranked_NE$mental_health_days, na.rm=TRUE)
+var(ranked_NE$mental_distress_rate, na.rm=TRUE)
+var(ranked_NE$inequality, na.rm=TRUE)
+
+var(ranked_SO$mental_health_days, na.rm=TRUE)
+var(ranked_SO$mental_distress_rate, na.rm=TRUE)
+var(ranked_SO$inequality, na.rm=TRUE)
+
+```
 
 ```{r anova_inequality, results='markup'}
 
@@ -1288,10 +1355,10 @@ We can also conduct a Spearman's rank test to see whether the mental health vari
 ```{r spearman, results='markup'}
 
 spearman_ineq_v_days <- cor.test(ranked$inequality, ranked$mental_health_days, method="spearman", exact=F)
-spearman_medinc_v_days
+spearman_ineq_v_days
 
 spearman_ineq_v_rate <- cor.test(ranked$inequality, ranked$mental_distress_rate, method="spearman", exact=F)
-spearman_medinc_v_rate
+spearman_ineq_v_rate
 
 spearman_medinc_v_days <- cor.test(ranked$median_inc, ranked$mental_health_days, method="spearman", exact=F)
 spearman_medinc_v_days
