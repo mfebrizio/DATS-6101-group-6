@@ -1,7 +1,7 @@
 ---
 title: "Investigating the Relationship between Mental Health and Income Inequality"
 author: "Team 6: Mark Febrizio, Shumel Siraj, Alex Thiersch, Xuan Zou"
-#date: "3/23/2022"
+#date: "3/28/2022"
 date: "`r Sys.Date()`"
 output:
   html_document:
@@ -480,7 +480,7 @@ gg7 <- ggplot(ranked, aes(y=inequality, x=food_index)) +
 
 #plot_list <- list(gg1, gg2, gg3, gg4, gg5, gg6, gg7)
 #do.call("grid.arrange", c(plot_list, ncol = 3))
-grid.arrange(gg1, gg2, gg3, gg4, gg5, gg6, gg7, nrow=3, ncol=3, top = text_grob("Income Inequality vs. Other Economic Variables")))
+grid.arrange(gg1, gg2, gg3, gg4, gg5, gg6, gg7, nrow=3, ncol=3, top = text_grob("Income Inequality vs. Other Economic Variables"))
 
 
 #-- Dependent vs. other economic variables --#
@@ -1320,7 +1320,7 @@ The chi-squared tests are summarized in the following table:
 
 ***
 Model | $\chi^2$ | p-value | Degrees of Freedom |
--------|----------|--------------|
+------|----------|---------|--------------------|
 `inequality` ~ `mental_health_days` | `r chitest_days$statistic` | `r chitest_days$p.value` | `r chitest_days$parameter` |
 `inequality` ~ `mental_distress_rate` | `r chitest_rate$statistic` | `r chitest_rate$p.value` | `r chitest_rate$parameter` |
 ***
