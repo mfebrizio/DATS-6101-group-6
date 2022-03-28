@@ -4448,7 +4448,7 @@ for (n in 1:15) {
 </table>
 <hr />
 <p>Based on visual inspection, the mean values of the variables seem different depending on the region. This is consistent with our earlier exploratory data analysis using boxplots. Using hypothesis tests to compare the mean values of <code>inequality</code>, <code>mental_health_days</code>, and <code>mental_distress_rate</code> across regions will give us greater clarity. Since there are 4 regions, we cannot use a 2-sample t-test. Instead, we conducted ANOVA tests for each variable with data for different regions as the samples.</p>
-<p>[Insert something about assumptions such as normality.]</p>
+<p>Before conducting the ANOVA tests, we assessed the normality and variances of the variables. In general, the distributions are relatively consistent across each region and the variances do not seem to differ substantially.</p>
 <pre class="r"><code>g1 &lt;- ggplot(ranked_MW, aes(x=mental_health_days)) + geom_histogram() #+ ggtitle(&quot;&quot;)
 
 g2 &lt;- ggplot(ranked_MW, aes(x=mental_distress_rate)) + geom_histogram() + ggtitle(&quot;&quot;)
