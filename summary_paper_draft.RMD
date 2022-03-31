@@ -1,0 +1,364 @@
+---
+title: "Investigating the Relationship between Mental Health and Economic Inequality"
+author: "Team 6: Mark Febrizio, Shumel Siraj, Alex Thiersch, Xuan Zou"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: hide
+    number_sections: false
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+---
+
+```{r init, include=F}
+
+# Import libraries
+library(ezids)
+library(dplyr)
+library(data.table)
+library(readr)
+library(lattice)
+library(corrplot)
+library(psych)
+library(kableExtra)
+library(ggpubr)
+
+```
+
+```{r setup, include=FALSE}
+
+# knitr::opts_chunk$set(warning = F, results = "markup", message = F)
+knitr::opts_chunk$set(warning = F, results = "hide", message = F, echo = TRUE)
+options(scientific=T, digits = 3) 
+# options(scipen=9, digits = 3) 
+# ‘scipen’: integer. A penalty to be applied when deciding to print numeric values in fixed or exponential notation.  Positive values bias towards fixed and negative towards scientific notation: fixed notation will be preferred unless it is more than ‘scipen’ digits wider.
+# use scipen=999 to prevent scientific notation at all times
+
+```
+
+
+# Summary Paper
+
+## Instructions
+
+Summary paper, 25%. (Due: Apr 4 Monday 12:30pm)
+
+Write a roughly 10-page (definitely no more than 4000 words, charts do not count) summary of the research and EDA process of your project. The summary should be prepared in R-markdown, and knitted into HTML. You may take some of the work in part II (such as graphs and results) to include here. They can overlap. This summary is to-be presented to your boss, your client, or to-be submitted for publication in journals.
+
+Potential area of topics to address in this summary may include:
+
+- What do we know about this dataset?
+- What are the limitations of the dataset?
+- How was the information gathered?
+- What analysis has already been completed related to the content in your dataset?
+- How did the research you gathered contribute to your question development?
+- What additional information would be beneficial?
+- How did your question change, if at all, after Exploratory Data Analysis?
+- Based on EDA can you begin to sketch out an answer to your question?
+- References (APA style preferred)
+
+
+## Introduction
+
+Here we should briefly state our topic, SMART question(s), data sources, and brief literature review.
+
+We should also give an overview of our findings / takeaways that will be highlighted in the conclusion.
+
+
+Throughout this section, let's try to answer these questions from the instructions:
+
+- *How was the information gathered?*
+- *What analysis has already been completed related to the content in your dataset?*
+- *How did the research you gathered contribute to your question development?*
+
+
+## Summary of Data Set
+
+Throughout this section, let's try to answer these questions from the instructions:
+
+- *What do we know about this dataset?*
+- *What are the limitations of the dataset?*
+
+
+The variables in the data set are:
+
+* `region`: name of the US Census Bureau region (name)
+* `division`: name of the US Census Bureau division (contained with a census region)
+* `state`: state abbreviation
+* `statecode`: FIPS state code
+* `countycode`: FIPS county code
+* `fipscode`: 5-digit FIPS Code (county-level); combines `statecode` and `countycode`
+* `county`: county name
+* `year`: report release year from [County Health Rankings](https://www.countyhealthrankings.org/); range of 2016-2021
+* `county_ranked`: Indicates whether or not the county was ranked; 0=unranked, 1=ranked, or NA for aggregated national or state-level data
+* `mental_health_days`: Average number of mentally unhealthy days reported in past 30 days (age-adjusted)
+* `mental_distress_rate`: Percentage of adults reporting 14 or more days of poor mental health per month
+* `inequality`: Ratio of household income at the 80th percentile to income at the 20th percentile (Income inequality)
+* `median_inc`: The income where half of households in a county earn more and half of households earn less
+* `hs_grad`: Percentage of adults ages 25 and over with a high school diploma or equivalent
+* `college`: Percentage of adults ages 25-44 with some post-secondary education
+* `unempl`: Percentage of population ages 16 and older unemployed but seeking work
+* `child_poverty`: Percentage of people under age 18 in poverty
+* `single_parent`: Percentage of children that live in a household headed by single parent
+* `severe_housing`: Percentage of households with severe housing problems
+* `food_index`: Index of factors that contribute to a healthy food environment, from 0 (worst) to 10 (best)
+* `mh_providers`: rate of providers to 100,000 population
+* `pop_provider_ratio`: ratio of population to mental health providers (i.e., population served per provider)
+* `pop`: census population estimate
+* `pct_below18`: percent of population younger than 18
+* `pct_black`: percent of population that are African-American or non-Hispanic Black
+* `pct_native_am`: percent of population that are Native American or Alaska Natives
+* `pct_asian`: percent of population that are Asian
+* `pct_pacific`: percent of population that are Native Hawaiian or Other Pacific Islander
+* `pct_hispanic`: percent of population that are Hispanic
+* `pct_white`: percent of population that are non-Hispanic white or Caucasian
+* `pct_female`: percent of population that are female
+* `pct_rural`: percent of population that live in rural areas
+
+For more information, see [the measures online](https://www.countyhealthrankings.org/explore-health-rankings/measures-data-sources/2021-measures).
+
+
+```{r import, results='hide', echo=F}
+
+# import csv as dataframe
+dframe <- data.frame(read.csv("data/processed/analytic_data_2016_2021_with_regions.csv"))
+#View(dframe)
+
+# convert variables to factor
+dframe$region <- factor(dframe$region)
+dframe$division <- factor(dframe$division)
+dframe$statecode <- factor(dframe$statecode)
+dframe$countycode <- factor(dframe$countycode)
+dframe$fipscode <- factor(dframe$fipscode)
+dframe$county_ranked <- factor(dframe$county_ranked)
+dframe$year <- factor(dframe$year)
+
+# check structure of data
+str(dframe)
+
+```
+
+```{r summary, results='hide'}
+
+# look at county_ranked var; not all counties are ranked; also some aggregated data per state and country exist in the observations
+# =1 means they are ranked, =0 means unranked, and =NA is for state/national data
+#print(summary(dframe$county_ranked))
+
+# subset of dataframe including only ranked counties
+ranked <- dframe %>% subset(county_ranked==1)
+
+# subset of dataframe including only ranked counties
+unranked <- dframe %>% subset(county_ranked==0)
+
+# subset of dataframe including only aggregated data
+aggregated <- dframe %>% subset(is.na(county_ranked))
+
+# duplicate column and rename level labels for easier reading
+ranked$region_abb <- ranked$region
+levels(ranked$region_abb) <- c("", 
+                              "MW",  # re-level factor labels
+                              "NE",
+                              "S", 
+                              "W")
+
+# subset ranked data by region
+ranked_MW <- ranked %>% subset(region=="Midwest")
+ranked_NE <- ranked %>% subset(region=="Northeast")
+ranked_SO <- ranked %>% subset(region=="South")
+ranked_WE <- ranked %>% subset(region=="West")
+
+# subset ranked data into annual datasets
+ranked16 <- ranked %>% subset(year==2016)
+ranked17 <- ranked %>% subset(year==2017)
+ranked18 <- ranked %>% subset(year==2018)
+ranked19 <- ranked %>% subset(year==2019)
+ranked20 <- ranked %>% subset(year==2020)
+ranked21 <- ranked %>% subset(year==2021)
+
+# view size of annual datasets
+df_annual_list <- list(ranked16, ranked17, ranked18, ranked19, ranked20, ranked21)
+for (df in df_annual_list) {
+  print(paste("Observations in", median(df$year), "data: ", nrow(df)))
+  
+}
+
+# sort dataframe
+ranked <- ranked[order(ranked$year, ranked$region, ranked$division, ranked$statecode, ranked$countycode), ]
+
+# view head and tail of ranked data
+xkabledplyhead(ranked, 2, title = "Table: First 2 Rows of Ranked Data")
+xkabledplytail(ranked, 2, title = "Table: Last 2 Rows of Ranked Data")
+
+```
+
+```{r groupby, results='markup'}
+
+# groupby year
+ranked_by_year <- ranked %>% group_by(year)
+
+summ_by_year <- ranked_by_year %>%  summarise(num_counties = n_distinct(fipscode), 
+                              num_states = n_distinct(statecode),
+                              wmean_inequality = weighted.mean(inequality, pop, na.rm=T), 
+                              wmean_mh_rate = weighted.mean(mental_distress_rate, pop, na.rm=T), 
+                              wmean_mh_days = weighted.mean(mental_health_days, pop, na.rm=T), 
+                              wmean_unempl = weighted.mean(unempl, pop, na.rm=T), 
+                              wmean_medinc = weighted.mean(median_inc, pop, na.rm=T),
+                              )
+
+xkabledplyhead(summ_by_year, 6, title = "Table: Data grouped by Year")
+
+
+# groupby year and state
+ranked_by_year_state <- ranked %>% group_by(year, statecode)
+
+summ_by_year_state <- ranked_by_year_state %>% summarise(num_obs = n(), 
+                                   state_name = first(state),
+                                   region = first(region),
+                                   wmean_inequality = weighted.mean(inequality, 
+                                                                    pop, na.rm = T),
+                                   med_inequality = median(inequality, na.rm = T),
+                                   wmean_mh_rate = weighted.mean(mental_distress_rate, 
+                                                                 pop, na.rm=T),
+                                   med_mh_rate = median(mental_distress_rate, na.rm=T),
+                                   wmean_mh_days = weighted.mean(mental_health_days, 
+                                                                 pop, na.rm=T), 
+                                   med_mh_days = median(mental_health_days, na.rm=T),
+                                   wmean_unempl = weighted.mean(unempl, 
+                                                                pop, na.rm=T), 
+                                   med_unempl = median(unempl, na.rm=T),
+                                   wmean_medinc = weighted.mean(median_inc, 
+                                                                pop, na.rm=T),
+                                   med_medinc = median(median_inc, na.rm=T)
+                                   )
+
+xkabledplyhead(summ_by_year_state, 8, title = "Table: Data grouped by Year and State")
+
+
+# groupby region
+ranked_by_region <- ranked %>% group_by(region)
+
+summ_by_region <- ranked_by_region %>%  summarise(num_counties = n_distinct(fipscode), 
+                              num_states = n_distinct(statecode),
+                              wmean_inequality = weighted.mean(inequality, pop, na.rm=T), 
+                              wmean_mh_rate = weighted.mean(mental_distress_rate, pop, na.rm=T), 
+                              wmean_mh_days = weighted.mean(mental_health_days, pop, na.rm=T), 
+                              wmean_unempl = weighted.mean(unempl, pop, na.rm=T), 
+                              wmean_medinc = weighted.mean(median_inc, pop, na.rm=T),
+                              )
+
+xkabledplyhead(summ_by_region, 4, title = "Table: Data grouped by Region")
+
+
+# groupby year and region
+ranked_by_year_region <- ranked %>% group_by(year, region)
+
+summ_by_year_region <- ranked_by_year_region %>% summarise(num_obs = n(), 
+                                   region_name = first(region),
+                                   sum_pop_millions = sum(pop/1000000, na.rm = T),
+                                   wmean_inequality = weighted.mean(inequality, pop, na.rm = T),
+                                   wmean_mh_rate = weighted.mean(mental_distress_rate, pop, na.rm=T),
+                                   wmean_mh_days = weighted.mean(mental_health_days, pop, na.rm=T)
+                                   )
+
+xkabledplyhead(summ_by_year_region, 8, title = "Table: Data grouped by Year and Region")
+
+```
+
+Our data are identified at the county-year level. Our data set contains `r nrow(dframe)` observations and `r ncol(dframe)` variables, although `r nrow(aggregated)` of these observations are for aggregated data at the national or state level. In addition, `r nrow(unranked)` observations are for counties that are unranked by the [University of Wisconsin Population Health Institute](https://www.countyhealthrankings.org/explore-health-rankings/faq-page), suggesting that the data for these counties is less reliable.
+
+In total, we have `r nrow(ranked)` observations in the ranked data, combined across 6 annual reports (2016–2021). Each annual data set has between 3071 and 3084 observations, indicating that the number of ranked counties is consistent over time.
+
+We also grouped the data on several dimensions using the `group_by()` and `summarise()` functions from the dplyr package. This helped us better investigate time and geographic patterns in our data.
+
+First, we grouped the data set by report year and calculating the population-weighted means for several variables. In general, the mean income inequality has stayed relatively constant over time, while the mental health variables have risen slightly. Other economic variables, such as unemployment and median income, have moved in positive directions (unemployment has fallen, while median incomes have increased). 
+
+Next, we grouped the data by year and state and calculated population-weighted means and state-level medians. There was a lot more variation among the data at this level, which will be helpful when plotting aggregated data later.
+
+Finally, we grouped the data by region, giving us a sense of the size of the 4 census regions: the South contains the most states and counties and has the largest population, while the Northeast is the smallest on these measures. The Northeast has highest measured inequality, and the Midwest has the lowest. The mental health variables are highest (i.e., worst) in the South and lowest in the West. These general trends hold up when grouping by year and region. These differences suggest that comparing the relationship between the variables across regions would be worthwhile.
+
+
+## Exploratory Data Analysis
+
+Using the `ranked` data set, we should run through the most essential EDA we've completed.
+
+### Descriptive Statistics
+
+We examined the summary statistics for all the variables in our data set. We also took at look at a smaller subset of variables most relevant to our analysis.
+
+```{r dstats, results='markup'}
+
+#Summary Statistics of all Variables used in dframe dataset
+# use ranked instead
+table1<-describeBy(ranked)
+table1 %>%
+  kbl(caption="Summary Statistics for Master Dataset",
+       format= "html", col.names = c("Var Num.","Count","Mean","Std. Dev.","Median", "Trimmed Mean", "Mad", "Minimum", "Maximum","Range", "Skewness", "Kurtosis", "S.E."),
+      align="r") %>%
+   kable_classic_2(full_width = F, html_font = "helvetica")
+
+#Summary Statistics of relevant Variables used in analysis below in dfram dataset
+dframe2<-subset(ranked, select = c("mental_health_days", "mental_distress_rate", "inequality", "median_inc", "hs_grad", "college", "unempl", "child_poverty","single_parent", "severe_housing", "food_index","mh_providers","pop_provider_ratio"))
+table2<-describeBy(dframe2)
+table2 %>%
+  kbl(caption="Summary Statistics for Relevant Variables",
+       format= "html", col.names = c("Var Num.","Count","Mean","Std. Dev.","Median", "Trimmed Mean", "Mad", "Minimum", "Maximum","Range", "Skewness", "Kurtosis", "S.E."),
+      align="r") %>%
+   kable_classic_2(full_width = F, html_font = "helvetica")
+
+```
+
+### Scatterplots
+
+Initial visual depiction of the relationship of interest (income inequality vs. mental health) and other variables that might be important.
+
+### Boxplots
+
+Additional visual description of the relationship of interest, where we get a better sense of the variation of the data across categories/factor levels.
+
+### Normality
+
+I think that histograms and Q-Q plots will be sufficient at this stage. Combined graphs that show the distributions of several or many variables together would be best. Ultimately, we should leave this section with an understanding of whether the distribution of our variables is a problem for conducting tests and interpreting our results.
+
+If we decide to remove any outliers using the `ezids` package, we should do it here.
+
+If we decide to transform any of the data (e.g., log transformation), we should do it here.
+
+### EDA Summary
+
+Let's try to answer these questions: 
+
+- *Based on EDA can you begin to sketch out an answer to your question?*
+- *How did your question change, if at all, after Exploratory Data Analysis?*
+
+
+## Estimation and Hypothesis Testing
+
+This should be the simpler analysis we use to demonstrate a statistically significant relationship that differs by region.
+
+We should probably include:
+
+- t-intervals
+- ANOVA test (means by region)
+- Correlation tests (spearman)
+
+
+## Linear Models
+
+This should be the more complex and persuasive evidence demonstrating a statistically significant relationship that differs by region (if we find one!). This will include estimating the relationship while also controlling for other factors.
+
+
+## Conclusion
+
+Here we summarize our results and conclude with a clear sense of what we've learned. We should re-state our SMART question(s) and highlight how they have changed or evolved.
+
+
+In this section, let's also try to answer this question:
+
+- *What additional information would be beneficial?*
+
+
+
+## References
+**APA style preferred**
+
