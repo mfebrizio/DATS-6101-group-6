@@ -136,7 +136,6 @@ dframe$year <- factor(dframe$year)
 
 # check structure of data
 str(dframe)
-
 ```
 
 ```{r summary, results='hide'}
@@ -178,10 +177,6 @@ ranked21 <- ranked %>% subset(year==2021)
 
 # view size of annual datasets
 df_annual_list <- list(ranked16, ranked17, ranked18, ranked19, ranked20, ranked21)
-for (df in df_annual_list) {
-  print(paste("Observations in", median(df$year), "data: ", nrow(df)))
-  
-}
 
 # sort dataframe
 ranked <- ranked[order(ranked$year, ranked$region, ranked$division, ranked$statecode, ranked$countycode), ]
@@ -315,6 +310,26 @@ Initial visual depiction of the relationship of interest (income inequality vs. 
 ### Boxplots
 
 Additional visual description of the relationship of interest, where we get a better sense of the variation of the data across categories/factor levels.
+
+Here, I would like to thank Mark. Because he proposed to divide the United States into four regions according to geographical areas, namely the Northeast, South, West, and Midwest. In this way, we can analyze the income and mental health of people in four regions of the United States at the same time, which is obviously more convincing than our direct analysis of the United States, and makes our analysis more interesting.
+The plot I made is a boxplot. I have selected 2 independent and dependent variables in total. The two independent variables are Median household income and Income inequality. The two dependent variables are Poor mental health days and Frequent mental distress rate. I totally made 8 boxplots(group).
+In Boxplot1, I first analyzed the median household income of these four regions from 2016 to 2021. This is a horizontal analysis. Through this set of analysis, it can be easily concluded that the median household income in the northeast region is the highest, followed by the west region. This is actually not difficult to imagine, because the Northeast and West regions have big cities like New York and Los Angeles respectively, so the economy is developed and the median household income is very high. The median household income in the South and Midwest is relatively low. This is what we get from Boxplot1.
+In Boxplot2, I analyzed the median household income of the four regions for the six years separately, instead of putting them into one graph as in Boxplot1. In this set of analyses, we can see that the trend of median household income in all 4 regions gradually upward from 2016 to 2021. For example, in south region, the median household income in 2016 was about $40000, and by 2021, it was close to $50,000. That's a good thing, proving that household incomes rose across the U.S. in the six years between 2016 and 2021.
+In Boxplot3, I analyzed the income inequality problem (overall analysis) in these four regions from 2016 to 2021. For the trend of these 6 photographs, we can see the trend are the same. We can find that the income inequality of south region is biggest. This also happens to Boxplot1. The south, which has the lowest median household income, is likely to have the biggest income inequality problem. Therefore, economic problems are all interrelated.
+In Boxplot4, I separately analyze the income inequality issues for these four regions over the 6 years. From these four photographs, we can easily find that no matter which region it is, it has been around 4.4% for 6 consecutive years. This kind of data result could provide some advice for local governments to continue working to reduce or even eliminate income inequality .
+In Boxplot5, we begin to analyze the dependent variable. In Boxplot5, we analyze the poor mental health days/month of people in four regions from 2016 to 2021. From the graph, we can easily conclude that the south region has the biggest poor mental health days. This is consistent with our previous findings from Boxplot1. From Boxplot1, we know that south region has the lowest median household income of the 4 regions. So people in the south region are more likely to be unhappy. In this case, they are more prone to mental problems. Sure enough, mental problems are all about money. Like me now, if I have a lot of money, I can go to rent and live in a studio without having to put up with my roommate every day.
+In Boxplot6, I separately analyzed the poor mental health days of people in these 4 regions in the past 6 years. We can associate the following boxplot2. boxplot2 shows that "people's median household income is rising regardless of region". Looking back at Boxplot6, we can find that even though the income of local people is increasing year by year, their unhappy time is still increasing. My guess is that income growth may be not keeping up with local prices.
+In Boxplot7, I analyzed the frequent mental distress rate of these four regions over the past 6 years. The results are similar to boxplot5. Stress, nervousness, and menrally unhealthy emotions are all related to income. The lower the income, the more stressful it is. Just like the situation of south region.
+In Boxplot8, I separately analyzed the frequent mental distress rate in these four regions over the past 6 years. We can easily find that the frequent mental distress rate gradually goes up, no matter in which region. Combined with Boxplot2, even though the income of local people is increasing year by year, it is still easy for them to feel stressed. My guess is that income growth is not keeping up with local prices. Maybe because of COVID-19, we can see that the trend from 2020 to 2021 is more ovbious than previous years.
+From that, what we can conclude for information provided by these boxplots?
+1. In the four U.S. regions, the Northeast has the highest median household income and the South has the lowest. The gap between the rich and the poor in the northeast and western regions is relatively large, and the gap between the rich and the poor in the southern region and the central and western regions is relatively small.
+2. Income inequality is highest in the South.
+3. Residents in the South have the highest number of days per month with psychological problems, which are related to their relatively low household income and inequality.
+4. Household incomes have been rising across the U.S. for the past six years, but income inequality has not been addressed nationally.
+5. In addition, even though household incomes are increasing across the United States, residents' psychological problems are still growing, especially since 2020, perhaps due to the impact of the new crown pandemic, residents' psychological problems have become more.
+6. Therefore, I think the government should be committed to strengthening the economic construction of the South, increasing the income of residents in the South, and reducing income inequality across the United States.
+In a word, the economic base determines the superstructure. Without money, it's easy to feel bad!
+
 
 ### Normality
 
