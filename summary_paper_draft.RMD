@@ -48,15 +48,15 @@ Write a roughly 10-page (definitely no more than 4000 words, charts do not count
 
 Potential area of topics to address in this summary may include:
 
-- What do we know about this dataset?
-- What are the limitations of the dataset?
-- How was the information gathered?
-- What analysis has already been completed related to the content in your dataset?
-- How did the research you gathered contribute to your question development?
-- What additional information would be beneficial?
-- How did your question change, if at all, after Exploratory Data Analysis?
-- Based on EDA can you begin to sketch out an answer to your question?
-- References (APA style preferred)
+- What do we know about this dataset? (Alex)
+- What are the limitations of the dataset? (Alex)
+- How was the information gathered? (Shumel)
+- What analysis has already been completed related to the content in your dataset? (Shumel)
+- How did the research you gathered contribute to your question development? (Xuan)
+- What additional information would be beneficial? (Xuan)
+- How did your question change, if at all, after Exploratory Data Analysis? (Mark)
+- Based on EDA can you begin to sketch out an answer to your question? (Mark)
+- References (APA style preferred) (Alex)
 
 
 ## Introduction
@@ -71,6 +71,22 @@ Throughout this section, let's try to answer these questions from the instructio
 - *How was the information gathered?*
 - *What analysis has already been completed related to the content in your dataset?*
 - *How did the research you gathered contribute to your question development?*
+
+
+While the relationship between economic inequality and health, generally, has been extensively studied, less focus has been paid to the relationship with mental health, specifically. Further, the results seem sensitive to the geographic locations studied and measures used. As a result, although the research area is not unexplored, there is still room for novel empirical investigations.
+
+As an initial step, we conducted a literature review to better understand the scholarly work on the topic. 
+
+
+Two notable systematic reviews focus on summarizing the relationship between income inequality and mental health. First, Ribeiro et al. (2017) conducted a meta-analysis of 27 studies exploring the relationship between income inequality and the incidence of mental health problems. Of these articles, 9 found a positive association, 10 found mixed results, and 8 found no association. The meta-analysis included both qualitative evaluation and pooled empirical analysis of select study results. The authors concluded, “Income inequality negatively affects mental health but the effect sizes are small and there is marked heterogeneity among studies.” Second, Tibber et al. (2022) systematically reviewed 42 subnational studies (i.e., within countries rather than across countries) and determined whether they supported the Income Inequality Hypothesis or the Mixed Neighbourhood Hypothesis. A plurality of these studies focused on US populations. After controlling for absolute deprivation, approximately 55 percent of the studies supported the IIH, 12 percent supported the MNH, and the remaining studies (roughly 1/3) did not establish a conclusive association. The results were robust to mental health conditions, geographical unit size, and across countries with different incomes.
+
+
+An initial literature review suggests that the nature of the relationship between income inequality and mental health has not been conclusively answered, making this topic is worthy of further study.
+
+Given the potential differences in effects by geographic area, focusing on how the relationship between income inequality and mental health varies across parts of the U.S. would be valuable. We are asking the following SMART question:
+
+What is the relationship between the prevalence of mental health problems and income inequality across U.S. counties from 2016 to 2021?
+
 
 
 ## Summary of Data Set
@@ -139,7 +155,7 @@ str(dframe)
 
 ```
 
-```{r summary, results='hide'}
+```{r subset, results='hide'}
 
 # look at county_ranked var; not all counties are ranked; also some aggregated data per state and country exist in the observations
 # =1 means they are ranked, =0 means unranked, and =NA is for state/national data
@@ -176,19 +192,8 @@ ranked19 <- ranked %>% subset(year==2019)
 ranked20 <- ranked %>% subset(year==2020)
 ranked21 <- ranked %>% subset(year==2021)
 
-# view size of annual datasets
-df_annual_list <- list(ranked16, ranked17, ranked18, ranked19, ranked20, ranked21)
-for (df in df_annual_list) {
-  print(paste("Observations in", median(df$year), "data: ", nrow(df)))
-  
-}
-
 # sort dataframe
 ranked <- ranked[order(ranked$year, ranked$region, ranked$division, ranked$statecode, ranked$countycode), ]
-
-# view head and tail of ranked data
-xkabledplyhead(ranked, 2, title = "Table: First 2 Rows of Ranked Data")
-xkabledplytail(ranked, 2, title = "Table: Last 2 Rows of Ranked Data")
 
 ```
 
@@ -232,8 +237,6 @@ summ_by_year_state <- ranked_by_year_state %>% summarise(num_obs = n(),
                                    med_medinc = median(median_inc, na.rm=T)
                                    )
 
-xkabledplyhead(summ_by_year_state, 8, title = "Table: Data grouped by Year and State")
-
 
 # groupby region
 ranked_by_region <- ranked %>% group_by(region)
@@ -261,15 +264,12 @@ summ_by_year_region <- ranked_by_year_region %>% summarise(num_obs = n(),
                                    wmean_mh_days = weighted.mean(mental_health_days, pop, na.rm=T)
                                    )
 
-xkabledplyhead(summ_by_year_region, 8, title = "Table: Data grouped by Year and Region")
 
 ```
 
 Our data are identified at the county-year level. Our data set contains `r nrow(dframe)` observations and `r ncol(dframe)` variables, although `r nrow(aggregated)` of these observations are for aggregated data at the national or state level. In addition, `r nrow(unranked)` observations are for counties that are unranked by the [University of Wisconsin Population Health Institute](https://www.countyhealthrankings.org/explore-health-rankings/faq-page), suggesting that the data for these counties is less reliable.
 
-In total, we have `r nrow(ranked)` observations in the ranked data, combined across 6 annual reports (2016–2021). Each annual data set has between 3071 and 3084 observations, indicating that the number of ranked counties is consistent over time.
-
-We also grouped the data on several dimensions using the `group_by()` and `summarise()` functions from the dplyr package. This helped us better investigate time and geographic patterns in our data.
+In total, we have `r nrow(ranked)` observations in the ranked data, combined across 6 annual reports (2016–2021). Each annual data set has between 3071 and 3084 observations, indicating that the number of ranked counties is consistent over time. We also grouped the data on several dimensions help us better investigate time and geographic patterns in our data.
 
 First, we grouped the data set by report year and calculating the population-weighted means for several variables. In general, the mean income inequality has stayed relatively constant over time, while the mental health variables have risen slightly. Other economic variables, such as unemployment and median income, have moved in positive directions (unemployment has fallen, while median incomes have increased). 
 
@@ -307,6 +307,18 @@ table2 %>%
    kable_classic_2(full_width = F, html_font = "helvetica")
 
 ```
+
+Takeaways
+- have nearly complete data for our most critical variables (mental health, inequality, median income, several other economic vars)
+- intended dependent vars have
+
+`r mean(ranked$mental_health_days, na.rm=T)`
+
+`r median(ranked$mental_health_days, na.rm=T)`
+
+`r sd(ranked$mental_health_days, na.rm=T)`
+
+
 
 ### Scatterplots
 
