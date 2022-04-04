@@ -989,7 +989,7 @@ summary_in <- summary(aov_in1)
 
 aov_in <- tidy(aov_in <- aov(inequality ~ region, data = ranked))
 aov_in %>%
-  kbl(caption="ANOVA results: Income Inequality by Region",
+  kbl(caption="ANOVA Results: Income Inequality by Region",
        format= "html", col.names = c("Res.Df", "RSS", "DF", "Sum of Sq","F","Pr(>F)"),
       align="r") %>%
    kable_classic_2(full_width = F, html_font = "helvetica")
@@ -1043,7 +1043,7 @@ summary_mh_rate <- summary(aov_mh_rate1)
 
 aov_mh_rate <- tidy(aov(mental_distress_rate ~ region, data = ranked))
 aov_mh_rate %>%
-  kbl(caption="ANOVA results: Frequent Mental Distress by Region",
+  kbl(caption="ANOVA Results: Frequent Mental Distress by Region",
        format= "html", col.names = c("Res.Df", "RSS", "DF", "Sum of Sq","F","Pr(>F)"),
       align="r") %>%
    kable_classic_2(full_width = F, html_font = "helvetica")
