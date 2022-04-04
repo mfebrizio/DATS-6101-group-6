@@ -1038,7 +1038,13 @@ summary_in <- summary(aov_in)
 xkabledply(aov_in, title = "ANOVA results: Income inequality by Region")
 
 tukey_in <- TukeyHSD(aov_in)
-tukey_in
+#tukey_in
+
+tukey_in$region %>%
+  kbl(caption="Tukey HSD Test: Income Inequailty by Region",
+       format= "html", col.names = c("Diff", "Lower", "Upper", "p adj"),
+      align="r") %>%
+   kable_classic_2(full_width = F, html_font = "helvetica")
 
 ```
 
@@ -1054,7 +1060,13 @@ summary_mh_days <- summary(aov_mh_days)
 xkabledply(aov_mh_days, title = "ANOVA results: Poor Mental Health Days by Region")
 
 tukey_mh_days <- TukeyHSD(aov_mh_days)
-tukey_mh_days
+#tukey_mh_days
+
+tukey_mh_days$region %>%
+  kbl(caption="Tukey HSD Test: Poor Mental Health Days by Region",
+       format= "html", col.names = c("Diff", "Lower", "Upper", "p adj"),
+      align="r") %>%
+   kable_classic_2(full_width = F, html_font = "helvetica")
 
 # frequent mental distress rate
 aov_mh_rate <- aov(mental_distress_rate ~ region, data = ranked)
@@ -1064,7 +1076,14 @@ summary_mh_rate <- summary(aov_mh_rate)
 xkabledply(aov_mh_rate, title = "ANOVA results: Frequent Mental Distress by Region")
 
 tukey_mh_rate <- TukeyHSD(aov_mh_rate)
-tukey_mh_rate
+#tukey_mh_rate
+
+tukey_mh_rate$region %>%
+  kbl(caption="Tukey HSD Test: Frequent Mental Distress by Region",
+       format= "html", col.names = c("Diff", "Lower", "Upper", "p adj"),
+      align="r") %>%
+   kable_classic_2(full_width = F, html_font = "helvetica")
+
 
 ```
 
