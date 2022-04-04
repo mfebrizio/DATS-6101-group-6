@@ -91,7 +91,22 @@ Overall, we found that the prevalence of mental health conditions seems positive
 
 ## Summary of Data Set
 
-Answer here: *What do we know about this dataset?*
+The primary dataset used for this project is a combination of annual datasets called the County Health Rankings and Roadmaps National Data and was obtained the Robert Wood Johnson Foundation (RWJF). The Robert Wood Johnson Foundation is a non-profit public health foundation-based New Jersey that collects data on various socioeconomic and public health indicators. The County Health Rankings and Roadmaps National Data consists of county-level socioeconomic and public health data. The Robert Wood Johnson Foundation collects data from the National Center for Health Statistics, the Centers for Disease Prevention and Control (CDC) Behavioral Risk Factor Surveillance System, the National Center for HIV/AIDS, Viral Hepatitis, STD, and TB Prevention, USDA Food Environment Atlas, the Centers for Medicare & Medicaid Services (CMS) National Provider Identifier Standard, the Stanford Education Data Archive, and the U.S. Census Bureau (RWJF, 2021). 
+
+The full dataset includes data from 2011 to 2021. For this project the dataset a subset of the data was taken from 2016 to 2021. This time-period was chosen because it provided the most complete for all the variables of interest. Years prior to 2016 upon an initial inspection of the annual datasets were incomplete or did not have variables that exactly corresponded to variables in 2016 to 2021. 
+
+The full dataset includes thirty-two variables. The following variables are listed below including descriptions of each variable. However, the scope of this project was primarily concerned with two mental health variables and two economic inequality variables. The primary economic inequality variables of interest include household income ratio and median income. These two economic inequality variables were used as independent variables. The primary mental health variables of interest include the number of mentally unhealthy days and the percentage of frequent mental distress. These two mental health variables were used as dependent variables. The table below displays the summary statistics of the dataset. 
+
+The income ratio variable, also called inequality or income inequality in the exploratory data analysis, is the ratio of the household income at the 80th percentile and income at the 20th percentile. Income is defined as the sum of the amounts reported separately for wages, salary, net self-employment income, interest dividends, royalty income from estates/trusts, Social Security, Railroad Retirement income, Supplemental Security Income (SSI), public assistance/welfare payments, retirement, and survivor/disability pensions. A higher inequality ratio indicates greater division between the top percentile and bottom percentile of the income spectrum. The RWJF obtained this data from the American Community Survey (ACS) which is conducted by the U.S. Census Bureau and collects and produces population and housing information (RWJF, 2021). The total number of observations for the income ratio variable is 18,465. 
+
+The median income variable, also called median_inc in the exploratory data analysis, is the income in the middle of the household income distribution of the county. Half of the incomes are greater and lesser than the median income of a county. Income is defined as the sum of the amounts reported separately for wages, salary, net self-employment income, interest dividends, royalty income from estates/trusts, Social Security, Railroad Retirement income, Supplemental Security Income (SSI), public assistance/welfare payments, retirement, and survivor/disability pensions. The RWJF obtained this data from the American Community Survey (ACS) which is conducted by the U.S. Census Bureau and collects and produces population and housing information (RWJF, 2021). The total number of observations for the median income variable is 18,469.
+
+The number of mentally unhealthy days, also called mental_health_days in the exploratory data analysis, is the average number of mentally unhealthy days reported in the past 30 days. Mentally unhealthy days is self-reported by respondents answering the question, “Now thinking about your mental health, which includes stress, depression, and problems with emotions, for how many days during the past 30 days was your mental health not good?” The RWJF obtained this data from the CDC’s Behavioral Risk Factor Surveillance System (BRFSS). The BRFSS is a health survey conducted by the CDC that collects information on health-related behavioral risk factors (RWJF, 2021). The total number of observations for the number of mentally unhealthy days variable is 18,469.
+  
+The percentage of frequent mental distress, also called mental_distress_rate in the exploratory data analysis, is the percentage of adults who reported 14 or more days as mentally unhealthy. Mentally unhealthy days is self-reported by respondents answering the question, “Now thinking about your mental health, which includes stress, depression, and problems with emotions, for how many days during the past 30 days was your mental health not good?” The estimate of the percentage of frequent mental distress is based on the measurement of the number of mentally unhealthy days variable above. The RWJF obtained this data from the CDC’s Behavioral Risk Factor Surveillance System (BRFSS). The BRFSS is a health survey conducted by the CDC that collects information on health-related behavioral risk factors. The total number of observations for the percentage of frequent mental distress is 18,469.  
+
+For the exploratory data analysis, the data was also separated into regions based on state. This project separated the states into regions as defined by the U.S. Census Bureau. The states were divided into four regions the Midwest, Northeast, South, and West. The states in the West include Washington, Oregon, California, Montana, Idaho, Wyoming, Nevada, Utah, Colorado, Arizona, New Mexico, Alaska, and Hawaii. The states in the Midwest include North Dakota, South Dakota, Nebraska, Kansas, Minnesota, Iowa, Missouri, Wisconsin, Illinois, Indiana, Michigan, and Ohio. The states in the South include Texas, Oklahoma, Arkansas, Louisiana, Mississippi, Alabama, Tennessee, Kentucky, Virginia, West Virginia, Georgia, Florida, North Carolina, South Carolina, District of Columbia, Maryland, and Delaware. Finally, the states in the Northeast include Pennsylvania, New York, New Jersey, Connecticut, Massachusetts, Rhode Island, Vermont, New Hampshire, and Maine (U.S. Census Bureau, 2010).   
+
 
 The variables in the data set are:
 
@@ -272,7 +287,11 @@ Next, we grouped the data by year and state and calculated population-weighted m
 
 Finally, we grouped the data by region, giving us a sense of the size of the 4 census regions: the South contains the most states and counties and has the largest population, while the Northeast is the smallest on these measures. The Northeast has highest measured inequality, and the Midwest has the lowest. The mental health variables are highest (i.e., worst) in the South and lowest in the West. These general trends hold up when grouping by year and region. These differences suggest that comparing the relationship between the variables across regions would be worthwhile.
 
-Answer here: *What are the limitations of the dataset?*
+## Limitations of the Dataset
+
+The main limitation of this dataset is that it is largely based on survey data. The income ratio and median income is based on a sample surveyed by the U.S. Census Bureau. The number of mentally unhealthy days and percentage of frequent mental distress are based on a sample self-reported survey conducted by the CDC. While both the U.S. Census Bureau and the CDC are reputable institutions and reliable sources of data there is always a possibility that the sample is biased, or the survey is improperly conduct or the survey deviates from year to year. 
+
+Additionally, given that the data is collected at the county-level, local level factors influence the type of information collected making comparisons across state lines questionable given the different geographical, social, and economic contexts. Furthermore, self-reported mental health cannot be validated in medical records. Additionally, the data for each variable is not normally distributed. This can be seen in the plotted histograms and normal Q-Q plots.  
 
 
 ## Exploratory Data Analysis
@@ -1100,5 +1119,29 @@ In a word, the economic base determines the superstructure. Without money, it's 
 
 
 ## References
-**APA style preferred**
+
+Bechtel, L., Lordan, G., & Rao, D. P. (2012). Income inequality and mental health—empirical evidence from Australia. Health economics, 21, 4-17.
+
+Kelley, J., & Evans, M. D. (2017). Societal Inequality and individual subjective well-being: Results from 68 societies and over 200,000 individuals, 1981–2008. Social science research, 62, 1-23.
+
+Layte, R. (2012). The association between income inequality and mental health: testing status anxiety, social capital, and neo-materialist explanations. European Sociological Review, 28(4), 498-511.
+
+Matthew, P., & Brodersen, D. M. (2018). Income inequality and health outcomes in the United States: An empirical analysis. The Social Science Journal, 55(4), 432-442.
+
+Pickett, K. E., & Wilkinson, R. G. (2015). Income inequality and health: a causal review. Social science & medicine, 128, 316-326.
+
+Ribeiro, W. S., Bauer, A., Andrade, M. C. R., York-Smith, M., Pan, P. M., Pingani, L., Coutinho, E.S.F., & Evans-Lacko, S. (2017). Income inequality and mental illness-related morbidity and resilience: a systematic review and meta-analysis. The Lancet Psychiatry, 4(7), 554-562.
+
+Robert Wood Johnson Foundation (RWJF) (2021). 2021 County Health Rankings National Data. County Health Rankings & Roadmaps. https://www.countyhealthrankings.org/explore-health-rankings/rankings-data-documentation. Accessed: March 13, 2022.
+
+Robert Wood Johnson Foundation (RWJF) (2021). County Health Rankings Model. County Health Rankings & Roadmaps. https://www.countyhealthrankings.org/explore-health-rankings/measures-data-sources/county-health-rankings-model. Accessed: March 13, 2022.
+
+Sommet, N., Morselli, D., & Spini, D. (2018). Income inequality affects the psychological health of only the people facing scarcity. Psychological Science, 29(12), 1911-1921.
+
+Tibber, M. S., Walji, F., Kirkbride, J. B., & Huddy, V. (2021). The association between income inequality and adult mental health at the subnational level—a systematic review. Social psychiatry and psychiatric epidemiology, 1-24.
+
+U.S. Census Bureau. (2010). Census Regions and Divisions of the United States. U.S. Department of Commerce Economics and Statistics Administration. https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf. Accessed: March 13, 2022.
+
+Zimmerman, F. J., & Bell, J. F. (2006). Income inequality and physical and mental health: testing associations consistent with proposed causal pathways. Journal of Epidemiology & Community Health, 60(6), 513-521.
+
 
