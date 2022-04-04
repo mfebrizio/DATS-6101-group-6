@@ -1098,16 +1098,63 @@ We can also conduct a Spearman's rank test to see whether the mental health vari
 ```{r spearman, results='markup'}
 
 spearman_ineq_v_days <- cor.test(ranked$inequality, ranked$mental_health_days, method="spearman", exact=F)
-spearman_ineq_v_days
+#spearman_ineq_v_days
+
+corr_table1 <- data.frame(estimate = c(spearman_ineq_v_days$estimate))
+corr_table1 <- rbind(corr_table1, spearman_ineq_v_days$statistic)
+corr_table1 <- rbind(corr_table1, spearman_ineq_v_days$p.value)
+rownames(corr_table1) <- c("Sample Estimates: rho", "Test-Statistic: S", "p-value")
+
+corr_table1 %>%
+  kbl(caption="Spearman's Rank Correlation rho: Mental Health Days v. Inequality",
+       format= "html", col.names = c(""),
+      align="r") %>%
+   kable_classic_2(full_width = F, html_font = "helvetica")
 
 spearman_ineq_v_rate <- cor.test(ranked$inequality, ranked$mental_distress_rate, method="spearman", exact=F)
-spearman_ineq_v_rate
+#spearman_ineq_v_rate
+
+corr_table2 <- data.frame(estimate = c(spearman_ineq_v_rate$estimate))
+corr_table2 <- rbind(corr_table2, spearman_ineq_v_rate$statistic)
+corr_table2 <- rbind(corr_table2, spearman_ineq_v_rate$p.value)
+rownames(corr_table2) <- c("Sample Estimates: rho", "Test-Statistic: S", "p-value")
+
+corr_table2 %>%
+  kbl(caption="Spearman's Rank Correlation rho: Mental Distress Rate v. Inequality",
+       format= "html", col.names = c(""),
+      align="r") %>%
+   kable_classic_2(full_width = F, html_font = "helvetica")
+
 
 spearman_medinc_v_days <- cor.test(ranked$median_inc, ranked$mental_health_days, method="spearman", exact=F)
-spearman_medinc_v_days
+#spearman_medinc_v_days
+
+corr_table3 <- data.frame(estimate = c(spearman_medinc_v_days$estimate))
+corr_table3 <- rbind(corr_table3, spearman_medinc_v_days$statistic)
+corr_table3 <- rbind(corr_table3, spearman_medinc_v_days$p.value)
+rownames(corr_table3) <- c("Sample Estimates: rho", "Test-Statistic: S", "p-value")
+
+corr_table3 %>%
+  kbl(caption="Spearman's Rank Correlation rho: Mental Health Days v. Median Income",
+       format= "html", col.names = c(""),
+      align="r") %>%
+   kable_classic_2(full_width = F, html_font = "helvetica")
+
 
 spearman_medinc_v_rate <- cor.test(ranked$median_inc, ranked$mental_distress_rate, method="spearman", exact=F)
-spearman_medinc_v_rate
+#spearman_medinc_v_rate
+
+corr_table4 <- data.frame(estimate = c(spearman_medinc_v_rate$estimate))
+corr_table4 <- rbind(corr_table4, spearman_medinc_v_rate$statistic)
+corr_table4 <- rbind(corr_table4, spearman_medinc_v_rate$p.value)
+rownames(corr_table4) <- c("Sample Estimates: rho", "Test-Statistic: S", "p-value")
+
+corr_table4 %>%
+  kbl(caption="Spearman's Rank Correlation rho: Mental Distress Rate v. Median Income",
+       format= "html", col.names = c(""),
+      align="r") %>%
+   kable_classic_2(full_width = F, html_font = "helvetica")
+
 
 ```
 
