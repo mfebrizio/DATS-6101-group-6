@@ -48,30 +48,9 @@ options(scientific=T, digits = 3)
 
 ```
 
-
 # Summary Paper
 
-## Instructions
-
-Summary paper, 25%. (Due: Apr 4 Monday 12:30pm)
-
-Write a roughly 10-page (definitely no more than 4000 words, charts do not count) summary of the research and EDA process of your project. The summary should be prepared in R-markdown, and knitted into HTML. You may take some of the work in part II (such as graphs and results) to include here. They can overlap. This summary is to-be presented to your boss, your client, or to-be submitted for publication in journals.
-
-Potential area of topics to address in this summary may include:
-
-- What do we know about this dataset? (Alex)
-- What are the limitations of the dataset? (Alex)
-- How was the information gathered? (Shumel)
-- What analysis has already been completed related to the content in your dataset? (Shumel)
-- How did the research you gathered contribute to your question development? (Xuan)
-- What additional information would be beneficial? (Xuan)
-- How did your question change, if at all, after Exploratory Data Analysis? (Mark)
-- Based on EDA can you begin to sketch out an answer to your question? (Mark)
-- References (APA style preferred) (Alex)
-
-
 ## Introduction
-**Here we should briefly state our topic, SMART question(s), data sources, and brief literature review. We should also give an overview of our findings / takeaways that will be highlighted in the conclusion.**
 
 While the relationship between economic inequality and health, generally, has been extensively studied, less focus has been paid to the relationship with mental health, specifically. Further, the results seem sensitive to the geographic locations studied and measures used. As a result, although the research area is not unexplored, there is still room for novel empirical investigations.
 
@@ -79,15 +58,12 @@ As an initial step, we conducted a literature review to better understand the sc
 
 The upshot of this literature review was twofold. First, the nature of the relationship between income inequality and mental health has not been conclusively answered. Second, the relationship might differ based on the geographic area being considered. Therefore, we believe this topic is worthy of further study.
 
-Answer here: *How did the research you gathered contribute to your question development?*
-
-Throughout the investigation of our topic, we developed the following SMART questions:
+In addition, the research we gathered contributed to the development of our SMART questions. Primarily, we discovered that the relationship could vary by geography, making it important to examine the data for different parts of the U.S. Throughout the investigation of our topic, we developed the following SMART questions:
 
 - What is the relationship between the prevalence of mental health problems and income inequality across U.S. counties from 2016 to 2021?
 - Does the relationship differ across regions of the U.S.?
 
 Overall, we found that the prevalence of mental health conditions seems positively associated with greater economic inequality in the U.S. This relationship also seems to be different depending on the region.
-
 
 ## Summary of Data Set
 
@@ -293,7 +269,6 @@ The main limitation of this dataset is that it is largely based on survey data. 
 
 Additionally, given that the data is collected at the county-level, local level factors influence the type of information collected making comparisons across state lines questionable given the different geographical, social, and economic contexts. Furthermore, self-reported mental health cannot be validated in medical records. Additionally, the data for each variable is not normally distributed. This can be seen in the plotted histograms and normal Q-Q plots.  
 
-
 ## Exploratory Data Analysis
 
 After establishing our initial questions and taking a preliminary look at our data, we conducted exploratory data analysis to investigate our research questions.
@@ -485,16 +460,13 @@ Notably, we compared both `mental_health_days` and `mental_distress_rate` agains
 
 At this point in the EDA, it became clear that geographic differences in the relationship between mental health and inequality were important. These results justified our decision to focus our SMART question on the differences by region. Our next step in exploration was to use boxplots to get a better sense of how the data varied across regional categories.
 
-
 ### Boxplots
 
 To better show the relationship between the economic variables and mental health in different regions of the United States, we generated boxplots of the data by region. Analyzing the economic inequality and mental health of people by region can more clearly assess whether the relationship varies by geography than direct analysis of the whole United States. To highlight the key points, we only focus on two independent variables (`inequality` and `median_inc`) and two dependent variables (`mental_health_days` and `mental_distress_rate`). In total, we created 8 groups of boxplots.
 
 In the first group we first analyzed the median household income of these four regions from 2016 to 2021. This is a horizontal analysis. Through this set of analysis, it can be easily concluded that the median household income in the NOrtheast region is the highest, followed by the West region. This is actually not difficult to imagine, because the Northeast and West regions have big cities like New York and Los Angeles respectively, so the economy is developed and the median household income is very high. The median household income in the South and Midwest is relatively low.
 
-```{r boxplots_median_inc, results='markup'}
-
-#Boxplot 1
+```{r boxplots_1, results='markup'}
 
 # Characterization of the Median household income of four regions in the United States in 2016.
 b1 <- ggplot(ranked16, aes(x=region_abb, y=median_inc)) + 
@@ -536,11 +508,9 @@ boxplot1 <- grid.arrange(b1,b2,b3,b4,b5,b6, nrow=2, ncol=3, top = text_grob("The
 
 ```
 
-In the second group, we analyzed the median household income of the four regions for the six years separately, instead of putting them into one graph as in Boxplot1. In this set of analyses, we can see that the trend of median household income in all 4 regions gradually upward from 2016 to 2021. For example, in south region, the median household income in 2016 was about $40000, and by 2021, it was close to $50,000. That's a good thing, proving that household incomes rose across the U.S. in the six years between 2016 and 2021.
+In the second group, we analyzed the median household income of the four regions for the six years separately, instead of putting them into one graph as in Boxplot1. In this set of analyses, we can see that the trend of median household income in all 4 regions gradually upward from 2016 to 2021. For example, in south region, the median household income in 2016 was about $40,000, and by 2021, it was close to $50,000. That's a good thing, proving that household incomes rose across the U.S. in the six years between 2016 and 2021.
 
-```{r boxplots_median_inc_region, results='markup'}
-##### Characterizations of the Median household income of four regions from 2016 to 2021, decided by regions.
-##### From the four photographs below, we can see that the trend of median household income in all 4 regions gradually upward from 2016 to 2021. For example, in south region, the median household income in 2016 was about $40,000, and by 2021, it was close to $50,000.
+```{r boxplots_2, results='markup'}
 
 # Characterization of the Median household income of northeast region from 2016 to 2021.
 b1 <- ggplot(ranked_NE, aes(x=factor(year), y=median_inc)) +
@@ -572,7 +542,7 @@ boxplot2 <- grid.arrange(b1,b2,b3,b4, nrow=2, ncol=2, top = text_grob("Median In
 
 In the third group, the boxplots show the income inequality of 4 regions from 2016 to 2021. The trend of these 6 plots are similar. Income inequality is biggest in the South. This also happens to validate the six plots above for median household income. The South, which has the lowest median household income, is likely to have the greatest income inequality problem.
 
-```{r boxplots_inequality, results='markup'}
+```{r boxplots_3, results='markup'}
 
 # Characterization of Income inequality of four regions in the United States in 2016.
 b1 <- ggplot(ranked16, aes(x=region_abb, y=inequality)) + 
@@ -616,9 +586,7 @@ boxplot3 <- grid.arrange(b1,b2,b3,b4,b5,b6, nrow=2, ncol=3, top = text_grob("The
 
 In the fourth group, we separately analyzed the income inequality issues for these four regions over the 6 years. From these four photographs, we can easily find that no matter which region it is, it has been around 4.4% for 6 consecutive years.
 
-```{r boxplots_inequality_region, results='markup'}
-##### Characterizations of the income inequality of four regions from 2016 to 2021, decided by regions.
-##### From the four photographs below, we can easily find that, no matter which region it is, the status of income inequality has not changed much from 2016 to 2021. For example, in the Northeast region, it has been around 4.4% for 6 consecutive years. This kind of data result could provide some advice for local governments to continue working to reduce or even eliminate income inequality.
+```{r boxplots_4, results='markup'}
 
 # Characterization of the income inequality of northeast region from 2016 to 2021.
 b1 <- ggplot(ranked_NE, aes(x=factor(year), y=inequality)) +
@@ -650,7 +618,7 @@ boxplot4 <- grid.arrange(b1,b2,b3,b4, nrow=2, ncol=2, top = text_grob("Income In
 
 In the fifth group of boxplots, we begin to analyze the dependent variables. In Boxplot5, we analyze the poor mental health days of people in four regions from 2016 to 2021. From the graph, we can easily conclude that the south region has the biggest poor mental health days. This is consistent with our previous findings from Boxplot1. From Boxplot1, we know that south region has the lowest median household income of the 4 regions. Because the South has the lowest median household income of the four regions, people in the South could be more likely to be unhappy. In this case, they are more prone to mental problems.
 
-```{r boxplots_mh_days, results='markup'}
+```{r boxplots_5, results='markup'}
 
 # Characterization of the Poor mental health days/month of four regions in the United States in 2016.
 b7 <- ggplot(ranked16, aes(x=region_abb, y=mental_health_days)) + 
@@ -692,12 +660,9 @@ boxplot5 <- grid.arrange(b7,b8,b9,b10,b11,b12, nrow=2, ncol=3, top = text_grob("
 
 ```
 
-In Boxplot6, I separately analyzed the poor mental health days of people in these 4 regions in the past 6 years. We can associate the following boxplot2. boxplot2 shows that "people's median household income is rising regardless of region". Looking back at Boxplot6, we can find that even though the income of local people is increasing year by year, their unhappy time is still increasing. My guess is that income growth may be not keeping up with local prices.
+In the sixth group, we separately analyzed the poor mental health days of people in these 4 regions in the past 6 years. Similar to the second group of boxplots, which indicated that people's median household income is rising regardless of region, even though median household income is increasing year by year, mental health issues are also increasing. One potential option is that income growth may be not keeping up with local prices, which exacerbates mental health problems.
 
-```{r boxplots_mh_days_region, results='markup'}
-##Assigned to: Xuan
-##### Characterizations of the Poor mental health days/month of 4 regions from 2016 to 2021
-##### From following 4 photographs, we can easily find that the poor mental health days gradually go up, no matter in which region. Combined with the results of the previous findings, even though the income of local people is increasing year by year, their unhappy time is still increasing. My guess is that income growth is not keeping up with local prices.
+```{r boxplots_6, results='markup'}
 
 # Characterization of the Poor mental health days/month of northeast region from 2016 to 2021.
 b1 <- ggplot(ranked_NE, aes(x=factor(year), y=mental_health_days)) + 
@@ -727,9 +692,9 @@ boxplot6 <- grid.arrange(b1,b2,b3,b4, nrow=2, ncol=2, top = text_grob("Poor Ment
 
 ```
 
-In Boxplot7, I analyzed the frequent mental distress rate of these four regions over the past 6 years. The results are similar to boxplot5. Stress, nervousness, and menrally unhealthy emotions are all related to income. The lower the income, the more stressful it is. Just like the situation of south region.
+In the seventh group, we analyzed the frequent mental distress rate of these four regions over the past 6 years. The results are similar to those for poor mental health days.
 
-```{r boxplots_md_rate, results='markup'}
+```{r boxplots_7, results='markup'}
 
 # Characterization of the Frequent mental distress rate of four regions in the United States in 2016.
 b13<-ggplot(ranked16, aes(x=region_abb, y=mental_distress_rate)) + 
@@ -771,12 +736,9 @@ boxplot7 <- grid.arrange(b13,b14,b15,b15,b17,b18, nrow=2, ncol=3, top = text_gro
 
 ```
 
-In Boxplot8, I separately analyzed the frequent mental distress rate in these four regions over the past 6 years. We can easily find that the frequent mental distress rate gradually goes up, no matter in which region. Combined with Boxplot2, even though the income of local people is increasing year by year, it is still easy for them to feel stressed. Income growth might not be keeping up with local prices.
+In the eight group, we separately analyzed the frequent mental distress rate in these four regions over the past 6 years. We can easily find that the frequent mental distress rate gradually goes up, no matter in which region. Combined with prior results, even though the income of local people is increasing year by year, it is still easy for them to feel stressed.
 
-```{r boxplots_md_rate_region, results='markup'}
-##Assigned to: Xuan
-##### Characterizations of the Frequent mental distress rate of 4 regions from 2016 to 2021
-##### From following 4 photographs, we can easily find that the frequent mental distress rate gradually goes up, no matter in which region. Combined with the results of the previous findings, even though the income of local people is increasing year by year, it is still easy for then to feel stressed. My guess is that income growth is not keeping up with local prices. Maybe because of COVID-19, we can see that the trend from 2020 to 2021 is more obvious than previous years.
+```{r boxplots_8, results='markup'}
 
 # Characterization of the Frequent mental distress rate of northeast region from 2016 to 2021.
 b1 <- ggplot(ranked_NE, aes(x=factor(year), y=mental_distress_rate)) + 
@@ -808,7 +770,7 @@ boxplot8 <- grid.arrange(b1,b2,b3,b4, nrow=2, ncol=2, top = text_grob("Frequent 
 
 Overall, what information can we conclude from these boxplots?
 
-1. In the four U.S. regions, the Northeast has the highest median household income and the South has the lowest. The gap between the rich and the poor in the Northeast and West is relatively large, and the gap between the rich and the poor in the South region and the central and western regions is relatively small.
+1. In the four U.S. regions, the Northeast has the highest median household income and the South has the lowest.
 2. Income inequality is highest in the South.
 3. Residents in the South also have the highest number of mentally unhealthy days per month, which is correlates with their relatively low household income and higher levels of inequality.
 4. Household incomes have been rising across the U.S. for the past six years, but income inequality has not changed much.
@@ -822,12 +784,8 @@ We also graphed histograms of many of the numeric variables to consider their di
 
 ```{r norm_hist, results='markup'}
 
-# https://www.r-bloggers.com/2016/07/quick-plot-of-all-variables/
-
 # variables to plot
 keep_var <- c('inequality', 'unempl', 'child_poverty', 'hs_grad', 'college', 'single_parent', 'severe_housing', 'food_index', 'mental_health_days', 'mental_distress_rate', 'median_inc', 'pop_provider_ratio')
-
-#ranked[keep_var]
 
 # plot histograms
 ranked[keep_var] %>% 
@@ -884,13 +842,6 @@ In general, the mental health variables do not diverge too far from normality. A
 
 ```{r norm_qq, results='markup', warning=FALSE}
 
-# density plot of key numeric variables for every year
-
-# variables to plot
-keep_var <- c('inequality', 'unempl', 'child_poverty', 'hs_grad', 'college', 'single_parent', 'severe_housing', 'food_index', 'mental_health_days', 'mental_distress_rate', 'median_inc', 'pop_provider_ratio')
-
-#ranked[keep_var]
-
 # plot histograms
 ranked[keep_var] %>% 
   gather() %>% 
@@ -940,7 +891,7 @@ EDA was also helpful to refine our questions as we became increasingly familiar 
 
 ## Estimation and Hypothesis Testing
 
-We concudted several types of analysis to demonstrate a statistically significant relationship between mental health and inequality that differs by region.
+We conducted several types of analysis to demonstrate a statistically significant relationship between mental health and inequality that differs by region.
 
 ### T-Intervals
 
@@ -1095,7 +1046,7 @@ The ANOVA test for the frequent mental distress rate produced an F-statistic of 
 
 We can also conduct a Spearman's rank test to see whether the mental health variables are independent from income inequality and median income.
 
-```{r spearman, results='markup'}
+```{r spearman, results='hide'}
 
 spearman_ineq_v_days <- cor.test(ranked$inequality, ranked$mental_health_days, method="spearman", exact=F)
 spearman_ineq_v_days
@@ -1115,7 +1066,7 @@ The Spearman correlation tests are summarized in the following table:
 
 ***
 Variables | rho | p-value |
-------|----------|---------|
+----------|-----|---------|
 `inequality` vs. `mental_health_days` | `r spearman_ineq_v_days$estimate` | `r spearman_medinc_v_days$p.value` |
 `inequality` vs. `mental_distress_rate` | `r spearman_ineq_v_rate$estimate` | `r spearman_ineq_v_days$p.value` |
 `median_inc` vs. `mental_health_days` | `r spearman_medinc_v_days$estimate` | `r spearman_medinc_v_days$p.value` |
@@ -1129,12 +1080,17 @@ Based on the small p-values below 0.05, we can reject the null hypothesis and co
 Here we summarize our results and conclude with a clear sense of what we've learned. We should re-state our SMART question(s) and highlight how they have changed or evolved.
 
 
-In this section, let's also try to answer this question:
+- As the research by T et al. showed, controlling for economic deprivation is important
+- info based on medical records
 
-- *What additional information would be beneficial?*
+
+are there policy differences between south and midwest that explain?
+
+The most progress could be made in the South:
 
 Therefore, I think the government should be committed to strengthening the economic construction of the South, increasing the income of residents in the South, and reducing income inequality across the United States.
-In a word, the economic base determines the superstructure. Without money, it's easy to feel bad!
+
+
 
 
 ## References
