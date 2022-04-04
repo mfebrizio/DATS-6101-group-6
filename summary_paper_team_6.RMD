@@ -1010,7 +1010,7 @@ The ANOVA test for the frequent mental distress rate produced an F-statistic of 
 
 We can also conduct a Spearman's rank test to see whether the mental health variables are independent from income inequality and median income.
 
-```{r spearman, results='hide'}
+```{r spearman, results = 'markup'}
 
 # inequality vs mental health days
 spearman_ineq_v_days <- cor.test(ranked$inequality, ranked$mental_health_days, method="spearman", exact=F)

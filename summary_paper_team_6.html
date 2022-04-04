@@ -4192,9 +4192,47 @@ corr_table1 %&gt;%
   kbl(caption=&quot;Spearman&#39;s Rank Correlation rho: Mental Health Days v. Inequality&quot;,
        format= &quot;html&quot;, col.names = c(&quot;&quot;),
       align=&quot;r&quot;) %&gt;%
-   kable_classic_2(full_width = F, html_font = &quot;helvetica&quot;)
-
-# inequality vs mental distress rate
+   kable_classic_2(full_width = F, html_font = &quot;helvetica&quot;)</code></pre>
+<table class=" lightable-classic-2" style="font-family: helvetica; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Spearman’s Rank Correlation rho: Mental Health Days v. Inequality
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Sample Estimates: rho
+</td>
+<td style="text-align:right;">
+3.99e-01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Test-Statistic: S
+</td>
+<td style="text-align:right;">
+6.31e+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p-value
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># inequality vs mental distress rate
 spearman_ineq_v_rate &lt;- cor.test(ranked$inequality, ranked$mental_distress_rate, method=&quot;spearman&quot;, exact=F)
 
 corr_table2 &lt;- data.frame(estimate = c(spearman_ineq_v_rate$estimate))
@@ -4206,9 +4244,47 @@ corr_table2 %&gt;%
   kbl(caption=&quot;Spearman&#39;s Rank Correlation rho: Mental Distress Rate v. Inequality&quot;,
        format= &quot;html&quot;, col.names = c(&quot;&quot;),
       align=&quot;r&quot;) %&gt;%
-   kable_classic_2(full_width = F, html_font = &quot;helvetica&quot;)
-
-# median income vs mental health days
+   kable_classic_2(full_width = F, html_font = &quot;helvetica&quot;)</code></pre>
+<table class=" lightable-classic-2" style="font-family: helvetica; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Spearman’s Rank Correlation rho: Mental Distress Rate v. Inequality
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Sample Estimates: rho
+</td>
+<td style="text-align:right;">
+4.30e-01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Test-Statistic: S
+</td>
+<td style="text-align:right;">
+5.98e+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p-value
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># median income vs mental health days
 spearman_medinc_v_days &lt;- cor.test(ranked$median_inc, ranked$mental_health_days, method=&quot;spearman&quot;, exact=F)
 
 corr_table3 &lt;- data.frame(estimate = c(spearman_medinc_v_days$estimate))
@@ -4220,9 +4296,47 @@ corr_table3 %&gt;%
   kbl(caption=&quot;Spearman&#39;s Rank Correlation rho: Mental Health Days v. Median Income&quot;,
        format= &quot;html&quot;, col.names = c(&quot;&quot;),
       align=&quot;r&quot;) %&gt;%
-   kable_classic_2(full_width = F, html_font = &quot;helvetica&quot;)
-
-# median income vs mental distress rate
+   kable_classic_2(full_width = F, html_font = &quot;helvetica&quot;)</code></pre>
+<table class=" lightable-classic-2" style="font-family: helvetica; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Spearman’s Rank Correlation rho: Mental Health Days v. Median Income
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Sample Estimates: rho
+</td>
+<td style="text-align:right;">
+-4.50e-01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Test-Statistic: S
+</td>
+<td style="text-align:right;">
+1.52e+12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p-value
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># median income vs mental distress rate
 spearman_medinc_v_rate &lt;- cor.test(ranked$median_inc, ranked$mental_distress_rate, method=&quot;spearman&quot;, exact=F)
 #spearman_medinc_v_rate
 
@@ -4236,6 +4350,45 @@ corr_table4 %&gt;%
        format= &quot;html&quot;, col.names = c(&quot;&quot;),
       align=&quot;r&quot;) %&gt;%
    kable_classic_2(full_width = F, html_font = &quot;helvetica&quot;)</code></pre>
+<table class=" lightable-classic-2" style="font-family: helvetica; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Spearman’s Rank Correlation rho: Mental Distress Rate v. Median Income
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Sample Estimates: rho
+</td>
+<td style="text-align:right;">
+-4.97e-01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Test-Statistic: S
+</td>
+<td style="text-align:right;">
+1.57e+12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p-value
+</td>
+<td style="text-align:right;">
+0.00e+00
+</td>
+</tr>
+</tbody>
+</table>
 <p>Based on the small p-values below 0.05, we can reject the null hypothesis and conclude that the correlations between the variables are significantly different from zero. These findings suggest that there is a real relationship between mental health and income inequality.</p>
 </div>
 </div>
