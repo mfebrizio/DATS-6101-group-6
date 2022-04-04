@@ -53,16 +53,16 @@ options(scientific=T, digits = 3)
 
 ## Introduction
 
-The relationship between economic inequality and health is a widely studied topic that is seeing increasing relevancy in the United States. As economic inequality grows in salience in the United States, health outcomes are distinctly being observed along socioeconomic gradients. In other words, socioeconomic indicators appear to be associated with health disparities within various populations. While many scholars have studied the relationship between income inequality and human health, less research has focused on income inequality and people’s mental health. 
+The relationship between economic inequality and health is a widely studied topic that is seeing increasing relevance. As economic inequality grows in salience in the United States, health outcomes are distinctly being observed along socioeconomic gradients. In other words, socioeconomic indicators appear to be associated with health disparities within various populations. While many scholars have studied the relationship between income inequality and human health, less research has focused on income inequality and people’s mental health. 
 
-As an initial step, we conducted a literature review to better understand the scholarly work on the topic. The most helpful articles on the topic were two systematic reviews that sought to summarizing the relationship between income inequality and mental health. First, [Ribeiro et al. (2017)](https://doi.org/10.1016/S2215-0366(17)30159-1) conducted a meta-analysis of 27 studies exploring the relationship between income inequality and the incidence of mental health problems. Of these articles, 9 found a positive association, 10 found mixed results, and 8 found no association. The authors concluded, “Income inequality negatively affects mental health but the effect sizes are small and there is marked heterogeneity among studies.” Second, [Tibber et al. (2022)](https://doi.org/10.1007/s00127-021-02159-w) systematically reviewed 42 subnational studies (i.e., within countries rather than across countries), with a plurality of these studies focusing on US populations. After controlling for absolute deprivation, approximately 55 percent of the studies supported an association between higher inequality and poorer mental health, 12 percent supported an association between higher inequality and better mental health, and the remaining studies (roughly 1/3) did not establish a conclusive association. The results were robust to mental health conditions, geographical unit size, and across countries with different incomes.
+As an initial step, we conducted a literature review to better understand the scholarly work on the topic. The most helpful articles on the topic were two systematic reviews that sought to summarize the relationship between income inequality and mental health. First, [Ribeiro et al. (2017)](https://doi.org/10.1016/S2215-0366(17)30159-1) conducted a meta-analysis of 27 studies exploring the relationship between income inequality and the incidence of mental health problems. Of these articles, 9 found a positive association, 10 found mixed results, and 8 found no association. Second, [Tibber et al. (2022)](https://doi.org/10.1007/s00127-021-02159-w) systematically reviewed 42 subnational studies (i.e., within countries rather than across countries), with a plurality of these studies focusing on US populations. After controlling for absolute deprivation, approximately 55 percent of the studies supported an association between higher inequality and poorer mental health, 12 percent supported an association between higher inequality and better mental health, and the remaining studies (roughly 1/3) did not establish a conclusive association.
 
-Given the findings from previous studies above, more research is needed to determine if there is a relationship between mental health in economic inequality. In particular, the literature review suggested to us that the relationship might also differ based on the geographic area being considered. Thus, we developed the following SMART questions:
+Given the above findings, more research is needed to determine if there is a relationship between mental health and economic inequality. In particular, the literature review suggested to us that the relationship might also differ based on the geographic area being considered. Thus, we developed the following SMART questions:
 
 - What is the relationship between the prevalence of mental health problems and income inequality across U.S. counties from 2016 to 2021?
 - Does the relationship differ across regions of the U.S.?
 
-The null hypothesis is that there is no relationship between mental and economic inequality. The alternative hypothesis is that there is a relationship between mental health and economic inequality. Further, we also propose that this relationship differs geographically.
+The null hypothesis is that there is no relationship between mental health and economic inequality. The alternative hypothesis is that there is a relationship between mental health and economic inequality. Further, we also propose that this relationship differs geographically.
 
 Overall, we found that the prevalence of mental health conditions seems positively associated with greater economic inequality in the U.S. This relationship also seems to be different depending on the region.
 
@@ -70,7 +70,7 @@ Overall, we found that the prevalence of mental health conditions seems positive
 
 The primary dataset used for this project is a combination of annual datasets called the County Health Rankings and Roadmaps National Data and was obtained the Robert Wood Johnson Foundation (RWJF). The Robert Wood Johnson Foundation is a non-profit public health foundation-based New Jersey that collects data on various socioeconomic and public health indicators from a variety of government and academic sources (RWJF, 2021). The County Health Rankings and Roadmaps National Data consists of county-level socioeconomic and public health data.
 
-The full dataset includes data from 2011 to 2021. For this project the dataset a subset of the data was taken from 2016 to 2021. This time-period was chosen because it provided the most complete for all the variables of interest. Years prior to 2016 upon an initial inspection of the annual datasets were incomplete or did not have variables that exactly corresponded to variables in 2016 to 2021. In general, the years in the datasets reflect the year the report was released by RWJF, but the underlying source data are from a one or two years earlier.
+The full dataset includes data from 2011 to 2021. We selected a subset of the data from 2016 to 2021 for this project because this time period provided the most complete data for all the variables of interest. The annual datasets before 2016 were incomplete or did not have variables that exactly corresponded to variables in 2016 to 2021. In general, the years in the datasets reflect the year the report was released by RWJF, but the underlying source data are from a one or two calendar years earlier.
 
 The full dataset includes 33 variables. The following variables are listed below including descriptions of each variable. However, the scope of this project was primarily concerned with two mental health variables and two economic inequality variables. The primary economic inequality variables of interest include household income ratio and median income. These two economic inequality variables were used as independent variables. The primary mental health variables of interest include the number of mentally unhealthy days and the percentage of frequent mental distress. These two mental health variables were used as dependent variables. The table below displays the summary statistics of the dataset. 
 
@@ -216,13 +216,13 @@ Our data are identified at the county-year level. Our data set contains `r nrow(
 
 In total, we have `r nrow(ranked)` observations in the ranked data, combined across 6 annual reports (2016–2021). Each annual data set has between 3071 and 3084 observations, indicating that the number of ranked counties is consistent over time. We also grouped the data on several dimensions help us better investigate time and geographic patterns in our data.
 
-First, we grouped the data set by report year and calculating the population-weighted means for several variables. In general, the mean income inequality has stayed relatively constant over time, while the mental health variables have risen slightly. Other economic variables, such as unemployment and median income, have moved in positive directions (unemployment has fallen, while median incomes have increased). 
+First, we grouped the data set by report year and calculated the population-weighted means for several variables. In general, the mean income inequality has stayed relatively constant over time, while the mental health variables have risen slightly. Other economic variables have moved in positive directions (unemployment has fallen, while median incomes have increased). 
 
-Finally, we grouped the data by region, giving us a sense of the size of the 4 census regions: the South contains the most states and counties and has the largest population, while the Northeast is the smallest on these measures. The Northeast has highest measured inequality, and the Midwest has the lowest. The mental health variables are highest (i.e., worst) in the South and lowest in the West. These general trends hold up when grouping by year and region. These differences suggest that comparing the relationship between the variables across regions would be worthwhile.
+Next, we grouped the data by region, giving us a sense of the size of the 4 census regions: the South contains the most states and counties and has the largest population, while the Northeast is the smallest on these measures. The Northeast has highest measured inequality, and the Midwest has the lowest. The mental health variables are highest in the South and lowest in the West. These differences suggest that comparing the relationship between the variables across regions would be worthwhile.
 
 ## Limitations of the Dataset
 
-The main limitation of this dataset is that it is largely based on survey data. The income ratio and median income is based on a sample surveyed by the U.S. Census Bureau. The number of mentally unhealthy days and percentage of frequent mental distress are based on a sample self-reported survey conducted by the CDC. While both the U.S. Census Bureau and the CDC are reputable institutions and reliable sources of data there is always a possibility that the sample is biased, or the survey is improperly conduct or the survey deviates from year to year. 
+The main limitation of this dataset is that it is largely based on survey data. The income ratio and median income is based on a sample surveyed by the U.S. Census Bureau. The number of mentally unhealthy days and percentage of frequent mental distress are based on a sample self-reported survey conducted by the CDC. While both the Census Bureau and the CDC are reputable institutions and reliable sources of data there is always a possibility that the sample is biased, or the survey is improperly conduct or the survey deviates from year to year. 
 
 Additionally, given that the data is collected at the county-level, local level factors influence the type of information collected making comparisons across state lines questionable given the different geographical, social, and economic contexts. Furthermore, self-reported mental health cannot be validated in medical records. Additionally, the data for each variable is not normally distributed. This can be seen in the plotted histograms and normal Q-Q plots.  
 
@@ -268,8 +268,6 @@ For a first visual depiction of the relationship between mental health and incom
 
 Both poor mental health days and the frequent mental distress rate are positively correlated with income inequality. When coloring the scatterplot by median income, counties with a lower median income tend toward the outer limits of the figure, which suggests that poorer counties generally have higher inequality and worse mental health. It's harder to infer a clear relationship when coloring the points by `pct_rural`, although the many of the highly unequal counties are heavily urban.
 
-Further, it might be important to get a sense of whether the availability of mental health care is related to measures of mental health. Our data contains the ratio of population to mental health providers, which could be thought of as [representing](https://www.countyhealthrankings.org/explore-health-rankings/measures-data-sources/county-health-rankings-model/health-factors/clinical-care/access-to-care/mental-health-providers) "the number of individuals served by one mental health provider in a county, if the population were equally distributed across providers." Surprisingly, there is not much of a correlation between the mental health outcomes and this ratio.
-
 ```{r scatter_a, results='markup'}
 
 # data: use ranked
@@ -311,26 +309,6 @@ c4 <- ggplot(ranked, aes(y=mental_distress_rate, x=inequality, color=pct_rural))
        y = 'Mental Distress Rate', x = 'Income Inequality Rate', 
        color = color_value)
 
-
-#-- Dependent vs. Provision of Mental Health Care --#
-
-# color = % rural
-color_value <- "% Rural Pop."
-
-c5 <- ggplot(ranked, aes(y=mental_health_days, x=pop_provider_ratio, color=pct_rural)) + 
-  geom_point(show.legend = F) +
-  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
-  labs(title = "(a) Per 30 Days",
-       y = 'Poor Mental Health Days per 30', x = 'Ratio Population : Providers', 
-       color = color_value)
-
-c6 <- ggplot(ranked, aes(y=mental_distress_rate, x=pop_provider_ratio, color=pct_rural)) + 
-  geom_point() +
-  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
-  labs(title = "(b) Percentage",
-       y = 'Mental Distress Rate', x = 'Ratio Population : Providers', 
-       color = color_value)
-
 # combine using patchwork 
 c_a <- c1 + c2 + plot_annotation(title = "Scatterplot of Mental Health Variables vs. Income Inequality")
 c_a
@@ -338,12 +316,9 @@ c_a
 c_b <- c3 + c4 + plot_annotation(title = "Scatterplot of Mental Health Variables vs. Income Inequality")
 c_b
 
-c_c <- c5 + c6 + plot_annotation(title = "Scatterplot of Mental Health Variables vs. Availability of Mental Health Care")
-c_c
-
 ```
 
-We also plotted the mental health measures vs. inequality by region. The results are striking. The Midwest and the South both exhibit a moderate correlation between the variables. The West has a weaker, but still positive, correlation. And in the Northeast, mental health and inequality does not seem to be correlated.
+We also plotted the mental health measures vs. inequality by region. The results are striking. The Midwest and the South both exhibit a moderate correlation between the variables. The West has a weaker, but still positive, correlation. And in the Northeast, mental health and inequality do not seem to be correlated.
 
 ```{r scatter_c, results='markup'}
 
@@ -413,15 +388,13 @@ p_regions_2
 
 ```
 
-Notably, we compared both `mental_health_days` and `mental_distress_rate` against `inequality` and found similar trends. 
-
-At this point in the EDA, it became clear that geographic differences in the relationship between mental health and inequality were important. These results justified our decision to focus our SMART question on the differences by region. Our next step in exploration was to use boxplots to get a better sense of how the data varied across regional categories.
+At this point in the EDA, it became clear that geographic differences in the relationship between mental health and inequality were important. These results justified our decision to focus on the differences by region. Our next step in exploration was to use boxplots to get a better sense of how the data varied across regional categories.
 
 ### Boxplots
 
-To better show the relationship between the economic variables and mental health in different regions of the United States, we generated boxplots of the data by region. Analyzing the economic inequality and mental health of people by region can more clearly assess whether the relationship varies by geography than direct analysis of the whole United States. To highlight the key points, we only focus on two independent variables (`inequality` and `median_inc`) and two dependent variables (`mental_health_days` and `mental_distress_rate`). In total, we created 8 groups of boxplots.
+To better show the relationship between the economic variables and mental health in different regions of the United States, we generated boxplots of the data by region. Analyzing the economic inequality and mental health of people by region can more clearly assess whether the relationship varies by geography than direct analysis of the whole country. In total, we created 8 groups of boxplots focusing on two independent variables (`inequality` and `median_inc`) and two dependent variables (`mental_health_days` and `mental_distress_rate`).
 
-In the first group we first analyzed the median household income of these four regions from 2016 to 2021. Evidently, the median household income in the Northeast region is the highest, followed by the West region. This is actually not difficult to imagine, because the Northeast and West regions have big cities like New York and Los Angeles. The median household incomes in the South and Midwest are relatively low.
+In the first group we analyzed the median household income by region and year. Evidently, the median household income in the Northeast region is the highest, followed by the West region. This makes sense because the Northeast and West regions have big cities like New York and Los Angeles. The median household incomes in the South and Midwest are relatively low.
 
 ```{r boxplots_1, results='markup'}
 
@@ -465,7 +438,7 @@ boxplot1 <- grid.arrange(b1,b2,b3,b4,b5,b6, nrow=2, ncol=3, top = text_grob("The
 
 ```
 
-In the second group, we analyzed the annual trend in median household income for each region. We can see that the trend of median household income in all 4 regions gradually upward from 2016 to 2021. In the South, the median household income in 2016 was about $40,000, and by 2021, it was close to $50,000. The data suggest that `median_inc` rose across the U.S. in the six years between 2016 and 2021.
+In the second group, we analyzed the annual trend in median household income for each region. We can see a gradually upward trend in all 4 regions over time. In the South, the median household income in 2016 was about $40,000, and by 2021, it was close to $50,000.
 
 ```{r boxplots_2, results='markup'}
 
@@ -497,7 +470,7 @@ boxplot2 <- grid.arrange(b1,b2,b3,b4, nrow=2, ncol=2, top = text_grob("Median In
 
 ```
 
-In the third group, the boxplots show the income inequality of 4 regions from 2016 to 2021. The trend of these 6 plots are similar. Income inequality is biggest in the South, which is consistent with our results for median household income. The South, which has the lowest median household income, also has the greatest income inequality.
+In the third group, the boxplots show income inequality by region and year. The trend of these 6 plots are similar. Income inequality is biggest in the South, which is consistent with our results for median household income. The South, which has the lowest median household income, also has the greatest income inequality.
 
 ```{r boxplots_3, results='markup'}
 
@@ -541,7 +514,7 @@ boxplot3 <- grid.arrange(b1,b2,b3,b4,b5,b6, nrow=2, ncol=3, top = text_grob("The
 
 ```
 
-In the fourth group, we separately analyzed the income inequality for these four regions over the 6 years. No matter which region it is, `inequality` has remained around 4.4%.
+In the fourth group, we separately analyzed the income inequality for these four regions over time. In all regions `inequality` has remained around 4.4%.
 
 ```{r boxplots_4, results='markup'}
 
@@ -573,7 +546,7 @@ boxplot4 <- grid.arrange(b1,b2,b3,b4, nrow=2, ncol=2, top = text_grob("Income In
 
 ```
 
-The fifth group of boxplots focuses on poor mental health days by region from 2016 to 2021. From the graph, we can easily conclude that the South has the biggest poor mental health days. This is consistent with our previous findings indicating that the South has the lowest median household income of the 4 regions. Because the South has the lowest median household income of the four regions, people in the South could be more prone to mental problems.
+The fifth group of boxplots focuses on poor mental health days by region from 2016 to 2021. From the graph, we can easily conclude that individuals the South have the most poor mental health days. This seems consistent with our previous findings indicating that the South has the the greatest inequality of the 4 regions.
 
 ```{r boxplots_5, results='markup'}
 
@@ -617,7 +590,7 @@ boxplot5 <- grid.arrange(b7,b8,b9,b10,b11,b12, nrow=2, ncol=3, top = text_grob("
 
 ```
 
-In the sixth group, we separately analyzed the poor mental health days of people in these 4 regions in the past 6 years. Similar to the second group of boxplots, which indicated that people's median household income is rising regardless of region, even though median household income is increasing year by year, mental health issues are also increasing. One potential option is that income growth may be not keeping up with local prices, which exacerbates mental health problems.
+Similar to the second group of boxplots, the sixth group indicated that people's median household income is rising regardless of region. But even though median household income is increasing year by year, mental health issues are also increasing. Perhaps income growth is not keeping up with local prices, which exacerbates mental health problems.
 
 ```{r boxplots_6, results='markup'}
 
@@ -649,7 +622,7 @@ boxplot6 <- grid.arrange(b1,b2,b3,b4, nrow=2, ncol=2, top = text_grob("Poor Ment
 
 ```
 
-In the seventh group, we analyzed the frequent mental distress rate of these four regions over the past 6 years. The results are similar to those for poor mental health days.
+In the seventh group, we analyzed the frequent mental distress rate of these four regions over time. The results are similar to those for poor mental health days.
 
 ```{r boxplots_7, results='markup'}
 
@@ -693,7 +666,7 @@ boxplot7 <- grid.arrange(b13,b14,b15,b15,b17,b18, nrow=2, ncol=3, top = text_gro
 
 ```
 
-In the eight group, we separately analyzed the frequent mental distress rate in these four regions over the past 6 years. We can easily find that the frequent mental distress rate gradually goes up, no matter in which region. Combined with prior results, even though the income of local people is increasing year by year, it is still easy for them to feel stressed.
+In the eight group, we noticed that the frequent mental distress rate is gradually going up in all regions.
 
 ```{r boxplots_8, results='markup'}
 
@@ -737,7 +710,7 @@ As a whole, there seems to be real differences across regions in these key varia
 
 ### Normality
 
-We also graphed histograms of many of the numeric variables to consider their distributions. Although none are perfectly "normal" distributions, many do seem to approximate normality. Most importantly, `mental_distress_rate` and `mental_health_days` have distributions that resemble normality. Generally, the economic variables – such as `inequality`, `median_inc`, and `unempl` – are right-skewed.
+We also graphed histograms of many of the numeric variables to consider their distributions. Although none are perfectly "normal" distributions, many do seem to approximate normality. Most importantly, `mental_distress_rate` and `mental_health_days` have distributions that somewhat resemble normality. Generally, the economic variables – such as `inequality`, `median_inc`, and `unempl` – are right-skewed.
 
 ```{r norm_hist, results='markup'}
 
@@ -808,9 +781,7 @@ ranked[keep_var] %>%
 
 ```
 
-Despite not having a perfectly normal distribution, the sample quantiles remain relatively close to the theoretical quantiles for many of our variables. In other words, each Q-Q plot is not that different from a normal Q-Q plot, which would be represented by its points closely following the Q-Q line.
-
-Ultimately, even if none of our variables are perfectly "normal," few would seem to pose substantial issues during hypothesis testing. `inequality` and `median_inc` have right-tailed distributions, but without very thick tails. Several more extreme exceptions might include `pop_provider_ratio`, `severe_housing`, `unempl`, and `food_index`. This suggests that we should consider removing outliers or transforming these variables before using them in linear modeling.
+Despite not having a perfectly normal distribution, the sample quantiles remain relatively close to the theoretical quantiles for many of our variables. Ultimately, even if none of our variables are perfectly "normal," few would seem to pose substantial issues during hypothesis testing. `inequality` and `median_inc` have right-tailed distributions, but without very thick tails. Several more extreme exceptions might include `pop_provider_ratio`, `severe_housing`, `unempl`, and `food_index`. This suggests that we should consider removing outliers or transforming these variables before using them in linear modeling.
 
 ### Correlation Matrix
 
@@ -838,9 +809,9 @@ corr_numbers <- corrplot(b, is.corr=TRUE, title="Correlation Matrix for Numeric 
 
 Based on our EDA, we are able to draw preliminary conclusions concerning our questions. The scatterplots reveal a positive relationship between `inequality` and the mental health variables. More specifically, counties with greater inequality generally have worse mental health, according to the data. However, the relationship seems to differ by region. The Midwest, South, and west exhibit positive correlations, while the association in the Northeast is flat.
 
-The boxplots clarify these regional differences. The South generally has lowest median incomes and highest inequality, while also having the worst mental health. Conversely, the Midwest has the lowest inequality, moderate median incomes, and also the best mental health outcomes. The Northeast, which has the highest median household incomes, seems to also have the smallest variation in income inequality and mental health outcomes.
+The boxplots clarify these regional differences. The South generally has low median incomes and high inequality, while also having the worst mental health. Conversely, the Midwest has the lowest inequality, moderate median incomes, and also the best mental health outcomes. The Northeast, which has the highest median household incomes, seems to also have the smallest variation in income inequality and mental health outcomes.
 
-EDA was also helpful to refine our questions as we became increasingly familiar with the data. Our initial hypothesis focused on the link between economic inequality and mental health. Reviewing the literature prompted us to think about whether this relationship differed by geography. Visually contrasting these variables by region confirmed that such differences may exist and pushed us to continue investigating whether the association would hold up to hypothesis testing.
+EDA helped us to refine our questions as we became increasingly familiar with the data. Our initial hypothesis focused on the link between economic inequality and mental health. Reviewing the literature prompted us to think about whether this relationship differed by geography. Visually contrasting these variables by region confirmed that such differences may exist and pushed us to continue investigating whether the association would hold up to hypothesis testing.
 
 ## Estimation and Hypothesis Testing
 
@@ -1075,7 +1046,7 @@ Based on the small p-values below 0.05, we can reject the null hypothesis and co
 
 ## Conclusion
 
-The results of our EDA and hypothesis testing suggest that there is a relationship between economic inequality and mental health. Further, this relationship seems to differ by census region. We initially focused on the overall relationship in the U.S., but our review of the literature suggested that we should also look geographically. Based on the estimates of Spearman's rho, we can tentatively reject our null hypothesis and accept the alternative hypothesis that there is a relationship between mental health and economic inequality. The results of our ANOVA tests support that this relationship differs by region.
+The results of our EDA and hypothesis testing suggest that there is a relationship between economic inequality and mental health. Further, this relationship seems to differ by census region. We initially focused on the overall relationship in the U.S., but our review of the literature suggested that we should also look at geographic differences. Based on the estimates of Spearman's rho, we can tentatively reject our null hypothesis and accept the alternative hypothesis that there is a relationship between mental health and economic inequality. The results of our ANOVA tests support that this relationship differs by region.
 
 Nevertheless, this remains a preliminary look at the data, and we still do not know whether other economic factors might be more relevant to determining mental health. The relationship only exhibits a moderate correlation in 3 regions, and it does not seem to hold in the Northeast. Also, the annual trends suggest that mental health problems have been increasing, while inequality has remained largely at the same level. As a result, further research should uncover whether the relationship holds up when other variables are included. It would be important to uncover whether the inclusion of demographic data would explain the variation in mental health outcomes. There are other pieces of information that it would be helpful to know. Because our data are self-reported, comparing our findings to measures based on medical records would demonstrate whether bias exists in the data collection process.
 
@@ -1084,27 +1055,13 @@ In addition, the South and the Midwest resemble two sides of the same coin. Both
 
 ## References
 
-Bechtel, L., Lordan, G., & Rao, D. P. (2012). Income inequality and mental health—empirical evidence from Australia. Health economics, 21, 4-17.
-
-Kelley, J., & Evans, M. D. (2017). Societal Inequality and individual subjective well-being: Results from 68 societies and over 200,000 individuals, 1981–2008. Social science research, 62, 1-23.
-
-Layte, R. (2012). The association between income inequality and mental health: testing status anxiety, social capital, and neo-materialist explanations. European Sociological Review, 28(4), 498-511.
-
-Matthew, P., & Brodersen, D. M. (2018). Income inequality and health outcomes in the United States: An empirical analysis. The Social Science Journal, 55(4), 432-442.
-
-Pickett, K. E., & Wilkinson, R. G. (2015). Income inequality and health: a causal review. Social science & medicine, 128, 316-326.
-
 Ribeiro, W. S., Bauer, A., Andrade, M. C. R., York-Smith, M., Pan, P. M., Pingani, L., Coutinho, E.S.F., & Evans-Lacko, S. (2017). Income inequality and mental illness-related morbidity and resilience: a systematic review and meta-analysis. The Lancet Psychiatry, 4(7), 554-562.
 
 Robert Wood Johnson Foundation (RWJF) (2021). 2021 County Health Rankings National Data. County Health Rankings & Roadmaps. https://www.countyhealthrankings.org/explore-health-rankings/rankings-data-documentation. Accessed: March 13, 2022.
 
 Robert Wood Johnson Foundation (RWJF) (2021). County Health Rankings Model. County Health Rankings & Roadmaps. https://www.countyhealthrankings.org/explore-health-rankings/measures-data-sources/county-health-rankings-model. Accessed: March 13, 2022.
 
-Sommet, N., Morselli, D., & Spini, D. (2018). Income inequality affects the psychological health of only the people facing scarcity. Psychological Science, 29(12), 1911-1921.
-
 Tibber, M. S., Walji, F., Kirkbride, J. B., & Huddy, V. (2021). The association between income inequality and adult mental health at the subnational level—a systematic review. Social psychiatry and psychiatric epidemiology, 1-24.
 
 U.S. Census Bureau. (2010). Census Regions and Divisions of the United States. U.S. Department of Commerce Economics and Statistics Administration. https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf. Accessed: March 13, 2022.
-
-Zimmerman, F. J., & Bell, J. F. (2006). Income inequality and physical and mental health: testing associations consistent with proposed causal pathways. Journal of Epidemiology & Community Health, 60(6), 513-521.
 
