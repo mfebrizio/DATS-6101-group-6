@@ -266,9 +266,9 @@ Finally, we grouped the data by region, giving us a sense of the size of the 4 c
 
 ## Limitations of the Dataset
 
-The main limitation of this dataset is that it is largely based on survey data. The income ratio and median income is based on a sample surveyed by the U.S. Census Bureau. The number of mentally unhealthy days and percentage of frequent mental distress are based on a sample self-reported survey conducted by the CDC. While both the U.S. Census Bureau and the CDC are reputable institutions and reliable sources of data there is always a possibility that the sample is biased, or the survey is improperly conduct or the survey deviates from year to year. 
+The main limitation of this dataset is that it is largely based on survey data. The income ratio and median income are based on a sample surveyed by the U.S. Census Bureau. The number of mentally unhealthy days and percentage of frequent mental distress are based on a sample self-reported survey conducted by the CDC. While both the U.S. Census Bureau and the CDC are reputable institutions and reliable sources of data there is always a possibility that the sample is biased, the survey is improperly conducted, or the survey itself changes from year to year. 
 
-Additionally, given that the data is collected at the county-level, local level factors influence the type of information collected making comparisons across state lines questionable given the different geographical, social, and economic contexts. Furthermore, self-reported mental health cannot be validated in medical records. Additionally, the data for each variable is not normally distributed. This can be seen in the plotted histograms and normal Q-Q plots.  
+Additionally, given that the data is collected at the county-level, local level factors influence the type of information collected making comparisons across state lines questionable given the different geographical, social, and economic contexts. Furthermore, self-reported mental health cannot be validated in medical records. Additionally, the data for each variable is not normally distributed. This can be seen in the plotted histograms and normal Q-Q plots below.  
 
 ## Exploratory Data Analysis
 
