@@ -21,6 +21,7 @@ library(readr)
 library(corrplot)
 library(psych)
 library(kableExtra)
+library(broom)
 
 loadPkg("ggplot2")
 loadPkg("patchwork") ## for combining graphs
@@ -29,7 +30,7 @@ loadPkg("tidyr")
 loadPkg("gridExtra")
 loadPkg("ggpubr")
 loadPkg("Hmisc")
-
+loadPkg("broom")
 ```
 
 ```{r setup, include=FALSE}
@@ -65,13 +66,11 @@ In addition, the research we gathered contributed to the development of our SMAR
 
 Overall, we found that the prevalence of mental health conditions seems positively associated with greater economic inequality in the U.S. This relationship also seems to be different depending on the region.
 
-## Summary of Data Set
-
 The primary dataset used for this project is a combination of annual datasets called the County Health Rankings and Roadmaps National Data and was obtained the Robert Wood Johnson Foundation (RWJF). The Robert Wood Johnson Foundation is a non-profit public health foundation-based New Jersey that collects data on various socioeconomic and public health indicators. The County Health Rankings and Roadmaps National Data consists of county-level socioeconomic and public health data. The Robert Wood Johnson Foundation collects data from the National Center for Health Statistics, the Centers for Disease Prevention and Control (CDC) Behavioral Risk Factor Surveillance System, the National Center for HIV/AIDS, Viral Hepatitis, STD, and TB Prevention, USDA Food Environment Atlas, the Centers for Medicare & Medicaid Services (CMS) National Provider Identifier Standard, the Stanford Education Data Archive, and the U.S. Census Bureau (RWJF, 2021). 
 
 The full dataset includes data from 2011 to 2021. For this project the dataset a subset of the data was taken from 2016 to 2021. This time-period was chosen because it provided the most complete for all the variables of interest. Years prior to 2016 upon an initial inspection of the annual datasets were incomplete or did not have variables that exactly corresponded to variables in 2016 to 2021. 
 
-The full dataset includes thirty-two variables. The following variables are listed below including descriptions of each variable. However, the scope of this project was primarily concerned with two mental health variables and two economic inequality variables. The primary economic inequality variables of interest include household income ratio and median income. These two economic inequality variables were used as independent variables. The primary mental health variables of interest include the number of mentally unhealthy days and the percentage of frequent mental distress. These two mental health variables were used as dependent variables. The table below displays the summary statistics of the dataset. 
+The full dataset includes thirty-three variables. The following variables are listed below including descriptions of each variable. However, the scope of this project was primarily concerned with two mental health variables and two economic inequality variables. The primary economic inequality variables of interest include household income ratio and median income. These two economic inequality variables were used as independent variables. The primary mental health variables of interest include the number of mentally unhealthy days and the percentage of frequent mental distress. These two mental health variables were used as dependent variables. The table below displays the summary statistics of the dataset. 
 
 The income ratio variable, also called inequality or income inequality in the exploratory data analysis, is the ratio of the household income at the 80th percentile and income at the 20th percentile. Income is defined as the sum of the amounts reported separately for wages, salary, net self-employment income, interest dividends, royalty income from estates/trusts, Social Security, Railroad Retirement income, Supplemental Security Income (SSI), public assistance/welfare payments, retirement, and survivor/disability pensions. A higher inequality ratio indicates greater division between the top percentile and bottom percentile of the income spectrum. The RWJF obtained this data from the American Community Survey (ACS) which is conducted by the U.S. Census Bureau and collects and produces population and housing information (RWJF, 2021). The total number of observations for the income ratio variable is 18,465. 
 
@@ -982,13 +981,20 @@ ANOVA tests make assumptions about the normality and variances of the variables.
 ```{r anova_inequality, results='markup'}
 
 # anova test for inequality
-aov_in <- aov(inequality ~ region, data = ranked)
+aov_in1 <- aov(inequality ~ region, data = ranked)
 
-summary_in <- summary(aov_in)
+summary_in <- summary(aov_in1)
 
-xkabledply(aov_in, title = "ANOVA results: Income inequality by Region")
+#xkabledply(aov_in, title = "ANOVA results: Income inequality by Region")
 
-tukey_in <- TukeyHSD(aov_in)
+aov_in <- tidy(aov_in <- aov(inequality ~ region, data = ranked))
+aov_in %>%
+  kbl(caption="ANOVA results: Income Inequality by Region",
+       format= "html", col.names = c("Res.Df", "RSS", "DF", "Sum of Sq","F","Pr(>F)"),
+      align="r") %>%
+   kable_classic_2(full_width = F, html_font = "helvetica")
+
+tukey_in <- TukeyHSD(aov_in1)
 #tukey_in
 
 tukey_in$region %>%
@@ -1004,13 +1010,22 @@ The ANOVA test for income inequality produced an F-statistic of `r summary_in[[1
 ```{r anova_mh, results='markup'}
 
 # mental health days
-aov_mh_days <- aov(mental_health_days ~ region, data = ranked)
+aov_mh_days1 <- aov(mental_health_days ~ region, data = ranked)
 
-summary_mh_days <- summary(aov_mh_days)
+summary_mh_days <- summary(aov_mh_days1)
 
-xkabledply(aov_mh_days, title = "ANOVA results: Poor Mental Health Days by Region")
+#xkabledply(aov_mh_days, title = "ANOVA results: Poor Mental Health Days by Region")
 
-tukey_mh_days <- TukeyHSD(aov_mh_days)
+aov_mh_days <- tidy(aov(mental_health_days ~ region, data = ranked))
+aov_mh_days %>%
+  kbl(caption="ANOVA Results: Poor Mental Health Days by Region",
+       format= "html", col.names = c("Res.Df", "RSS", "DF", "Sum of Sq","F","Pr(>F)"),
+      align="r") %>%
+   kable_classic_2(full_width = F, html_font = "helvetica")
+
+
+
+tukey_mh_days <- TukeyHSD(aov_mh_days1)
 #tukey_mh_days
 
 tukey_mh_days$region %>%
@@ -1020,13 +1035,21 @@ tukey_mh_days$region %>%
    kable_classic_2(full_width = F, html_font = "helvetica")
 
 # frequent mental distress rate
-aov_mh_rate <- aov(mental_distress_rate ~ region, data = ranked)
+aov_mh_rate1 <- aov(mental_distress_rate ~ region, data = ranked)
 
-summary_mh_rate <- summary(aov_mh_rate)
+summary_mh_rate <- summary(aov_mh_rate1)
 
-xkabledply(aov_mh_rate, title = "ANOVA results: Frequent Mental Distress by Region")
+#xkabledply(aov_mh_rate, title = "ANOVA results: Frequent Mental Distress by Region")
 
-tukey_mh_rate <- TukeyHSD(aov_mh_rate)
+aov_mh_rate <- tidy(aov(mental_distress_rate ~ region, data = ranked))
+aov_mh_rate %>%
+  kbl(caption="ANOVA results: Frequent Mental Distress by Region",
+       format= "html", col.names = c("Res.Df", "RSS", "DF", "Sum of Sq","F","Pr(>F)"),
+      align="r") %>%
+   kable_classic_2(full_width = F, html_font = "helvetica")
+
+
+tukey_mh_rate <- TukeyHSD(aov_mh_rate1)
 #tukey_mh_rate
 
 tukey_mh_rate$region %>%
