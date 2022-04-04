@@ -28,6 +28,7 @@ loadPkg("purrr")
 loadPkg("tidyr")
 loadPkg("gridExtra")
 loadPkg("ggpubr")
+loadPkg("Hmisc")
 
 ```
 
@@ -74,7 +75,7 @@ Potential area of topics to address in this summary may include:
 
 While the relationship between economic inequality and health, generally, has been extensively studied, less focus has been paid to the relationship with mental health, specifically. Further, the results seem sensitive to the geographic locations studied and measures used. As a result, although the research area is not unexplored, there is still room for novel empirical investigations.
 
-As an initial step, we conducted a literature review to better understand the scholarly work on the topic. The most helpful articles on the topic were two systematic reviews that sought to summarizing the relationship between income inequality and mental health. First, Ribeiro et al. (2017) conducted a meta-analysis of 27 studies exploring the relationship between income inequality and the incidence of mental health problems. Of these articles, 9 found a positive association, 10 found mixed results, and 8 found no association. The authors concluded, “Income inequality negatively affects mental health but the effect sizes are small and there is marked heterogeneity among studies.” Second, Tibber et al. (2022) systematically reviewed 42 subnational studies (i.e., within countries rather than across countries), with a plurality of these studies focusing on US populations. After controlling for absolute deprivation, approximately 55 percent of the studies supported an association between higher inequality and poorer mental health, 12 percent supported an association between higher inequality and better mental health, and the remaining studies (roughly 1/3) did not establish a conclusive association. The results were robust to mental health conditions, geographical unit size, and across countries with different incomes.
+As an initial step, we conducted a literature review to better understand the scholarly work on the topic. The most helpful articles on the topic were two systematic reviews that sought to summarizing the relationship between income inequality and mental health. First, [Ribeiro et al. (2017)](https://doi.org/10.1016/S2215-0366(17)30159-1) conducted a meta-analysis of 27 studies exploring the relationship between income inequality and the incidence of mental health problems. Of these articles, 9 found a positive association, 10 found mixed results, and 8 found no association. The authors concluded, “Income inequality negatively affects mental health but the effect sizes are small and there is marked heterogeneity among studies.” Second, [Tibber et al. (2022)](https://doi.org/10.1007/s00127-021-02159-w) systematically reviewed 42 subnational studies (i.e., within countries rather than across countries), with a plurality of these studies focusing on US populations. After controlling for absolute deprivation, approximately 55 percent of the studies supported an association between higher inequality and poorer mental health, 12 percent supported an association between higher inequality and better mental health, and the remaining studies (roughly 1/3) did not establish a conclusive association. The results were robust to mental health conditions, geographical unit size, and across countries with different incomes.
 
 The upshot of this literature review was twofold. First, the nature of the relationship between income inequality and mental health has not been conclusively answered. Second, the relationship might differ based on the geographic area being considered. Therefore, we believe this topic is worthy of further study.
 
@@ -277,7 +278,7 @@ Answer here: *What are the limitations of the dataset?*
 
 ## Exploratory Data Analysis
 
-After establishing our initial questions and taking a preliminary look at our data, we conducted exploratory data analysis to XX.
+After establishing our initial questions and taking a preliminary look at our data, we conducted exploratory data analysis to investigate our research questions.
 
 ### Summary Statistics
 
@@ -305,12 +306,11 @@ table2 %>%
 
 ```
 
-An initial look at the summary statistics shows that we have nearly complete data for our most relevant quantitative variables – namely, the measures of mental health, income inequality, and median household income. Several other important economic variables, such as `child_poverty`, `single_parent`, and `severe_housing`, have nearly complete data too.
+The summary statistics show that we have nearly complete data for our most relevant quantitative variables – namely, the measures of mental health, income inequality, and median household income. Several other important economic variables, such as `child_poverty`, `single_parent`, and `severe_housing`, have nearly complete data too.
 
 Our intended dependent variables, `mental_health_days` and `mental_distress_rate`, each have skewness and kurtosis below 1, which indicates those variables have relatively normal distributions. The mean and median for mentally unhealthy days in the past 30 days are similar at `r mean(ranked$mental_health_days, na.rm=T)` and `r median(ranked$mental_health_days, na.rm=T)`, with a standard deviation of `r sd(ranked$mental_health_days, na.rm=T)`. The mean `mental_distress_rate` is `r mean(ranked$mental_distress_rate, na.rm=T)` with a standard deviation of `r sd(ranked$mental_distress_rate, na.rm=T)`. The median is slightly below the mean.
 
-The economic variables. particularly `inequality`, have greater skewness and kurtosis, suggesting their distributions are less symmetrical and have larger tails. `inequality` has a mean of `r mean(ranked$inequality, na.rm=T)`, a median of `r median(ranked$inequality, na.rm=T)`, and a standard deviation of `r sd(ranked$inequality, na.rm=T)`.
-
+The economic variables, particularly `inequality`, have greater skewness and kurtosis, suggesting their distributions are less symmetrical and have larger tails. `inequality` has a mean of `r mean(ranked$inequality, na.rm=T)`, a median of `r median(ranked$inequality, na.rm=T)`, and a standard deviation of `r sd(ranked$inequality, na.rm=T)`.
 
 ### Scatterplots
 
@@ -397,30 +397,32 @@ We also plotted the mental health measures vs. inequality by region. The results
 
 ```{r scatter_c, results='markup'}
 
-# data: use ranked
+# data: use ranked_MW, ranked_NE, ranked_SO, ranked_WE
+
+rgb_colors <- c("#A27BB8", "#006994", "#B52E1F", "#00873E")
 
 #-- mental_health_days --#
 
 p1 <- ggplot(ranked_MW, aes(y=mental_health_days, x=inequality)) + 
-  geom_point(show.legend = F, alpha = .7, color="purple") + 
+  geom_point(show.legend = F, alpha = .7, color = rgb_colors[1]) + 
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
   labs(title = paste("(a) Midwest"),
        y = 'Days per 30', x = 'Income Inequality Rate')
 
 p2 <- ggplot(ranked_NE, aes(y=mental_health_days, x=inequality)) + 
-  geom_point(show.legend = F, alpha = .7, color="blue") +
+  geom_point(show.legend = F, alpha = .7, color = rgb_colors[2]) +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +
   labs(title = paste("(b) Northeast"),
        y = 'Days per 30', x = 'Income Inequality Rate')
 
 p3 <- ggplot(ranked_SO, aes(y=mental_health_days, x=inequality)) + 
-  geom_point(show.legend = F, alpha = .7, color="red") +
+  geom_point(show.legend = F, alpha = .7, color = rgb_colors[3]) +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +
   labs(title = paste("(c) South"),
        y = 'Days per 30', x = 'Income Inequality Rate')
 
 p4 <- ggplot(ranked_WE, aes(y=mental_health_days, x=inequality)) + 
-  geom_point(show.legend = F, alpha = .7, color="green") +
+  geom_point(show.legend = F, alpha = .7, color = rgb_colors[4]) +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +
   labs(title = paste("(d) West"),
        y = 'Days per 30', x = 'Income Inequality Rate')
@@ -432,25 +434,25 @@ p_regions_1
 #-- mental_distress_rate --#
 
 p1 <- ggplot(ranked_MW, aes(y=mental_distress_rate, x=inequality)) + 
-  geom_point(show.legend = F, alpha = .7, color="purple") + 
+  geom_point(show.legend = F, alpha = .7, color = rgb_colors[1]) + 
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
   labs(title = paste("(a) Midwest"),
        y = '% Frequent Distress', x = 'Income Inequality Rate')
 
 p2 <- ggplot(ranked_NE, aes(y=mental_distress_rate, x=inequality)) + 
-  geom_point(show.legend = F, alpha = .7, color="blue") +
+  geom_point(show.legend = F, alpha = .7, color = rgb_colors[2]) +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +
   labs(title = paste("(b) Northeast"),
        y = '% Frequent Distress', x = 'Income Inequality Rate')
 
 p3 <- ggplot(ranked_SO, aes(y=mental_distress_rate, x=inequality)) + 
-  geom_point(show.legend = F, alpha = .7, color="red") +
+  geom_point(show.legend = F, alpha = .7, color = rgb_colors[3]) +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +
   labs(title = paste("(c) South"),
        y = '% Frequent Distress', x = 'Income Inequality Rate')
 
 p4 <- ggplot(ranked_WE, aes(y=mental_distress_rate, x=inequality)) + 
-  geom_point(show.legend = F, alpha = .7, color="green") +
+  geom_point(show.legend = F, alpha = .7, color = rgb_colors[4]) +
   geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +
   labs(title = paste("(d) West"),
        y = '% Frequent Distress', x = 'Income Inequality Rate')
@@ -651,11 +653,9 @@ boxplot7 <- grid.arrange(b13,b14,b15,b15,b17,b18, nrow=2, ncol=3, top = text_gro
 
 ### Normality
 
-I think that histograms and Q-Q plots will be sufficient at this stage. Combined graphs that show the distributions of several or many variables together would be best. Ultimately, we should leave this section with an understanding of whether the distribution of our variables is a problem for conducting tests and interpreting our results.
-
 We also graphed histograms of many of the numeric variables to consider their distributions. Although none are perfectly "normal" distributions, many do seem to approximate normality. Most importantly, `mental_distress_rate` and `mental_health_days` have distributions that resemble normality. Generally, the economic variables – such as `inequality`, `median_inc`, and `unempl` – are right-skewed.
 
-```{r hist, results='markup'}
+```{r norm_hist, results='markup'}
 
 # https://www.r-bloggers.com/2016/07/quick-plot-of-all-variables/
 
@@ -675,7 +675,47 @@ ranked[keep_var] %>%
 
 ```
 
+We also assessed the normality of `mental_health_days`, `mental_distress_rate`, and `inequality` by region. In general, the distributions are relatively consistent across each region.
 
+```{r anova_norm, results='markup', warning=F}
+
+# Midwest
+mw1 <- ggplot(ranked_MW, aes(x=mental_health_days)) + geom_histogram(bins = 50) + ggtitle("Midwest")
+
+mw2 <- ggplot(ranked_MW, aes(x=mental_distress_rate)) + geom_histogram(bins = 50) + ggtitle("")
+
+mw3 <- ggplot(ranked_MW, aes(x=inequality)) + geom_histogram(bins = 50) + ggtitle("")
+
+# West
+w1 <- ggplot(ranked_WE, aes(x=mental_health_days)) + geom_histogram(bins = 50) + ggtitle("West")
+
+w2 <- ggplot(ranked_WE, aes(x=mental_distress_rate)) + geom_histogram(bins = 50) + ggtitle("")
+
+w3 <- ggplot(ranked_WE, aes(x=inequality)) + geom_histogram(bins = 50) + ggtitle("")
+
+# Northeast
+ne1 <- ggplot(ranked_NE, aes(x=mental_health_days)) + geom_histogram(bins = 50) + ggtitle("Northeast")
+
+ne2 <- ggplot(ranked_NE, aes(x=mental_distress_rate)) + geom_histogram(bins = 50) + ggtitle("")
+
+ne3 <- ggplot(ranked_NE, aes(x=inequality)) + geom_histogram(bins = 50) + ggtitle("")
+
+# South
+s1 <- ggplot(ranked_SO, aes(x=mental_health_days)) + geom_histogram(bins = 50) + ggtitle("South")
+
+s2 <- ggplot(ranked_SO, aes(x=mental_distress_rate)) + geom_histogram(bins = 50) + ggtitle("")
+
+s3 <- ggplot(ranked_SO, aes(x=inequality)) + geom_histogram(bins = 50) + ggtitle("")
+
+hist_regions_a <- grid.arrange(mw1,mw2,mw3,ne1,ne2,ne3, nrow=2, ncol=3, top = text_grob("Regional Histograms (a)", color = "black", face = "bold", size = 14))
+
+hist_regions_b <- grid.arrange(s1,s2,s3,w1,w2,w3, nrow=2, ncol=3, top = text_grob("Regional Histograms (b)", color = "black", face = "bold", size = 14))
+
+```
+
+To complement the histograms, we also graphed Q-Q plots to assess the normality of our data. These plots compare the theoretical and sample distributions for a variable at specific quantiles. The line on each graph estimates what the variable would look like with a normal distribution.
+
+In general, the mental health variables do not diverge too far from normality. Also, `inequality` and `median_inc` tightly follow a normal distribution until the upper range of their values, reflecting the greater spread that exists at the high end of the distribution. 
 
 ```{r norm_qq, results='markup', warning=FALSE}
 
@@ -695,17 +735,44 @@ ranked[keep_var] %>%
 
 ```
 
+Despite not having a perfectly normal distribution, the sample quantiles remain relatively close to the theoretical quantiles for many of our variables. In other words, each Q-Q plot is not that different from a normal Q-Q plot, which would be represented by its points closely following the Q-Q line.
+
+Ultimately, even if none of our variables are perfectly "normal," few would seem to pose substantial issues during hypothesis testing. `inequality` and `median_inc` have right-tailed distributions, but without very thick tails. Several more extreme exceptions might include `pop_provider_ratio`, `severe_housing`, `unempl`, and `food_index`. We should consider removing outliers or transforming these variables before using them in linear modeling.
+
 If we decide to remove any outliers using the `ezids` package, we should do it here.
 
 If we decide to transform any of the data (e.g., log transformation), we should do it here.
 
+### Correlation Matrix
+
+First, we assessed the correlation among the numeric variables. This helps us establish whether variables are positively or negatively associated with each other, as well as the strength of that relationship.
+
+In general, the results were not surprising. The two mental health variables are very positively correlated, and both are also positively correlated with `inequality`. In addition, `inequality` exhibited the strongest positive association with `child_poverty` and `single_parent`, and it had the strongest negative correlation with `food_index` and `median_inc`. These results make sense (remember that a higher score on the food index indicates a better food environment).
+
+
+```{r corr, results='markup'}
+
+# Correlation Matrices for numeric data
+
+ranked_numeric <- subset(ranked, select = c("mental_health_days", "mental_distress_rate", "inequality", "median_inc", "hs_grad", "college", "unempl", "child_poverty","single_parent", "severe_housing", "food_index","mh_providers","pop_provider_ratio"))
+
+a <- as.matrix(ranked_numeric)
+
+b <- cor(a, use = "na.or.complete")
+
+#corr_numbers <- corrplot(b, is.corr=TRUE, method="number", title="Correlation Matrix for Numeric Vars.",mar=c(0,0,1,0))
+
+corr_numbers <- corrplot(b, is.corr=TRUE, title="Correlation Matrix for Numeric Vars.",mar=c(0,0,1,0))
+
+```
+
 ### EDA Summary
 
-Let's try to answer these questions: 
+Based on our EDA, we are able to draw preliminary conclusions concerning our questions. The scatterplots reveal a positive relationship between `inequality` and the mental health variables. More specifically, counties with greater inequality generally have worse mental health, according to the data. However, the relationship seems to differ by region. The Midwest, South, and west exhibit positive correlations, while the association in the Northeast is flat.
 
-- *Based on EDA can you begin to sketch out an answer to your question?*
-- *How did your question change, if at all, after Exploratory Data Analysis?*
+The boxplots clarify these regional differences. The South generally has lowest median incomes and highest inequality, while also having the worst mental health. Conversely, the Midwest has the lowest inequality, moderate median incomes, and also the best mental health outcomes. The Northeast, which has the highest median household incomes, seems to also have the smallest variation in income inequality and mental health outcomes.
 
+EDA was also helpful to refine our questions as we became increasingly familiar with the data. Our initial hypothesis focused on the link between economic inequality and mental health. Reviewing the literature prompted us to think about whether this relationship differed by geography. Visually contrasting these variables by region confirmed that such differences may exist and pushed us to continue investigating whether the association would hold up in a more formal context. Thus, to get clearer answers to our questions, we estimated mean values by region and conducted hypothesis tests across regional samples.
 
 ## Estimation and Hypothesis Testing
 
@@ -717,11 +784,170 @@ We should probably include:
 - ANOVA test (means by region)
 - Correlation tests (spearman)
 
+### T-Intervals
 
-## Linear Models
+Next, we estimated the t-intervals by region for three variables at the 99% confidence level: `inequality`, `mental_health_days`, and `mental_distress_rate`. This helped us get a better sense of by how much the mean values differ across regions and see whether their confidence intervals overlap. Given the large size of our data set, we expect robust results even if our variables have skewed distributions.
 
-This should be the more complex and persuasive evidence demonstrating a statistically significant relationship that differs by region (if we find one!). This will include estimating the relationship while also controlling for other factors.
+```{r estimation, results='hide'}
 
+# Estimation: Establish confidence intervals
+# t-interval by region for inequality, mental_health_days, mental_distress_rate
+
+# estimate for all regions
+ttest99_in <- t.test(x=ranked$inequality, conf.level=0.99)
+ttest99_mh_days <- t.test(x=ranked$mental_health_days, conf.level=0.99)
+ttest99_mh_rate <- t.test(x=ranked$mental_distress_rate, conf.level=0.99)
+
+ci99_in <- paste0("[", paste0(round(ttest99_in$conf.int, 4), collapse = ", "), "]")
+
+ci99_mh_days <- paste0("[", paste0(round(ttest99_mh_days$conf.int, 4), collapse = ", "), "]")
+
+ci99_mh_rate <- paste0("[", paste0(round(ttest99_mh_rate$conf.int, 4), collapse = ", "), "]")
+
+var_list <- c("inequality", "mental_health_days", "mental_distress_rate")
+
+ci_list <- list(rep(c("All"), times = length(var_list)), var_list, c(ci99_in, ci99_mh_days, ci99_mh_rate))
+
+
+# estimate by region
+region_list <- c("Midwest", "Northeast", "South", "West")
+
+for (r in region_list) {  ## region names
+  
+  ranked_region <- ranked %>% subset(region==r)
+  
+  ttest99_in <- t.test(ranked_region$inequality, conf.level=0.99)
+  ttest99_mh_days <- t.test(ranked_region$mental_health_days, conf.level=0.99)
+  ttest99_mh_rate <- t.test(ranked_region$mental_distress_rate, conf.level=0.99)
+  
+  ci99_in <- paste0("[", paste0(round(ttest99_in$conf.int, 4), collapse = ", "), "]")
+  
+  ci99_mh_days <- paste0("[", paste0(round(ttest99_mh_days$conf.int, 4), collapse = ", "), "]")
+  
+  ci99_mh_rate <- paste0("[", paste0(round(ttest99_mh_rate$conf.int, 4), collapse = ", "), "]")
+  
+  ci_list[[1]] <- append(ci_list[[1]], rep(c(r), times = length(var_list)))
+  ci_list[[2]] <- append(ci_list[[2]], var_list)
+  ci_list[[3]] <- append(ci_list[[3]], c(ci99_in, ci99_mh_days, ci99_mh_rate))
+  
+  #print(ci_list)
+}
+
+# print results
+for (n in 1:15) {
+  
+  print(paste(ci_list[[1]][n], ci_list[[2]][n], ci_list[[3]][n], sep=" | "))
+  
+}
+
+```
+
+
+The t-intervals by region are reported for each variable of interest in the following table:
+
+***
+Region | Variable | 99% conf.int |
+-------|----------|--------------|
+`r ci_list[[1]][1]` | `r ci_list[[2]][1]` | `r ci_list[[3]][1]` |
+`r ci_list[[1]][2]` | `r ci_list[[2]][2]` | `r ci_list[[3]][2]` |
+`r ci_list[[1]][3]` | `r ci_list[[2]][3]` | `r ci_list[[3]][3]` |
+`r ci_list[[1]][4]` | `r ci_list[[2]][4]` | `r ci_list[[3]][4]` |
+`r ci_list[[1]][5]` | `r ci_list[[2]][5]` | `r ci_list[[3]][5]` |
+`r ci_list[[1]][6]` | `r ci_list[[2]][6]` | `r ci_list[[3]][6]` |
+`r ci_list[[1]][7]` | `r ci_list[[2]][7]` | `r ci_list[[3]][7]` |
+`r ci_list[[1]][8]` | `r ci_list[[2]][8]` | `r ci_list[[3]][8]` |
+`r ci_list[[1]][9]` | `r ci_list[[2]][9]` | `r ci_list[[3]][9]` |
+`r ci_list[[1]][10]` | `r ci_list[[2]][10]` | `r ci_list[[3]][10]` |
+`r ci_list[[1]][11]` | `r ci_list[[2]][11]` | `r ci_list[[3]][11]` |
+`r ci_list[[1]][12]` | `r ci_list[[2]][12]` | `r ci_list[[3]][12]` |
+`r ci_list[[1]][13]` | `r ci_list[[2]][13]` | `r ci_list[[3]][13]` |
+`r ci_list[[1]][14]` | `r ci_list[[2]][14]` | `r ci_list[[3]][14]` |
+`r ci_list[[1]][15]` | `r ci_list[[2]][15]` | `r ci_list[[3]][15]` |
+***
+
+Based on visual inspection, the mean values of the variables seem different depending on the region. This is consistent with our earlier exploratory data analysis using boxplots. Using hypothesis tests to compare the mean values of `inequality`, `mental_health_days`, and `mental_distress_rate` across regions will give us greater clarity. Since there are 4 regions, we cannot use a 2-sample t-test. Instead, we conducted ANOVA tests for each variable with data for different regions as the samples.
+
+### ANOVA Tests
+
+[Before conducting the ANOVA tests, we assessed the normality and variances of the variables. In general, the distributions are relatively consistent across each region and the variances do not seem to differ substantially.]
+
+
+```{r anova_inequality, results='markup'}
+
+# anova test for inequality
+aov_in <- aov(inequality ~ region, data = ranked)
+
+summary_in <- summary(aov_in)
+
+xkabledply(aov_in, title = "ANOVA results: Income inequality by Region")
+
+tukey_in <- TukeyHSD(aov_in)
+tukey_in
+
+```
+
+The ANOVA test for income inequality produced an F-statistic of `r summary_in[[1]][1,4]` with a p-value of `r summary_in[[1]][1,5]`. We reject the null hypothesis because the p-value is below a significance level of 0.05, and accept the alternative hypothesis that the means of the regions are not all the same. We followed up with a post-hoc test to determine which groups are significantly different from the others. The Tukey HSD results indicate that all regions are significantly different from each other!
+
+```{r anova_mh, results='markup'}
+
+# mental health days
+aov_mh_days <- aov(mental_health_days ~ region, data = ranked)
+
+summary_mh_days <- summary(aov_mh_days)
+
+xkabledply(aov_mh_days, title = "ANOVA results: Poor Mental Health Days by Region")
+
+tukey_mh_days <- TukeyHSD(aov_mh_days)
+tukey_mh_days
+
+# frequent mental distress rate
+aov_mh_rate <- aov(mental_distress_rate ~ region, data = ranked)
+
+summary_mh_rate <- summary(aov_mh_rate)
+
+xkabledply(aov_mh_rate, title = "ANOVA results: Frequent Mental Distress by Region")
+
+tukey_mh_rate <- TukeyHSD(aov_mh_rate)
+tukey_mh_rate
+
+```
+
+The ANOVA test for poor mental health days produced an F-statistic of `r summary_mh_days[[1]][1,4]` with a p-value of `r summary_mh_days[[1]][1,5]`. Again, we reject the null hypothesis and followed up with a post-hoc Tukey HSD. The Tukey results indicate that all regions have significantly different means for `mental_health_days`.
+
+The ANOVA test for the frequent mental distress rate produced an F-statistic of `r summary_mh_rate[[1]][1,4]` with a p-value of `r summary_mh_rate[[1]][1,5]`. After rejecting the null, the Tukey results suggest that all regions, except the Northeast and the West, have significantly different means for `mental_distress_rate`.
+
+### Spearman's Rank Correlation
+
+We can also conduct a Spearman's rank test to see whether the mental health variables are independent from income inequality and median income.
+
+```{r spearman, results='markup'}
+
+spearman_ineq_v_days <- cor.test(ranked$inequality, ranked$mental_health_days, method="spearman", exact=F)
+spearman_ineq_v_days
+
+spearman_ineq_v_rate <- cor.test(ranked$inequality, ranked$mental_distress_rate, method="spearman", exact=F)
+spearman_ineq_v_rate
+
+spearman_medinc_v_days <- cor.test(ranked$median_inc, ranked$mental_health_days, method="spearman", exact=F)
+spearman_medinc_v_days
+
+spearman_medinc_v_rate <- cor.test(ranked$median_inc, ranked$mental_distress_rate, method="spearman", exact=F)
+spearman_medinc_v_rate
+
+```
+
+The Spearman correlation tests are summarized in the following table:
+
+***
+Variables | rho | p-value |
+------|----------|---------|
+`inequality` vs. `mental_health_days` | `r spearman_ineq_v_days$estimate` | `r spearman_medinc_v_days$p.value` |
+`inequality` vs. `mental_distress_rate` | `r spearman_ineq_v_rate$estimate` | `r spearman_ineq_v_days$p.value` |
+`median_inc` vs. `mental_health_days` | `r spearman_medinc_v_days$estimate` | `r spearman_medinc_v_days$p.value` |
+`median_inc` vs. `mental_distress_rate` | `r spearman_medinc_v_rate$estimate` | `r spearman_medinc_v_rate$p.value` |
+***
+
+Based on the small p-values below 0.05, we can reject the null hypothesis and conclude that the correlations between the variables are significantly different from zero These findings suggest that there is a real relationship between mental health and income inequality.
 
 ## Conclusion
 
