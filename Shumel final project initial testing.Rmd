@@ -164,3 +164,41 @@ corr_numbers <- corrplot(b, is.corr=TRUE, title="Correlation Matrix for Numeric 
 
 ```
 #Feature Selection
+
+```{r}
+loadPkg("ISLR")
+str(ranked)
+summary(ranked)
+```
+One thing we can do right away is to clean up the data a little. Remove variables that we know for sure are useless.
+In our case, let us remove some cumulative player stats to make the dataframe more manageable.
+
+```{r}
+#rankedfsf = ranked[ -c(1:9) ] # cleaned datasetnndf <- nndf1[c(1:23)]
+rankedfs = ranked [c(10:33)] 
+head(rankedfs)
+```
+
+```{r}
+loadPkg("leaps")
+#This is essentially best fit 
+reg.best10 <- regsubsets(mental_health_days~. , data = rankedfs, nvmax = 10, nbest = 1, method = "exhaustive")  # leaps::regsubsets() - Model selection by exhaustive (default) search, forward or backward stepwise, or sequential replacement
+#The plot will show the Adjust R^2 when using the variables across the bottom
+plot(reg.best10, scale = "adjr2", main = "Adjusted R^2")
+plot(reg.best10, scale = "r2", main = "R^2")
+# In the "leaps" package, we can use scale=c("bic","Cp","adjr2","r2")
+plot(reg.best10, scale = "bic", main = "BIC")
+plot(reg.best10, scale = "Cp", main = "Cp")
+summary(reg.best10)
+```
+
+Let us try non-linear model as well using feature selection with exhaustive method (`nbest=1`)
+
+```{r}
+regnonlin.forward10 <- regsubsets(rankedfs~(AtBat+Hits+Walks+Runs+RBI)^2+League:Division, data = hittersC, nvmax = 10)  # leaps, regsubsets: Model selection by exhaustive search, forward or backward stepwise, or sequential replacement
+#The plot will show the Adjust R^2 when using the variables across the bottom
+plot(regnonlin.forward10, scale = "adjr2", main = "Adjusted R^2")
+plot(regnonlin.forward10, scale = "bic", main = "BIC")
+plot(regnonlin.forward10, scale = "Cp", main = "Cp")
+summary(regnonlin.forward10)
+```
