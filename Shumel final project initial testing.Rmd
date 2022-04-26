@@ -178,27 +178,36 @@ In our case, let us remove some cumulative player stats to make the dataframe mo
 rankedfs = ranked [c(10:33)] 
 head(rankedfs)
 ```
-
 ```{r}
-loadPkg("leaps")
-#This is essentially best fit 
-reg.best10 <- regsubsets(mental_health_days~. , data = rankedfs, nvmax = 10, nbest = 1, method = "exhaustive")  # leaps::regsubsets() - Model selection by exhaustive (default) search, forward or backward stepwise, or sequential replacement
-#The plot will show the Adjust R^2 when using the variables across the bottom
-plot(reg.best10, scale = "adjr2", main = "Adjusted R^2")
-plot(reg.best10, scale = "r2", main = "R^2")
-# In the "leaps" package, we can use scale=c("bic","Cp","adjr2","r2")
-plot(reg.best10, scale = "bic", main = "BIC")
-plot(reg.best10, scale = "Cp", main = "Cp")
-summary(reg.best10)
+#1.Perform Linear Regression with All Predictors
+#Before selecting the best subset of predictors for our regression, let’s run a simple linear regression on our dataset with all predictors to set the base adjusted r² for comparison.
+
+lm1 <- lm(rankedfs,formula=mental_health_days ~.)
+summary(lm1)
+
 ```
-
-Let us try non-linear model as well using feature selection with exhaustive method (`nbest=1`)
+#Details
+Since this function returns separate best models of all sizes up to nvmax and since different model
+selection criteria such as AIC, BIC, CIC, DIC, ... differ only in how models of different sizes are
+compared, the results do not depend on the choice of cost-complexity tradeoff.
+When x is a biglm object it is assumed to be the full model, so force.out is not relevant. If there
+is an intercept it is forced in by default; specify a force.in as a logical vector with FALSE as the
+first element to allow the intercept to be dropped.
+The model search does not actually fit each model, so the returned object does not contain coefficients or standard errors. Coefficients and the variance-covariance matrix for one or model models
+can be obtained with the coef and vcov methods.
 
 ```{r}
-regnonlin.forward10 <- regsubsets(rankedfs~(AtBat+Hits+Walks+Runs+RBI)^2+League:Division, data = hittersC, nvmax = 10)  # leaps, regsubsets: Model selection by exhaustive search, forward or backward stepwise, or sequential replacement
-#The plot will show the Adjust R^2 when using the variables across the bottom
-plot(regnonlin.forward10, scale = "adjr2", main = "Adjusted R^2")
-plot(regnonlin.forward10, scale = "bic", main = "BIC")
-plot(regnonlin.forward10, scale = "Cp", main = "Cp")
-summary(regnonlin.forward10)
+library(ISLR)
+library(leaps)
+rankedfs <- na.omit(rankedfs)
+regfit.full = regsubsets(mental_health_days ~.,rankedfs, nvmax=23)
+reg.summary <- summary(regfit.full)
+names(reg.summary)
+```
+```{r}
+plot(reg.summary$rsq,xlab="number of variables", ylab="RSquare", type="l")
+plot(reg.summary$rss,xlab="number of variables", ylab="RSS", type="l")
+plot(reg.summary$adjr2,xlab="number of variables", ylab="adjr2", type="l")
+plot(reg.summary$cp,xlab="number of variables", ylab="cp", type="l")
+plot(reg.summary$bic,xlab="number of variables", ylab="BIC", type="l")
 ```
