@@ -196,6 +196,8 @@ first element to allow the intercept to be dropped.
 The model search does not actually fit each model, so the returned object does not contain coefficients or standard errors. Coefficients and the variance-covariance matrix for one or model models
 can be obtained with the coef and vcov methods.
 
+#Feature Selection: mental_health_days
+
 ```{r}
 library(ISLR)
 library(leaps)
@@ -204,12 +206,119 @@ regfit.full = regsubsets(mental_health_days ~.,rankedfs, nvmax=23)
 reg.summary <- summary(regfit.full)
 names(reg.summary)
 ```
+
 ```{r}
-plot(regfit.full, scale = "adjr2", main = "Adjusted R^2")
-plot(regfit.full, scale = "r2", main = "R^2")
-plot(regfit.full, scale = "bic", main = "BIC")
-plot(regfit.full, scale = "Cp", main = "Cp")
-summary(regfit.full)
+library(leaps)
+reg.best10 <- regsubsets(mental_health_days~. , data = rankedfs, nvmax = NULL, nbest = 1, method = "exhaustive")
+                             
+reg.best10                   
+```
+```{r}
+summary.out <- summary(reg.best10)
+as.data.frame(summary.out$outmat)
+```
+#Best model at each variable number
+
+#The best model in the 10-variable case includes all variables, as that is the only way to have 10 variables.
+
+```{r}
+plot(reg.best10, scale = "adjr2", main = "Adjusted R^2")
+plot(reg.best10, scale = "r2", main = "R^2")
+plot(reg.best10, scale = "bic", main = "BIC")
+plot(reg.best10, scale = "Cp", main = "Cp")
+coef(reg.best10, 10) # default BIC
+```
+#Plot Output from regsubsets Function in leaps package
+
+#This is just another way of presenting the same information for adjusted \( R^2 \). 
+#Mallow Cp is used to decide on the number of predictors to include. The stopping rule is to start with the smallest model and gradually increase number of variables, and stop when Mallow Cp is approximately (number of regressors + 1, broken line) for the first time.
+```{r}
+library(carData)
+res.legend <-
+    subsets(regsubsets(mental_health_days~. , data = rankedfs, nvmax = 10, nbest = 1, method = "exhaustive"), statistic="adjr2", legend = FALSE, min.size = 5, main = "Adjusted R^2")
+## Mallow Cp
+res.legend <-
+    subsets(regsubsets(mental_health_days~. , data = rankedfs, nvmax = 10, nbest = 1, method = "exhaustive"), statistic="cp", legend = FALSE, min.size = 5, main = "Mallow Cp")
+abline(a = 1, b = 1, lty = 2)
+#BIC
+res.legend <-
+    subsets(regsubsets(mental_health_days~. , data = rankedfs, nvmax = 10, nbest = 1, method = "exhaustive"), statistic="bic", legend = FALSE, min.size = 5, main = "BIC")
+abline(a = 1, b = 1, lty = 2)
+#r2
+res.legend <-
+    subsets(regsubsets(mental_health_days~. , data = rankedfs, nvmax = 10, nbest = 1, method = "exhaustive"), statistic="rsq", legend = FALSE, min.size = 5, main = "R square")
+abline(a = 1, b = 1, lty = 2)
+
+
+
+res.legend
+```
+#See which model has the highest R Square :
+
+```{r}
+which.max(summary.out$rsq)
 ```
 
+#The model with 25 variables has the highest RSquare. Variables marked with TRUE are the ones chosen.
 
+```{r}
+plot(summary.out$adjr2,xlab="number of variables", ylab="R Square", type="l")
+points(25, summary.out$rsq[25], col='red', cex=2, pch=20)
+```
+
+#See which model has the highest adjusted R2 :
+
+```{r}
+which.max(summary.out$adjr2)
+```
+
+#The model with 23 variables has the highest adjusted \( R^2 \). Variables marked with TRUE are the ones chosen.
+
+```{r}
+plot(summary.out$adjr2,xlab="number of variables", ylab="adjr2", type="l")
+points(23, summary.out$adjr2[23], col='red', cex=2, pch=20)
+```
+
+#See which model has the lowest CP :
+
+```{r}
+which.min(summary.out$cp)
+```
+#The model with 23 variables has the lowest CP.
+
+```{r}
+plot(summary.out$cp,xlab="number of variables", ylab="cp", type="l")
+points(23, summary.out$cp[23], col='red', cex=2, pch=20)
+```
+
+#See which model has the lowest BIC :
+
+```{r}
+which.min(summary.out$bic)
+```
+
+#The model with 22 variables has the lowest CP.
+
+```{r}
+plot(summary.out$bic,xlab="number of variables", ylab="BIC", type="l")
+points(22, summary.out$bic[22], col='red', cex=2, pch=20)
+#forward and backward selection is same as exhaustive just slight different in forward it start will no variable and iterate till the max variable and backward selection is otherway around.
+
+```{r}
+#validation
+set.seed(1)
+train=sample(c(TRUE, FALSE), nrow(rankedfs), rep=T)
+test = (!train)
+regfit.best=regsubsets(mental_health_days~.,data=rankedfs[train,],nvmax = 23)
+test.mat = model.matrix(mental_health_days~., data = rankedfs[test,])
+val.errors = rep(NA, 23)
+for(i in 1:23){
+  coefi = coef(regfit.best, id=i)
+   pred = test.mat[,names(coefi)]%*%coefi
+   val.errors[i]= mean((rankedfs$mental_health_days[test]-pred)^2)
+   }
+val.errors
+which.min(val.errors)
+coef(regfit.best,23)
+```
+```
