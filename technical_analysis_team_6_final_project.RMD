@@ -188,5 +188,74 @@ Summarize from Midterm Project.
 
 # Models and Statistical Tests
 
+## Linear Models
+
+We assessed two sets of models with different dependent variables. The first set of models used `mental_health_days` as the dependent variable, while the second set used `mental_distress_rate` as the dependent variable.
+
+### Dependent variable: `mental_health_days`
+
+
+
+```{r lm_days, results='markup'}
+
+# v1: base model
+lm_days_1 <- lm(mental_health_days ~ inequality + region, data = ranked)
+summary(lm_days_1)
+xkablevif(lm_days_1)
+
+# v2: include year as factor variable
+lm_days_2 <- lm(mental_health_days ~ inequality + region + year, data = ranked)
+summary(lm_days_2)
+xkablevif(lm_days_2)
+
+# v3: include economic vars
+lm_days_3 <- lm(mental_health_days ~ inequality + college + unempl + mh_providers
+                + child_poverty + single_parent + severe_housing + food_index
+                + median_inc + hs_grad
+                + region + year, data = ranked)
+summary(lm_days_3)
+xkablevif(lm_days_3)
+
+# v4: include demographic vars
+lm_days_4 <- lm(mental_health_days ~ inequality + college + unempl + mh_providers
+                + child_poverty + single_parent + severe_housing + food_index
+                + median_inc + hs_grad
+                + pop + pct_below18 + pct_female + pct_rural
+                + pct_black + pct_native_am + pct_asian + pct_pacific + pct_hispanic + pct_white
+                + region + year, data = ranked)
+summary(lm_days_4)
+xkablevif(lm_days_4)
+
+```
+
+```{r lm_vif, results='markup'}
+
+# v5: remove vars to reduce vif
+lm_days_5 <- lm(mental_health_days ~ inequality + college + hs_grad + unempl
+                + child_poverty + single_parent + severe_housing + food_index
+                + pop + pop_provider_ratio + pct_female
+                + pct_black + pct_native_am + pct_asian + pct_pacific + pct_hispanic
+                + region + year, data = ranked)
+summary(lm_days_5)
+xkablevif(lm_days_5)
+
+```
+
+### Dependent variable: `mental_distress_rate`
+
+
 # Model Evaluation and Comparison
+
+```{r anova_lm}
+
+anovaRes_a <- anova(lm_days_1,lm_days_2)
+anovaRes_b <- anova(lm_days_3,lm_days_5)
+
+xkabledply(anovaRes_a, title = "ANOVA comparison between two linear models")
+xkabledply(anovaRes_b, title = "ANOVA comparison between two linear models")
+
+
+```
+
+
 
