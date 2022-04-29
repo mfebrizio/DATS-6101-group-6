@@ -235,9 +235,8 @@ plot(reg.best10, scale = "bic", main = "BIC")
 plot(reg.best10, scale = "Cp", main = "Cp")
 coef(reg.best10, 10, scale = "adjr2") # default BIC
 ```
-```{r}
 #1.Perform Linear Regression with selected variables after feature selection
-
+```{r}
 lm2 <- lm(rankedfs,formula=mental_health_days ~ child_poverty + inequality + unempl + college + mh_providers + pop_provider_ratio + unempl + single_parent + region_abb + pct_hispanic + pct_female)
 summary(lm2)
 
@@ -345,7 +344,7 @@ coef(regfit.best,23)
 #Before selecting the best subset of predictors for our regression, let’s run a simple linear regression on our dataset with all predictors to set the base adjusted r² for comparison for mental health distress rate.
 
 lm3 <- lm(rankedfs,formula=mental_distress_rate ~. -mental_health_days )
-summary(lm1)
+summary(lm3)
 
 ```
 
@@ -368,12 +367,10 @@ plot(reg2.best10, scale = "bic", main = "BIC")
 plot(reg2.best10, scale = "Cp", main = "Cp")
 coef(reg2.best10, 10, scale = "adjr2") # default BIC
 ```
-
-```{r}
 #1.Perform Linear Regression with selected variables after feature selection
-
+```{r}
 lm4 <- lm(rankedfs,formula=mental_distress_rate ~  inequality + college + mh_providers + pct_female + child_poverty  + unempl + single_parent + region_abb + pct_hispanic + pct_native_am)
-summary(lm2)
+summary(lm4)
 
 ```
 #Plot Output from regsubsets Function in leaps package
@@ -470,4 +467,13 @@ for(i in 1:23){
 val.errors
 which.min(val.errors)
 coef(regfit.best,23)
+```
+```{r anova_lm}
+
+anovaRes_mental_health_days <- anova(lm1,lm2)
+anovaRes_mental_distress_rate <- anova(lm3,lm4)
+
+xkabledply(anovaRes_mental_health_days, title = "ANOVA comparison between two linear models for mental health days : lm1 and lm2")
+xkabledply(anovaRes_mental_distress_rate, title = "ANOVA comparison between two linear models for mental distress rate : lm3 and lm4")
+
 ```
