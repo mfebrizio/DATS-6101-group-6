@@ -28,6 +28,7 @@ options(scientific=T, digits = 3)
 # Import libraries
 library(ezids)
 library(dplyr)
+library(faraway)
 #library(corrplot)
 #library(broom)
 #loadPkg("ggplot2")
@@ -182,80 +183,157 @@ Our data are identified at the county-year level. Our data set contains `r nrow(
 
 
 # Exploratory Data Analysis
+Assigned to: *Mark*
 
 Summarize from Midterm Project.
 
 
-# Models and Statistical Tests
-
-## Linear Models
+# Linear Models
 
 We assessed two sets of models with different dependent variables. The first set of models used `mental_health_days` as the dependent variable, while the second set used `mental_distress_rate` as the dependent variable.
 
-### Dependent variable: `mental_health_days`
+## Dependent variable: `mental_health_days`
 
+We arranged several different combinations of variables to evaluate what different might make a suitable linear model with `mental_health_days` as the dependent variable. First, we regressed `mental_health_days` on the independent variable of interest – `inequality` – and a factor variable indicating the US Census Bureau region. Next, we included the factor variable `year` to control for unobserved differences over time. Third, we integrated a set of economic variables that also might relate to mental health outcomes. Finally, we added demographic variables to the model.
 
+```{r lm_days_a, results='markup'}
 
-```{r lm_days, results='markup'}
-
-# v1: base model
+# v1: base model by region
 lm_days_1 <- lm(mental_health_days ~ inequality + region, data = ranked)
 summary(lm_days_1)
-xkablevif(lm_days_1)
 
 # v2: include year as factor variable
 lm_days_2 <- lm(mental_health_days ~ inequality + region + year, data = ranked)
 summary(lm_days_2)
-xkablevif(lm_days_2)
 
 # v3: include economic vars
-lm_days_3 <- lm(mental_health_days ~ inequality + college + unempl + mh_providers
+lm_days_3 <- lm(mental_health_days ~ inequality + college + hs_grad + unempl
                 + child_poverty + single_parent + severe_housing + food_index
-                + median_inc + hs_grad
+                + median_inc + pop_provider_ratio
                 + region + year, data = ranked)
 summary(lm_days_3)
-xkablevif(lm_days_3)
 
 # v4: include demographic vars
-lm_days_4 <- lm(mental_health_days ~ inequality + college + unempl + mh_providers
+lm_days_4 <- lm(mental_health_days ~ inequality + college + hs_grad + unempl
                 + child_poverty + single_parent + severe_housing + food_index
-                + median_inc + hs_grad
+                + median_inc + pop_provider_ratio
                 + pop + pct_below18 + pct_female + pct_rural
                 + pct_black + pct_native_am + pct_asian + pct_pacific + pct_hispanic + pct_white
                 + region + year, data = ranked)
 summary(lm_days_4)
-xkablevif(lm_days_4)
 
 ```
 
-```{r lm_vif, results='markup'}
+For the first (base) model, the equations for each region are as follows:
+
+* `regionMidwest`:  `mental_health_days` = 2.676 + 0.247 * `inequality`
+* `regionNortheast`:  `mental_health_days` = 2.676 + 0.212 + 0.247 * `inequality`
+* `regionSouth`:  `mental_health_days` = 2.676 + 0.472 + 0.247 * `inequality`
+* `regionWest`:  `mental_health_days` = 2.676 + 0.121 + 0.247 * `inequality`
+
+Similar to the initial results from our EDA, the Midwest region (which is included in the intercept) has the lowest estimate for mental_health_days and the South has the highest. All the coefficients are statistically significant. Our measure for income inequality is statistically significant at the 0.001 level with a coefficient of 0.247, indicating a positive association with poor mental health days.
+
+After including the year factor variables, the economic variables, and the demographic variables, the coefficients on all variables remained statistically significant. However, the coefficient on `inequality` declined to 0.072 in the fourth model (which included the most variables). This suggests that the base model exhibited omitted variable bias that the fuller model at least partially addressed. The South still had the largest coefficient among the `region` factor variables.
+
+In general, The other economic variables demonstrated relationships with mental health that were expected. For instance, higher rates for`unempl`, `child_poverty`, `single_parent`, and `severe_housing` were all associated with worse mental health. A better food environment, higher median household incomes, and having a larger percentage of the population with some post-secondary education were associated with better mental health. Interestingly, a higher high-school graduation rate was positively associated with poor mental health.
+
+After adding so many different variables, we want to check for multicollinearity. Thus, we evaluated the VIF for each of the above models.
+
+```{r vif_days_a, results='markup'}
+
+# check vif for each model
+xkablevif(lm_days_1, wide = F)
+xkablevif(lm_days_2, wide = F)
+xkablevif(lm_days_3, wide = F)
+xkablevif(lm_days_4, wide = F)
+
+# i think there's an error with the xkablevif() function in ezids
+# compare the xkablevif() results with vif()
+vif(lm_days_4)
+
+```
+
+The majority of VIF results are below 5, which is acceptable. However, several variables have extremely high VIFs – specifically, the demographic variables for ethnic groups. The following model removed `pct_white`, which improved the VIFs significantly. It also removed `child_poverty`, which had a relatively high VIF of `r vif(lm_days_4)['child_poverty'][[1]]`.
+
+```{r lm_days_b, results='markup'}
 
 # v5: remove vars to reduce vif
 lm_days_5 <- lm(mental_health_days ~ inequality + college + hs_grad + unempl
-                + child_poverty + single_parent + severe_housing + food_index
-                + pop + pop_provider_ratio + pct_female
+                + single_parent + severe_housing + food_index
+                + pop + pop_provider_ratio + pct_female + pct_rural + pct_below18
                 + pct_black + pct_native_am + pct_asian + pct_pacific + pct_hispanic
                 + region + year, data = ranked)
 summary(lm_days_5)
-xkablevif(lm_days_5)
+vif(lm_days_5)
 
 ```
 
-### Dependent variable: `mental_distress_rate`
+To permit the coefficients to differ by region, we included an interaction term between `inequality` and `region`.
+
+```{r lm_days_c, results='markup'}
+
+# v6: base model by region with interaction terms
+lm_days_6 <- lm(mental_health_days ~ inequality*region, data = ranked)
+summary(lm_days_6)
+
+```
+
+The equations for each region with interaction terms are as follows:
+
+* `regionMidwest`:  `mental_health_days` = 2.3639 + 0.3214 * `inequality`
+* `regionNortheast`:  `mental_health_days` = 2.3639 + 1.6126 + (0.3214 - 0.3143) * `inequality`
+* `regionSouth`:  `mental_health_days` = 2.3639 + 0.8029 + (0.3214 - 0.0786) * `inequality`
+* `regionWest`:  `mental_health_days` = 2.3639 + 0.4104 + (0.3214 - 0.0694) * `inequality`
+
+These results suggest that the strength of the relationship between `mental_health_days` and `inequality` differs by region. In fact, while the Northeast has the highest estimated amount of poor mental health (see the intercept), the coefficient on `inequality` is near zero. Conversely, the Midwest has the lowest estimate of poor mental health, while exhibiting the strongest association. All the independent variables are statistically significant.
+
+```{r lm_days_d, results='markup'}
+
+# v7: larger model with interaction terms
+lm_days_7 <- lm(mental_health_days ~ inequality*region + college + hs_grad + unempl
+                + single_parent + severe_housing + food_index
+                + pop + pop_provider_ratio + pct_female + pct_rural + pct_below18
+                + pct_black + pct_native_am + pct_asian + pct_pacific + pct_hispanic
+                + year, data = ranked)
+summary(lm_days_7)
+vif(lm_days_7)
+
+```
+
+The equations for the fuller models with interaction terms are below, where V~c~ is a vector of additional control variables:
+
+* `regionMidwest`:  `mental_health_days` = 2.13 + 0.182 * `inequality` + V~c~
+* `regionNortheast`:  `mental_health_days` = 2.13 + 0.448 + (0.182 - 0.0616) * `inequality` + V~c~
+* `regionSouth`:  `mental_health_days` = 2.13 + 0.734 + (0.182 - 0.0944) * `inequality` + V~c~
+* `regionWest`:  `mental_health_days` = 2.13 + 0.186 + (0.182 - 0.0121) * `inequality` + V~c~
+
+After including the set of control variables, the coefficients for `inequality` still differ by region. However, now it appears that the South has the weakest association between `inequality` and `mental_health_days` and the Midwest still has the strongest.
 
 
-# Model Evaluation and Comparison
+## Dependent variable: `mental_distress_rate`
+Assigned to: *Xuan*
+
+
+## Comparing the Dependent Variables
+
+
+# Linear Model Evaluation
+Assigned to: *Shumel*
+
+Include Feature Selection here?
 
 ```{r anova_lm}
 
-anovaRes_a <- anova(lm_days_1,lm_days_2)
-anovaRes_b <- anova(lm_days_3,lm_days_5)
+anovaRes_a <- anova(lm_days_1,lm_days_2,lm_days_6)
+anovaRes_b <- anova(lm_days_5,lm_days_7)
 
 xkabledply(anovaRes_a, title = "ANOVA comparison between two linear models")
 xkabledply(anovaRes_b, title = "ANOVA comparison between two linear models")
 
-
 ```
 
+
+# Regression Trees
+Assigned to: *Alex*
 
 
