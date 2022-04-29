@@ -28,12 +28,16 @@ options(scientific=T, digits = 3)
 # Import libraries
 library(ezids)
 library(dplyr)
-#library(corrplot)
-#library(broom)
-#loadPkg("ggplot2")
-#loadPkg("patchwork") ## for combining graphs
-#loadPkg("purrr")
-#loadPkg("gridExtra")
+library(faraway)
+library(corrplot)
+library(psych)
+library(broom)
+library(kableExtra)
+loadPkg("ggplot2")
+loadPkg("gridExtra")
+loadPkg("patchwork")
+loadPkg("purrr")
+loadPkg("tidyr")
 
 ```
 
@@ -182,11 +186,357 @@ Our data are identified at the county-year level. Our data set contains `r nrow(
 
 
 # Exploratory Data Analysis
+Assigned to: *Mark*
 
 Summarize from Midterm Project.
 
+## Descriptive Statistics
 
-# Models and Statistical Tests
+```{r summary_stats, results='markup'}
 
-# Model Evaluation and Comparison
+#Summary Statistics of all Variables used in dframe dataset
+# use ranked instead
+table1<-describeBy(ranked, type = 1) ## type of kurtosis and skewness to calculate
+table1 %>%
+  kbl(caption="Summary Statistics for Master Dataset",
+       format= "html", col.names = c("Var Num.","Count","Mean","Std. Dev.","Median", "Trimmed Mean", "Mad", "Minimum", "Maximum","Range", "Skewness", "Kurtosis", "S.E."),
+      align="r") %>%
+   kable_classic_2(full_width = F, html_font = "helvetica")
+
+```
+
+The summary statistics show that we have nearly complete data for our most relevant quantitative variables – namely, the measures of mental health, income inequality, and median household income. Several other important economic variables, such as `child_poverty`, `single_parent`, and `severe_housing`, have nearly complete data too.
+
+Our intended dependent variables, `mental_health_days` and `mental_distress_rate`, each have skewness and kurtosis below 1, which indicates those variables have relatively normal distributions. The mean and median for mentally unhealthy days in the past 30 days are similar at `r mean(ranked$mental_health_days, na.rm=T)` and `r median(ranked$mental_health_days, na.rm=T)`, with a standard deviation of `r sd(ranked$mental_health_days, na.rm=T)`. The mean `mental_distress_rate` is `r mean(ranked$mental_distress_rate, na.rm=T)` with a standard deviation of `r sd(ranked$mental_distress_rate, na.rm=T)`. The median is slightly below the mean.
+
+The economic variables, particularly `inequality`, have greater skewness and kurtosis, suggesting their distributions are less symmetrical and have larger tails. `inequality` has a mean of `r mean(ranked$inequality, na.rm=T)`, a median of `r median(ranked$inequality, na.rm=T)`, and a standard deviation of `r sd(ranked$inequality, na.rm=T)`.
+
+## Scatterplots
+
+We also plotted the mental health measures vs. inequality by region. The results are striking. The Midwest and the South both exhibit a moderate correlation between the variables. The West has a weaker, but still positive, correlation. And in the Northeast, mental health and inequality do not seem to be correlated.
+
+```{r scatter_c, results='markup'}
+
+# data: use ranked_MW, ranked_NE, ranked_SO, ranked_WE
+
+rgb_colors <- c("#A27BB8", "#006994", "#B52E1F", "#00873E")
+
+#-- mental_health_days --#
+
+p1 <- ggplot(ranked_MW, aes(y=mental_health_days, x=inequality)) + 
+  geom_point(show.legend = F, alpha = .7, color = rgb_colors[1]) + 
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
+  labs(title = paste("(a) Midwest"),
+       y = 'Days per 30', x = 'Income Inequality Rate')
+
+p2 <- ggplot(ranked_NE, aes(y=mental_health_days, x=inequality)) + 
+  geom_point(show.legend = F, alpha = .7, color = rgb_colors[2]) +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +
+  labs(title = paste("(b) Northeast"),
+       y = 'Days per 30', x = 'Income Inequality Rate')
+
+p3 <- ggplot(ranked_SO, aes(y=mental_health_days, x=inequality)) + 
+  geom_point(show.legend = F, alpha = .7, color = rgb_colors[3]) +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +
+  labs(title = paste("(c) South"),
+       y = 'Days per 30', x = 'Income Inequality Rate')
+
+p4 <- ggplot(ranked_WE, aes(y=mental_health_days, x=inequality)) + 
+  geom_point(show.legend = F, alpha = .7, color = rgb_colors[4]) +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +
+  labs(title = paste("(d) West"),
+       y = 'Days per 30', x = 'Income Inequality Rate')
+
+p_regions_1 <- (p1 + p2)/(p3 + p4) + plot_annotation(title = "Scatterplot of Poor Mental Health Days vs. Income Inequality by Region")
+p_regions_1
+
+
+#-- mental_distress_rate --#
+
+p1 <- ggplot(ranked_MW, aes(y=mental_distress_rate, x=inequality)) + 
+  geom_point(show.legend = F, alpha = .7, color = rgb_colors[1]) + 
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") + 
+  labs(title = paste("(a) Midwest"),
+       y = '% Frequent Distress', x = 'Income Inequality Rate')
+
+p2 <- ggplot(ranked_NE, aes(y=mental_distress_rate, x=inequality)) + 
+  geom_point(show.legend = F, alpha = .7, color = rgb_colors[2]) +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +
+  labs(title = paste("(b) Northeast"),
+       y = '% Frequent Distress', x = 'Income Inequality Rate')
+
+p3 <- ggplot(ranked_SO, aes(y=mental_distress_rate, x=inequality)) + 
+  geom_point(show.legend = F, alpha = .7, color = rgb_colors[3]) +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +
+  labs(title = paste("(c) South"),
+       y = '% Frequent Distress', x = 'Income Inequality Rate')
+
+p4 <- ggplot(ranked_WE, aes(y=mental_distress_rate, x=inequality)) + 
+  geom_point(show.legend = F, alpha = .7, color = rgb_colors[4]) +
+  geom_smooth(formula = y ~ x, method=lm, se=FALSE, color="#a89968") +
+  labs(title = paste("(d) West"),
+       y = '% Frequent Distress', x = 'Income Inequality Rate')
+
+p_regions_2 <- (p1 + p2)/(p3 + p4) + plot_annotation(title = "Scatterplot of Frequent Mental Distress Rate vs. Income Inequality by Region")
+p_regions_2
+
+```
+
+At this point in the EDA, it became clear that geographic differences in the relationship between mental health and inequality were important. These results justified our decision to focus on the differences by region. Our next step in exploration was to use boxplots to get a better sense of how the data varied across regional categories.
+
+## Boxplots
+
+To better show the relationship between the economic variables and mental health in different regions of the United States, we generated boxplots of the data by region. Analyzing the economic inequality and mental health of people by region can more clearly assess whether the relationship varies by geography than direct analysis of the whole country.
+
+```{r boxplots, results='markup', warning=FALSE}
+
+# Characterization of median household income of four regions
+b1 <- ggplot(ranked, aes(x=region_abb, y=median_inc)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="Median Income", x="region")
+
+# Characterization of Income inequality of four regions
+b2 <- ggplot(ranked, aes(x=region_abb, y=inequality)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="Inequality", x="region")
+
+# Characterization of poor mental health days of four regions
+b3 <- ggplot(ranked, aes(x=region_abb, y=mental_health_days)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="Poor Mental Health Days", x="region")
+
+# Characterization of the Frequent mental distress rate of four regions
+b4 <- ggplot(ranked, aes(x=region_abb, y=mental_distress_rate)) + 
+  geom_boxplot() + 
+  geom_boxplot(colour="orange",fill="#7777cc",outlier.colour="red",outlier.shape=8, outlier.size=4) +
+  labs(title="Frequent Mental Distress", x="region")
+
+boxplot_a <- grid.arrange(b1,b2,b3,b4, nrow=2, ncol=2) #, top = text_grob("Boxplots of Key Variables by Region", color = "black", face = "bold", size = 14))
+
+```
+
+Overall, what information can we conclude from these boxplots?
+
+1. In the four U.S. regions, the Northeast has the highest median household income and the South has the lowest.
+2. Income inequality is highest in the South.
+3. Residents in the South also have the worst mental health, which correlates with their relatively low household income and higher levels of inequality.
+
+As a whole, there seems to be real differences across regions in these key variables. The boxplots also indicate that these variables have outliers. As a result, we should look into the normality of the data before hypothesis testing.
+
+## Normality
+
+We also graphed histograms of many of the numeric variables to consider their distributions. Although none are perfectly "normal" distributions, many do seem to approximate normality. Most importantly, `mental_distress_rate` and `mental_health_days` have distributions that somewhat resemble normality. Generally, the economic variables – such as `inequality`, `median_inc`, and `unempl` – are right-skewed.
+
+```{r norm_hist, results='markup'}
+
+# variables to plot
+keep_var <- c('inequality', 'unempl', 'child_poverty', 'hs_grad', 'college', 'single_parent', 'severe_housing', 'food_index', 'mental_health_days', 'mental_distress_rate', 'median_inc', 'pop_provider_ratio')
+
+# plot histograms
+ranked[keep_var] %>% 
+  gather() %>% 
+  ggplot(aes(x=value)) + 
+    facet_wrap(~ key, scales = "free") + 
+    geom_histogram(bins=50, color = "#033C5A") +
+  labs(title = "Histograms for Select Numeric Variables")
+
+
+```
+
+To complement the histograms, we also graphed Q-Q plots to assess the normality of our data. These plots compare the theoretical and sample distributions for a variable at specific quantiles. The line on each graph estimates what the variable would look like with a normal distribution.
+
+In general, the mental health variables do not diverge too far from normality. Also, `inequality` and `median_inc` tightly follow a normal distribution until the upper range of their values, reflecting the greater spread that exists at the high end of the distribution. 
+
+```{r norm_qq, results='markup', warning=FALSE}
+
+# plot histograms
+ranked[keep_var] %>% 
+  gather() %>% 
+  ggplot(aes(sample=value), na.rm=T) + 
+    facet_wrap(~ key, scales = "free") + 
+    stat_qq(color = "#033C5A") + stat_qq_line() + labs(title = "Q-Q Plots for Select Numeric Variables", y = "Sample Quantiles", x = "Theoretical Quantiles")
+
+```
+
+Despite not having a perfectly normal distribution, the sample quantiles remain relatively close to the theoretical quantiles for many of our variables. Ultimately, even if none of our variables are perfectly "normal," few would seem to pose substantial issues during hypothesis testing. `inequality` and `median_inc` have right-tailed distributions, but without very thick tails. Several more extreme exceptions might include `pop_provider_ratio`, `severe_housing`, `unempl`, and `food_index`. This suggests that we should consider removing outliers or transforming these variables before using them in linear modeling.
+
+## Correlation Matrix
+
+We also assessed the correlation among the numeric variables. This helps us establish whether variables are positively or negatively associated with each other, as well as the strength of that relationship.
+
+```{r corr, results='markup'}
+
+# Correlation Matrices for numeric data
+
+ranked_numeric <- subset(ranked, select = c("mental_health_days", "mental_distress_rate", "inequality", "median_inc", "hs_grad", "college", "unempl", "child_poverty","single_parent", "severe_housing", "food_index","mh_providers","pop_provider_ratio"))
+
+a <- as.matrix(ranked_numeric)
+
+b <- cor(a, use = "na.or.complete")
+
+#corr_numbers <- corrplot(b, is.corr=TRUE, method="number", title="Correlation Matrix for Numeric Vars.",mar=c(0,0,1,0))
+
+corr_numbers <- corrplot(b, is.corr=TRUE, title="Correlation Matrix for Numeric Vars.",mar=c(0,0,1,0))
+
+```
+
+In general, the results were not surprising. The two mental health variables are very positively correlated, and both are also positively correlated with `inequality`. In addition, `inequality` exhibited the strongest positive association with `child_poverty` and `single_parent`, and it had the strongest negative correlation with `food_index` and `median_inc`. These results make sense (remember that a higher score on the food index indicates a better food environment).
+
+
+# Data Cleaning
+
+Remove outliers??
+
+
+# Linear Models
+
+We assessed two sets of models with different dependent variables. The first set of models used `mental_health_days` as the dependent variable, while the second set used `mental_distress_rate` as the dependent variable.
+
+## Dependent variable: `mental_health_days`
+
+We arranged several different combinations of variables to evaluate what different might make a suitable linear model with `mental_health_days` as the dependent variable. First, we regressed `mental_health_days` on the independent variable of interest – `inequality` – and a factor variable indicating the US Census Bureau region. Next, we included the factor variable `year` to control for unobserved differences over time. Third, we integrated a set of economic variables that also might relate to mental health outcomes. Finally, we added demographic variables to the model.
+
+```{r lm_days_a, results='markup'}
+
+# v1: base model by region
+lm_days_1 <- lm(mental_health_days ~ inequality + region, data = ranked)
+summary(lm_days_1)
+
+# v2: include year as factor variable
+lm_days_2 <- lm(mental_health_days ~ inequality + region + year, data = ranked)
+summary(lm_days_2)
+
+# v3: include economic vars
+lm_days_3 <- lm(mental_health_days ~ inequality + college + hs_grad + unempl
+                + child_poverty + single_parent + severe_housing + food_index
+                + median_inc + pop_provider_ratio
+                + region + year, data = ranked)
+summary(lm_days_3)
+
+# v4: include demographic vars
+lm_days_4 <- lm(mental_health_days ~ inequality + college + hs_grad + unempl
+                + child_poverty + single_parent + severe_housing + food_index
+                + median_inc + pop_provider_ratio
+                + pop + pct_below18 + pct_female + pct_rural
+                + pct_black + pct_native_am + pct_asian + pct_pacific + pct_hispanic + pct_white
+                + region + year, data = ranked)
+summary(lm_days_4)
+
+```
+
+For the first (base) model, the equations for each region are as follows:
+
+* `regionMidwest`:  `mental_health_days` = 2.676 + 0.247 * `inequality`
+* `regionNortheast`:  `mental_health_days` = 2.676 + 0.212 + 0.247 * `inequality`
+* `regionSouth`:  `mental_health_days` = 2.676 + 0.472 + 0.247 * `inequality`
+* `regionWest`:  `mental_health_days` = 2.676 + 0.121 + 0.247 * `inequality`
+
+Similar to the initial results from our EDA, the Midwest region (which is included in the intercept) has the lowest estimate for mental_health_days and the South has the highest. All the coefficients are statistically significant. Our measure for income inequality is statistically significant at the 0.001 level with a coefficient of 0.247, indicating a positive association with poor mental health days.
+
+After including the year factor variables, the economic variables, and the demographic variables, the coefficients on all variables remained statistically significant. However, the coefficient on `inequality` declined to 0.072 in the fourth model (which included the most variables). This suggests that the base model exhibited omitted variable bias that the fuller model at least partially addressed. The South still had the largest coefficient among the `region` factor variables.
+
+In general, The other economic variables demonstrated relationships with mental health that were expected. For instance, higher rates for`unempl`, `child_poverty`, `single_parent`, and `severe_housing` were all associated with worse mental health. A better food environment, higher median household incomes, and having a larger percentage of the population with some post-secondary education were associated with better mental health. Interestingly, a higher high-school graduation rate was positively associated with poor mental health.
+
+After adding so many different variables, we want to check for multicollinearity. Thus, we evaluated the VIF for each of the above models.
+
+```{r vif_days_a, results='markup'}
+
+# check vif for each model
+xkablevif(lm_days_1, wide = F)
+xkablevif(lm_days_2, wide = F)
+xkablevif(lm_days_3, wide = F)
+xkablevif(lm_days_4, wide = F)
+
+# i think there's an error with the xkablevif() function in ezids
+# compare the xkablevif() results with vif()
+vif(lm_days_4)
+
+```
+
+The majority of VIF results are below 5, which is acceptable. However, several variables have extremely high VIFs – specifically, the demographic variables for ethnic groups. The following model removed `pct_white`, which improved the VIFs significantly. It also removed `child_poverty`, which had a relatively high VIF of `r vif(lm_days_4)['child_poverty'][[1]]`.
+
+```{r lm_days_b, results='markup'}
+
+# v5: remove vars to reduce vif
+lm_days_5 <- lm(mental_health_days ~ inequality + college + hs_grad + unempl
+                + single_parent + severe_housing + food_index
+                + pop + pop_provider_ratio + pct_female + pct_rural + pct_below18
+                + pct_black + pct_native_am + pct_asian + pct_pacific + pct_hispanic
+                + region + year, data = ranked)
+summary(lm_days_5)
+vif(lm_days_5)
+
+```
+
+To permit the coefficients to differ by region, we included an interaction term between `inequality` and `region`.
+
+```{r lm_days_c, results='markup'}
+
+# v6: base model by region with interaction terms
+lm_days_6 <- lm(mental_health_days ~ inequality*region, data = ranked)
+summary(lm_days_6)
+
+```
+
+The equations for each region with interaction terms are as follows:
+
+* `regionMidwest`:  `mental_health_days` = 2.3639 + 0.3214 * `inequality`
+* `regionNortheast`:  `mental_health_days` = 2.3639 + 1.6126 + (0.3214 - 0.3143) * `inequality`
+* `regionSouth`:  `mental_health_days` = 2.3639 + 0.8029 + (0.3214 - 0.0786) * `inequality`
+* `regionWest`:  `mental_health_days` = 2.3639 + 0.4104 + (0.3214 - 0.0694) * `inequality`
+
+These results suggest that the strength of the relationship between `mental_health_days` and `inequality` differs by region. In fact, while the Northeast has the highest estimated amount of poor mental health (see the intercept), the coefficient on `inequality` is near zero. Conversely, the Midwest has the lowest estimate of poor mental health, while exhibiting the strongest association. All the independent variables are statistically significant.
+
+```{r lm_days_d, results='markup'}
+
+# v7: larger model with interaction terms
+lm_days_7 <- lm(mental_health_days ~ inequality*region + college + hs_grad + unempl
+                + single_parent + severe_housing + food_index
+                + pop + pop_provider_ratio + pct_female + pct_rural + pct_below18
+                + pct_black + pct_native_am + pct_asian + pct_pacific + pct_hispanic
+                + year, data = ranked)
+summary(lm_days_7)
+vif(lm_days_7)
+
+```
+
+The equations for the fuller models with interaction terms are below, where V~c~ is a vector of additional control variables:
+
+* `regionMidwest`:  `mental_health_days` = 2.13 + 0.182 * `inequality` + V~c~
+* `regionNortheast`:  `mental_health_days` = 2.13 + 0.448 + (0.182 - 0.0616) * `inequality` + V~c~
+* `regionSouth`:  `mental_health_days` = 2.13 + 0.734 + (0.182 - 0.0944) * `inequality` + V~c~
+* `regionWest`:  `mental_health_days` = 2.13 + 0.186 + (0.182 - 0.0121) * `inequality` + V~c~
+
+After including the set of control variables, the coefficients for `inequality` still differ by region. However, now it appears that the South has the weakest association between `inequality` and `mental_health_days` and the Midwest still has the strongest.
+
+
+## Dependent variable: `mental_distress_rate`
+Assigned to: *Xuan*
+
+
+## Comparing the Dependent Variables
+
+
+# Linear Model Evaluation
+Assigned to: *Shumel*
+
+Include Feature Selection here?
+
+```{r anova_lm}
+
+anovaRes_a <- anova(lm_days_1,lm_days_2,lm_days_6)
+anovaRes_b <- anova(lm_days_5,lm_days_7)
+
+xkabledply(anovaRes_a, title = "ANOVA comparison between two linear models")
+xkabledply(anovaRes_b, title = "ANOVA comparison between two linear models")
+
+```
+
+
+# Regression Trees
+Assigned to: *Alex*
+
 
