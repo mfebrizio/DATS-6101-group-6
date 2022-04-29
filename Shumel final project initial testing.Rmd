@@ -281,7 +281,7 @@ which.max(summary.out$rsq)
 
 ```{r}
 plot(summary.out$adjr2,xlab="number of variables", ylab="R Square", type="l")
-points(25, summary.out$rsq[25], col='red', cex=2, pch=20)
+points(22, summary.out$rsq[22], col='red', cex=2, pch=20)
 ```
 
 #See which model has the highest adjusted R2 :
@@ -294,7 +294,7 @@ which.max(summary.out$adjr2)
 
 ```{r}
 plot(summary.out$adjr2,xlab="number of variables", ylab="adjr2", type="l")
-points(23, summary.out$adjr2[23], col='red', cex=2, pch=20)
+points(21, summary.out$adjr2[21], col='red', cex=2, pch=20)
 ```
 
 #See which model has the lowest CP :
@@ -306,7 +306,7 @@ which.min(summary.out$cp)
 
 ```{r}
 plot(summary.out$cp,xlab="number of variables", ylab="cp", type="l")
-points(23, summary.out$cp[23], col='red', cex=2, pch=20)
+points(20, summary.out$cp[20], col='red', cex=2, pch=20)
 ```
 
 #See which model has the lowest BIC :
@@ -319,7 +319,7 @@ which.min(summary.out$bic)
 
 ```{r}
 plot(summary.out$bic,xlab="number of variables", ylab="BIC", type="l")
-points(22, summary.out$bic[22], col='red', cex=2, pch=20)
+points(19, summary.out$bic[19], col='red', cex=2, pch=20)
 #forward and backward selection is same as exhaustive just slight different in forward it start will no variable and iterate till the max variable and backward selection is otherway around.
 ```
 
