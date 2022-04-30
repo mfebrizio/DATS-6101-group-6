@@ -1104,11 +1104,6 @@ model_ment_helth_day_tree <- rpart(mental_health_days ~ inequality + median_inc 
 summ_table1<-summary(model_ment_helth_day_tree)
 summ_table1$variable.importance
 
-#Plot Regression Tree
-#rpart.plot(model_ment_helth_day_tree)
-fancyRpartPlot(model_ment_helth_day_tree, main = "Model 1 - Target y: mental_health_days (all vars.)")
-
-
 #Print Complexity Penalty
 printcp(model_ment_helth_day_tree)
 
@@ -1117,6 +1112,10 @@ rsq.rpart(model_ment_helth_day_tree)
 #Plotting Complexity Parameters
 plotcp(model_ment_helth_day_tree, minline = TRUE, lty = 3, col = 1)
 
+
+#Plot Regression Tree
+#rpart.plot(model_ment_helth_day_tree)
+fancyRpartPlot(model_ment_helth_day_tree, main = "Regression Tree: Target Y - mental_health_days (all vars.)")
 ```
 
 ```{r}
