@@ -1085,7 +1085,7 @@ Assigned to: *Alex*
 
 ```{r}
 
-#TRegression Tree - Number of Mentally Unhealthy Days
+#Regression Tree - Number of Mentally Unhealthy Days
 
 #View(ranked)
 #str(ranked)
