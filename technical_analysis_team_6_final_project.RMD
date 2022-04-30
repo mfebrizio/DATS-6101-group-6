@@ -835,10 +835,6 @@ xkabledply(anovaRes_mental_distress_rate, title = "ANOVA comparison between two 
 ```
 
 
-# Regression Trees
-Assigned to: *Alex*
-
-
 ### Linear regression models for frequent mental distress rate as the dependent variable -- Xuan
 ```{r}
 library(readxl)
@@ -1069,3 +1065,255 @@ plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = 
 abline(a2021W)
 
 ```
+
+
+# Regression Trees
+Assigned to: *Alex*
+
+```{r}
+#View(ranked)
+#str(ranked)
+
+#Remove NA values.
+
+ranked <- na.omit(ranked)
+
+#Creating Train and Test Set - ranked
+set.seed(123)
+train = sample(1:nrow(ranked), nrow(ranked)/1.25)
+
+#First Model for Number of Mentally Unhealthy Days (ranked; all vars.)
+model_ment_helth_day_tree <- rpart(mental_health_days ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region, ranked, subset=train, control = list(maxdepth=8, cp=0.004))
+
+#Summary for Number of Mentally Unhealthy Days
+summ_table1<-summary(model_ment_helth_day_tree)
+summ_table1$variable.importance
+
+#Plot Regression Tree
+#rpart.plot(model_ment_helth_day_tree)
+fancyRpartPlot(model_ment_helth_day_tree, main = "Model 1 - Target y: mental_health_days (all vars.)")
+
+
+#Print Complexity Penalty
+printcp(model_ment_helth_day_tree)
+
+rsq.rpart(model_ment_helth_day_tree)
+
+#Plotting Complexity Parameters
+plotcp(model_ment_helth_day_tree, minline = TRUE, lty = 3, col = 1)
+
+```
+
+```{r}
+#Prune Tree
+
+#Prune Tree Model
+prune_model_ment_helth_day_tree=prune.rpart(model_ment_helth_day_tree, cp=0.0072, best=5)
+
+#prune_model_ment_helth_day_tree=prune.rpart(model_ment_helth_day_tree, cp=model_ment_helth_day_tree$cptable[which.min(model_ment_helth_day_tree$cptable[,"xerror"]),"CP"], best=5)
+
+
+#Summary of Pruned Tree
+summ_table2<-summary(prune_model_ment_helth_day_tree)
+summ_table2$variable.importance
+#Print Complexity Penalty of Prune Tree
+printcp(prune_model_ment_helth_day_tree)
+
+#Plot Complexity Penalty of Prune Tree 
+plotcp(prune_model_ment_helth_day_tree,minline = TRUE, lty = 3, col = 1)
+
+rsq.rpart(prune_model_ment_helth_day_tree)
+
+#Plot Pruned Tree
+fancyRpartPlot(prune_model_ment_helth_day_tree)
+
+```
+
+```{r}
+#Predicting and MSE for Regression Trees
+
+#Prediction/Testing - Original Model
+yhat1=predict(model_ment_helth_day_tree,newdata=ranked[-train,])
+test=ranked[-train,"mental_health_days"]
+
+plot(yhat1,test, main="Regression Tree: Test vs. Predicted Values", xlab="Predicted Values", ylab="Test Values")
+abline(0,1)
+
+#MSE
+mean((yhat1-test)^2)
+
+#RMSE
+sqrt(mean((yhat1-test)^2))
+
+
+#Prediction/Testing - Pruned Model
+yhat_prune1=predict(prune_model_ment_helth_day_tree,newdata=ranked[-train,])
+test=ranked[-train,"mental_health_days"]
+
+plot(yhat_prune1,test, main="Pruned Regression Tree: Test vs. Predicted Values", xlab="Predicted Values", ylab="Test Values")
+abline(0,1)
+
+#MSE
+mean((yhat_prune1-test)^2)
+
+#RMSE
+sqrt(mean((yhat_prune1-test)^2))
+
+
+```
+
+
+```{r}
+#Random Forest - Num. of Mentally Unhealthy Days
+
+library(randomForest)
+
+#Generate Random Forest Model - Num. of Mentally Unhealthy Days (all vars.)
+set.seed(123)
+bag_ment_hlth_days=randomForest(mental_health_days ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region, data=ranked, subset=train, mtry=11, importance=TRUE)
+
+bag_ment_hlth_days
+
+#Predict/Test Random Forest Model
+yhat.bag1 = predict(bag_ment_hlth_days,newdata=ranked[-train,])
+plot(yhat.bag1, test, main="Random Forest: Test vs. Predicted Values", xlab="Predicted Values", ylab="Test Values")
+abline(0,1)
+
+#MSE
+mean((yhat.bag1-test)^2)
+
+#RMSE
+sqrt(mean((yhat.bag1-test)^2))
+
+
+#Determine Variable Importance
+importance(bag_ment_hlth_days)
+
+#Plot Variable Importance 
+varImpPlot(bag_ment_hlth_days, main = "Variable Importance Plots for Random Forest")
+
+```
+
+
+
+```{r}
+
+#Creating Train and Test Set - ranked
+set.seed(123)
+train = sample(1:nrow(ranked), nrow(ranked)/1.25)
+
+#First Model for Mental Health Distress Rate (ranked; all vars.)
+model_ment_dis_rate_tree <- rpart(mental_distress_rate ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region, ranked, subset=train, control = list(maxdepth=8, cp=0.004))
+
+#Summary for Number of Mentally Unhealthy Days
+summ_table1<-summary(model_ment_dis_rate_tree)
+summ_table1$variable.importance
+
+#Plot Regression Tree
+#rpart.plot(model_ment_dis_rate_tree)
+fancyRpartPlot(model_ment_dis_rate_tree, main = "Model 1 - Target y: mental_health_days (all vars.)")
+
+
+#Print Complexity Penalty
+printcp(model_ment_dis_rate_tree)
+
+rsq.rpart(model_ment_dis_rate_tree)
+
+#Plotting Complexity Parameters
+plotcp(model_ment_dis_rate_tree, minline = TRUE, lty = 3, col = 1)
+
+```
+
+
+```{r}
+#Prune Tree - Mental Health Distress Rate 
+
+#Prune Tree Model
+prune_model_ment_dis_rate_tree=prune.rpart(model_ment_dis_rate_tree, cp=0.0095, best=5)
+
+#prune_model_ment_helth_day_tree=prune.rpart(model_ment_helth_day_tree, cp=model_ment_helth_day_tree$cptable[which.min(model_ment_helth_day_tree$cptable[,"xerror"]),"CP"], best=5)
+
+
+#Summary of Pruned Tree
+summ_table2<-summary(prune_model_ment_dis_rate_tree)
+summ_table2$variable.importance
+#Print Complexity Penalty of Prune Tree
+printcp(prune_model_ment_dis_rate_tree)
+
+#Plot Complexity Penalty of Prune Tree 
+plotcp(prune_model_ment_dis_rate_tree,minline = TRUE, lty = 3, col = 1)
+
+rsq.rpart(prune_model_ment_dis_rate_tree)
+
+#Plot Pruned Tree
+fancyRpartPlot(prune_model_ment_dis_rate_tree)
+
+```
+
+
+```{r}
+#Predicting and MSE for Regression Trees
+
+#Prediction/Testing - Original Model
+yhat2=predict(model_ment_dis_rate_tree,newdata=ranked[-train,])
+test=ranked[-train,"mental_distress_rate"] 
+
+plot(yhat2,test, main="Regression Tree: Test vs. Predicted Values", xlab="Predicted Values", ylab="Test Values")
+abline(0,1)
+
+#MSE
+mean((yhat2-test)^2)
+
+#RMSE
+sqrt(mean((yhat2-test)^2))
+
+
+#Prediction/Testing - Pruned Model
+yhat_prune2=predict(prune_model_ment_dis_rate_tree,newdata=ranked[-train,])
+test=ranked[-train,"mental_distress_rate"]
+
+plot(yhat_prune2,test, main="Pruned Regression Tree: Test vs. Predicted Values", xlab="Predicted Values", ylab="Test Values")
+abline(0,1)
+
+#MSE
+mean((yhat_prune2-test)^2)
+
+#RMSE
+sqrt(mean((yhat_prune2-test)^2))
+
+
+```
+
+
+```{r}
+#Random Forest - Mental Distress Rate
+
+#Generate Random Forest Model - Mental Health Distress Rate 
+set.seed(123)
+bag_ment_dis_rate=randomForest(mental_distress_rate ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region, data=ranked, subset=train, mtry=11, importance=TRUE)
+
+bag_ment_dis_rate
+
+#Predict/Test Random Forest Model
+yhat.bag2 = predict(bag_ment_dis_rate,newdata=ranked[-train,])
+plot(yhat.bag2, test, main="Random Forest: Test vs. Predicted Values", xlab="Predicted Values", ylab="Test Values")
+abline(0,1)
+
+#MSE
+mean((yhat.bag2-test)^2)
+
+#RMSE
+sqrt(mean((yhat.bag2-test)^2))
+
+
+#Determine Variable Importance
+importance(bag_ment_dis_rate)
+
+#Plot Variable Importance 
+varImpPlot(bag_ment_dis_rate, main = "Variable Importance Plots for Random Forest")
+
+```
+
+
+
+
