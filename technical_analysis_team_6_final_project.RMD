@@ -1084,11 +1084,13 @@ abline(a2021W)
 Assigned to: *Alex*
 
 ```{r}
+
+#The following codes are for Regression Trees and Random Forests
+
 #View(ranked)
 #str(ranked)
 
 #Remove NA values.
-
 ranked <- na.omit(ranked)
 
 #Creating Train and Test Set - ranked
@@ -1178,8 +1180,6 @@ sqrt(mean((yhat_prune1-test)^2))
 
 ```{r}
 #Random Forest - Num. of Mentally Unhealthy Days
-
-library(randomForest)
 
 #Generate Random Forest Model - Num. of Mentally Unhealthy Days (all vars.)
 set.seed(123)
