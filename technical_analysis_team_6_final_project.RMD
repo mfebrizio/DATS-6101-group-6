@@ -1085,7 +1085,7 @@ Assigned to: *Alex*
 
 ```{r}
 
-#The following codes are for Regression Trees and Random Forests
+#TRegression Tree - Number of Mentally Unhealthy Days
 
 #View(ranked)
 #str(ranked)
@@ -1120,7 +1120,7 @@ plotcp(model_ment_helth_day_tree, minline = TRUE, lty = 3, col = 1)
 ```
 
 ```{r}
-#Prune Tree
+#Prune Tree - Number of Mentally Unhealthy Days
 
 #Prune Tree Model
 prune_model_ment_helth_day_tree=prune.rpart(model_ment_helth_day_tree, cp=0.0072, best=5)
@@ -1210,6 +1210,7 @@ varImpPlot(bag_ment_hlth_days, main = "Variable Importance Plots for Random Fore
 
 
 ```{r}
+#Regression Trees - Mental Health Distress Rate
 
 #Creating Train and Test Set - ranked
 set.seed(123)
