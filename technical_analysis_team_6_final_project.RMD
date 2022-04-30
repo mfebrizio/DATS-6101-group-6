@@ -1111,7 +1111,7 @@ fancyRpartPlot(model_ment_helth_day_tree, main = "Regression Tree: Target Y - me
 #Print Complexity Penalty
 printcp(model_ment_helth_day_tree)
 
-#Plotting Complexity Parameters
+#Plotting Complexity Parameters 
 par(mar = c(5, 5, 10, 5)) 
 plotcp(model_ment_helth_day_tree, minline = TRUE, lty = 3, col = 1, main="Regression Tree: CP Plot")
 
