@@ -1203,7 +1203,7 @@ sqrt(mean((yhat.bag1-test)^2))
 importance(bag_ment_hlth_days)
 
 #Plot Variable Importance 
-varImpPlot(bag_ment_hlth_days, main = "Variable Importance Plots for Random Forest")
+varImpPlot(bag_ment_hlth_days, main = "Random Forest Vars. Importance: Target Y - mental_health_days (all vars.)")
 
 ```
 
@@ -1225,7 +1225,7 @@ summ_table1$variable.importance
 
 #Plot Regression Tree
 #rpart.plot(model_ment_dis_rate_tree)
-fancyRpartPlot(model_ment_dis_rate_tree, main = "Model 1 - Target y: mental_health_days (all vars.)")
+fancyRpartPlot(model_ment_dis_rate_tree, main = "Regression Tree: Target Y - mental_distress_rate (all vars.)")
 
 
 #Print Complexity Penalty
@@ -1260,7 +1260,7 @@ plotcp(prune_model_ment_dis_rate_tree,minline = TRUE, lty = 3, col = 1)
 rsq.rpart(prune_model_ment_dis_rate_tree)
 
 #Plot Pruned Tree
-fancyRpartPlot(prune_model_ment_dis_rate_tree)
+fancyRpartPlot(prune_model_ment_dis_rate_tree, main = "Pruned Regression Tree: Target Y - mental_distress_rate (all vars.)")
 
 ```
 
@@ -1324,7 +1324,7 @@ sqrt(mean((yhat.bag2-test)^2))
 importance(bag_ment_dis_rate)
 
 #Plot Variable Importance 
-varImpPlot(bag_ment_dis_rate, main = "Variable Importance Plots for Random Forest")
+varImpPlot(bag_ment_dis_rate, main = "Random Forest Vars. Importance: Target Y - mental_distress_rate (all vars.)")
 
 ```
 
