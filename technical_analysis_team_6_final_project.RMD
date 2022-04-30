@@ -365,7 +365,7 @@ In general, the mental health variables do not diverge too far from normality. A
 
 ```{r norm_qq, results='markup', warning=FALSE}
 
-# plot histograms
+# plot qq-norm plots
 ranked[keep_var] %>% 
   gather() %>% 
   ggplot(aes(sample=value), na.rm=T) + 
