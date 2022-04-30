@@ -1104,18 +1104,20 @@ model_ment_helth_day_tree <- rpart(mental_health_days ~ inequality + median_inc 
 summ_table1<-summary(model_ment_helth_day_tree)
 summ_table1$variable.importance
 
-#Print Complexity Penalty
-printcp(model_ment_helth_day_tree)
-
-rsq.rpart(model_ment_helth_day_tree)
-
-#Plotting Complexity Parameters
-plotcp(model_ment_helth_day_tree, minline = TRUE, lty = 3, col = 1)
-
-
 #Plot Regression Tree
 #rpart.plot(model_ment_helth_day_tree)
 fancyRpartPlot(model_ment_helth_day_tree, main = "Regression Tree: Target Y - mental_health_days (all vars.)")
+
+#Print Complexity Penalty
+printcp(model_ment_helth_day_tree)
+
+#Plotting Complexity Parameters
+par(mar = c(5, 5, 10, 5)) 
+plotcp(model_ment_helth_day_tree, minline = TRUE, lty = 3, col = 1, main="Regression Tree: CP Plot")
+
+#R-squared
+#rsq.rpart(model_ment_helth_day_tree)
+
 ```
 
 ```{r}
@@ -1130,16 +1132,19 @@ prune_model_ment_helth_day_tree=prune.rpart(model_ment_helth_day_tree, cp=0.0072
 #Summary of Pruned Tree
 summ_table2<-summary(prune_model_ment_helth_day_tree)
 summ_table2$variable.importance
+
+#Plot Pruned Tree
+fancyRpartPlot(prune_model_ment_helth_day_tree, main = "Pruned Regression Tree: Target Y - mental_health_days (all vars.)")
+
 #Print Complexity Penalty of Prune Tree
 printcp(prune_model_ment_helth_day_tree)
 
 #Plot Complexity Penalty of Prune Tree 
-plotcp(prune_model_ment_helth_day_tree,minline = TRUE, lty = 3, col = 1)
+par(mar = c(5, 5, 10, 5)) 
+plotcp(prune_model_ment_helth_day_tree,minline = TRUE, lty = 3, col = 1, main="Pruned Regression Tree: CP Plot")
 
-rsq.rpart(prune_model_ment_helth_day_tree)
-
-#Plot Pruned Tree
-fancyRpartPlot(prune_model_ment_helth_day_tree)
+#R-squared
+#rsq.rpart(prune_model_ment_helth_day_tree)
 
 ```
 
@@ -1226,14 +1231,16 @@ summ_table1$variable.importance
 #rpart.plot(model_ment_dis_rate_tree)
 fancyRpartPlot(model_ment_dis_rate_tree, main = "Regression Tree: Target Y - mental_distress_rate (all vars.)")
 
-
 #Print Complexity Penalty
 printcp(model_ment_dis_rate_tree)
 
-rsq.rpart(model_ment_dis_rate_tree)
 
 #Plotting Complexity Parameters
-plotcp(model_ment_dis_rate_tree, minline = TRUE, lty = 3, col = 1)
+par(mar = c(5, 5, 10, 5))
+plotcp(model_ment_dis_rate_tree, minline = TRUE, lty = 3, col = 1, main="Regression Tree: CP Plot")
+
+#R-squared
+#rsq.rpart(model_ment_dis_rate_tree)
 
 ```
 
@@ -1250,17 +1257,19 @@ prune_model_ment_dis_rate_tree=prune.rpart(model_ment_dis_rate_tree, cp=0.0095, 
 #Summary of Pruned Tree
 summ_table2<-summary(prune_model_ment_dis_rate_tree)
 summ_table2$variable.importance
-#Print Complexity Penalty of Prune Tree
-printcp(prune_model_ment_dis_rate_tree)
-
-#Plot Complexity Penalty of Prune Tree 
-plotcp(prune_model_ment_dis_rate_tree,minline = TRUE, lty = 3, col = 1)
-
-rsq.rpart(prune_model_ment_dis_rate_tree)
 
 #Plot Pruned Tree
 fancyRpartPlot(prune_model_ment_dis_rate_tree, main = "Pruned Regression Tree: Target Y - mental_distress_rate (all vars.)")
 
+#Print Complexity Penalty of Prune Tree
+printcp(prune_model_ment_dis_rate_tree)
+
+#Plot Complexity Penalty of Prune Tree 
+par(mar = c(5, 5, 10, 5))
+plotcp(prune_model_ment_dis_rate_tree,minline = TRUE, lty = 3, col = 1, main="Pruned Regression Tree: CP Plot")
+
+#R-squared
+#rsq.rpart(prune_model_ment_dis_rate_tree)
 ```
 
 
