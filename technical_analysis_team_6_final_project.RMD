@@ -39,6 +39,17 @@ loadPkg("patchwork")
 loadPkg("purrr")
 loadPkg("tidyr")
 
+#Libraries for Regression Trees and Random Forests
+library(rpart)
+library(rattle)
+library(pROC)
+library(tree)
+library(MASS)
+library(caTools)
+library(modelr)
+library(randomForest)
+
+
 ```
 
 # Instructions
