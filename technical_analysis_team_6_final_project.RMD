@@ -673,7 +673,7 @@ The equations for the fuller models with interaction terms are below, where V~c~
 * `regionSouth`: `mental_distress_rate` = 0.04 + 0.02 + (0.01 - 0.00350) * `inequality` + V~c~
 * `regionWest`: `mental_distress_rate` = 0.04 + 0.01 + (0.01 - 0.00300) * `inequality` + V~c~
 
-After including the set of control variables, the coefficients for `inequality` and the interaction terms are so small that the differences by region are barely noticeable. 
+After including the set of control variables, the coefficients for `inequality` and the interaction terms are so small that the differences by region are barely noticeable. Looking at these smaller coefficients, the Midwest has strongest association, while South has the weakest association. However, as a whole, while there is still a statistically significant relationship between `mental_distress_rate` and `inequality`, the strength of the relationship seems very minor.
 
 ```{r lm_table_d, results='asis'}
 
@@ -1023,14 +1023,13 @@ abline(a2021W)
 # From above, we can see that the west region of U.S. from 2016 to 2021, the inequality as independent variable is significant. But the R-squareds are separately 18.7%, 21.4%, 20%, 22.9%, 21.7%, and 9.3%, which means that the model is not good.
 ```
 
+## Comparing the Dependent Variables
 
-## Comparing the Dependent Variables -- Xuan
-The results come from mental health days and mental distress rate are same.
-All of the results of the models have statistical meaning. Our data analysis models, whether by year or by region, are just linear equations in one variable. To make our model more convincing, we added more independent variables.
-When we want to permit the coefficients to differ by region, we included an interaction term between `inequality` and `region`. Both Mark and Xuan found that while the Northeast has the highest estimated amount of mental health days and mental distress rate. The coefficient on 'inequality' of northeast region is near 0. Conversely, the midwest region has the lowest estimate of mental health days and mental distress rate, while exhibiting the strongest association.
-And after including the set of control variables, the coefficients for `inequality` and mental health days or mental distress rate differ by region. However, now it appears that the South has the weakest association between `inequality` and `mental_distress_rate` and the Midwest still has the strongest. All of them happens in the two dependet variables.
+The results from the linear models for both dependent variables – `mental_health_days` and `mental_distress_rate` – are similar. Every model has a statistically significant coefficient on `inequality` and for the majority of region coefficients. These general trends remained after adding more independent variables, to make our models more robust.
 
+When we want to permit the coefficients to differ by region, we included an interaction term between `inequality` and `region`. For both dependent variables, the Midwest region exhibits the strongest association between `inequality` and mental health and the South has the weakest association.
 
+However, when `mental_distress_rate` is the dependent variable, the strength of the association is generally weaker than for the models with `mental_health_days` as the dependent variable. This could be partly due to how the variables are measured – where `mental_health_days` will be a number greater than zero (and usually 1), while `mental_distress_rate` is always a percentage below 1. Additionally, these differences could also suggest that the relationship between mental health and inequality also depends on the measure of mental health used.
 
 
 # Feature Selection and Linear Model Evaluation
