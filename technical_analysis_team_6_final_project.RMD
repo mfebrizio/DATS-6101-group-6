@@ -1231,7 +1231,9 @@ xkabledply(anovaRes_mental_distress_rate, title = "ANOVA comparison between two 
 
 In addition to the linear models above, regression tree models were also experimented with to determine if other model types could improve predicting the prevalence of the mental health variables and variable importance for predicting each mental health variable.
 
-The regression tree model analyzes the relationship between number of poor mental health days versus all the economic inequality variables included in our dataset. Additionally, a region was included as an explanatory variable to observe the impact that a specific region has on the dependent variable. In other words, the model regresses mental_health_days against inequality, median_inc, hs_grad, college, unempl, child_poverty, single_parent, severe_housing, food_index, mh_providers, pop_provider_ratio, and region.
+The regression tree model analyzes the relationship between number of poor mental health days versus all the economic inequality variables included in our dataset. Additionally, a region was included as an explanatory variable to observe the impact that a specific region has on the dependent variable. In other words, the model regresses mental_health_days against inequality, median_inc, hs_grad, college, unempl, child_poverty, single_parent, severe_housing, food_index, mh_providers, pop_provider_ratio, region, and year.
+
+The initial regression tree model below has a max depth of 8 and a complexity penalty (cp), or complexity parameter, of 0.004. This is to allow for a large regression tree in order to produce a model that can best fit the data. However, it must be acknowledge that a larger tree will run the risk of over fitting the data making the model worse at predicing the target variable (i.e. the dependent variable). 
 
 ```{r}
 
@@ -1248,7 +1250,7 @@ set.seed(123)
 train = sample(1:nrow(ranked), nrow(ranked)/1.25)
 
 #First Model for Number of Mentally Unhealthy Days (ranked; all vars.)
-model_ment_helth_day_tree <- rpart(mental_health_days ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region, ranked, subset=train, control = list(maxdepth=8, cp=0.004))
+model_ment_helth_day_tree <- rpart(mental_health_days ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region + year, ranked, subset=train, control = list(maxdepth=8, cp=0.004))
 
 #Summary for Number of Mentally Unhealthy Days
 summ_table1<-summary(model_ment_helth_day_tree)
@@ -1337,7 +1339,7 @@ sqrt(mean((yhat_prune1-test)^2))
 
 #Generate Random Forest Model - Num. of Mentally Unhealthy Days (all vars.)
 set.seed(123)
-bag_ment_hlth_days=randomForest(mental_health_days ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region, data=ranked, subset=train, mtry=11, importance=TRUE)
+bag_ment_hlth_days=randomForest(mental_health_days ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region + year, data=ranked, subset=train, mtry=13, importance=TRUE)
 
 bag_ment_hlth_days
 
@@ -1371,7 +1373,7 @@ set.seed(123)
 train = sample(1:nrow(ranked), nrow(ranked)/1.25)
 
 #First Model for Mental Health Distress Rate (ranked; all vars.)
-model_ment_dis_rate_tree <- rpart(mental_distress_rate ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region, ranked, subset=train, control = list(maxdepth=8, cp=0.004))
+model_ment_dis_rate_tree <- rpart(mental_distress_rate ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region + year, ranked, subset=train, control = list(maxdepth=8, cp=0.004))
 
 #Summary for Number of Mentally Unhealthy Days
 summ_table1<-summary(model_ment_dis_rate_tree)
@@ -1462,7 +1464,7 @@ sqrt(mean((yhat_prune2-test)^2))
 
 #Generate Random Forest Model - Mental Health Distress Rate 
 set.seed(123)
-bag_ment_dis_rate=randomForest(mental_distress_rate ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region, data=ranked, subset=train, mtry=11, importance=TRUE)
+bag_ment_dis_rate=randomForest(mental_distress_rate ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region + year, data=ranked, subset=train, mtry=13, importance=TRUE)
 
 bag_ment_dis_rate
 
