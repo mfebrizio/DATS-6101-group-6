@@ -97,7 +97,7 @@ including other economic variables?
 
 The primary dataset used for this project is a combination of annual datasets called the County Health Rankings and Roadmaps National Data and was obtained the Robert Wood Johnson Foundation (RWJF). The County Health Rankings and Roadmaps National Data consists of county-level socioeconomic and public health data. The reports published from 2016 to 2021 provided the most complete data for all the variables of interest. The annual datasets before 2016 were incomplete or did not have variables that exactly corresponded to variables in 2016 to 2021. In general, the years in the datasets reflect the year the report was released by RWJF, but the underlying source data are from a one or two calendar years earlier.
 
-For the exploratory data analysis, the data was also separated into four regions defined by the U.S. Census Bureau (U.S. Census Bureau, 2010).   
+For the exploratory data analysis, the data was also separated into four regions defined by the [U.S. Census Bureau](https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf).   
 
 The variables in the data set are:
 
@@ -204,7 +204,7 @@ Our data are identified at the county-year level. Our data set contains `r nrow(
 
 ```{r summary_stats, results='markup'}
 
-#Summary Statistics of all Variables used in dframe dataset
+#Summary Statistics of all Variables in dataset
 # use ranked instead
 table1<-describeBy(ranked, type = 1) ## type of kurtosis and skewness to calculate
 table1 %>%
@@ -217,13 +217,13 @@ table1 %>%
 
 The summary statistics show that we have nearly complete data for our most relevant quantitative variables – namely, the measures of mental health, income inequality, and median household income. Several other important economic variables, such as `child_poverty`, `single_parent`, and `severe_housing`, have nearly complete data too.
 
-Our intended dependent variables, `mental_health_days` and `mental_distress_rate`, each have skewness and kurtosis below 1, which indicates those variables have relatively normal distributions. The mean and median for mentally unhealthy days in the past 30 days are similar at `r mean(ranked$mental_health_days, na.rm=T)` and `r median(ranked$mental_health_days, na.rm=T)`, with a standard deviation of `r sd(ranked$mental_health_days, na.rm=T)`. The mean `mental_distress_rate` is `r mean(ranked$mental_distress_rate, na.rm=T)` with a standard deviation of `r sd(ranked$mental_distress_rate, na.rm=T)`. The median is slightly below the mean.
+Our intended dependent variables, `mental_health_days` and `mental_distress_rate`, each have skewness and kurtosis with an absolute value below 1, which indicates those variables have relatively normal distributions. The mean and median for mentally unhealthy days in the past 30 days are similar at `r mean(ranked$mental_health_days, na.rm=T)` and `r median(ranked$mental_health_days, na.rm=T)`, with a standard deviation of `r sd(ranked$mental_health_days, na.rm=T)`. The mean `mental_distress_rate` is `r mean(ranked$mental_distress_rate, na.rm=T)` with a standard deviation of `r sd(ranked$mental_distress_rate, na.rm=T)`. The median is slightly below the mean.
 
 The economic variables, particularly `inequality`, have greater skewness and kurtosis, suggesting their distributions are less symmetrical and have larger tails. `inequality` has a mean of `r mean(ranked$inequality, na.rm=T)`, a median of `r median(ranked$inequality, na.rm=T)`, and a standard deviation of `r sd(ranked$inequality, na.rm=T)`.
 
 ## Scatterplots
 
-We also plotted the mental health measures vs. inequality by region. The results are striking. The Midwest and the South both exhibit a moderate correlation between the variables. The West has a weaker, but still positive, correlation. And in the Northeast, mental health and inequality do not seem to be correlated.
+We also plotted the mental health measures vs. inequality by region. The results are striking. The Midwest and the South both exhibit a moderate correlation between the variables. The West has a weaker, but still positive, correlation. And in the Northeast, mental health and inequality do not seem to be correlated much at all.
 
 ```{r scatter_c, results='markup'}
 
@@ -292,7 +292,7 @@ p_regions_2
 
 ```
 
-At this point in the EDA, it became clear that geographic differences in the relationship between mental health and inequality were important. These results justified our decision to focus on the differences by region. Our next step in exploration was to use boxplots to get a better sense of how the data varied across regional categories.
+At this point in the EDA, it became clear that geographic differences in the relationship between mental health and inequality were important. These results justified our decision to focus on the differences by region.
 
 ## Boxplots
 
@@ -404,7 +404,7 @@ We assessed two sets of models with different dependent variables. The first set
 
 We arranged several different combinations of variables to evaluate what different might make a suitable linear model with `mental_health_days` as the dependent variable. First, we regressed `mental_health_days` on the independent variable of interest – `inequality` – and a factor variable indicating the US Census Bureau region. Next, we included the factor variable `year` to control for unobserved differences over time. Third, we integrated a set of economic variables that also might relate to mental health outcomes. Finally, we added demographic variables to the model.
 
-```{r, results='asis'}
+```{r lm_days_a, results='asis'}
 
 # v1: base model by region
 lm_days_1 <- lm(mental_health_days ~ inequality + region, data = ranked)
@@ -434,20 +434,20 @@ summ(lm_days_4, vifs = T)
 
 For the first (base) model, the equations for each region are as follows:
 
-* `regionMidwest`:  `mental_health_days` = 2.676 + 0.247 * `inequality`
-* `regionNortheast`:  `mental_health_days` = 2.676 + 0.212 + 0.247 * `inequality`
-* `regionSouth`:  `mental_health_days` = 2.676 + 0.472 + 0.247 * `inequality`
-* `regionWest`:  `mental_health_days` = 2.676 + 0.121 + 0.247 * `inequality`
+* `regionMidwest`:  `mental_health_days` = `r lm_days_1$coefficients[[1]]` + `r lm_days_1$coefficients[[2]]` * `inequality`
+* `regionNortheast`:  `mental_health_days` = `r lm_days_1$coefficients[[1]]` + `r lm_days_1$coefficients[[3]]` + `r lm_days_1$coefficients[[2]]` * `inequality`
+* `regionSouth`:  `mental_health_days` = `r lm_days_1$coefficients[[1]]` + `r lm_days_1$coefficients[[4]]` + `r lm_days_1$coefficients[[2]]` * `inequality`
+* `regionWest`:  `mental_health_days` = `r lm_days_1$coefficients[[1]]` + `r lm_days_1$coefficients[[5]]` + `r lm_days_1$coefficients[[2]]` * `inequality`
 
-Similar to the initial results from our EDA, the Midwest region (which is included in the intercept) has the lowest estimate for mental_health_days and the South has the highest. All the coefficients are statistically significant. Our measure for income inequality is statistically significant at the 0.001 level with a coefficient of 0.247, indicating a positive association with poor mental health days.
+Similar to the initial results from our EDA, the Midwest region (which is included in the intercept) has the lowest estimate for mental_health_days and the South has the highest. All the coefficients are statistically significant. Our measure for income inequality is statistically significant at the 0.001 level with a coefficient of `r lm_days_1$coefficients[[2]]`, indicating a positive association with poor mental health days.
 
-After including the year factor variables, the economic variables, and the demographic variables, the coefficients on all variables remained statistically significant. However, the coefficient on `inequality` declined to 0.072 in the fourth model (which included the most variables). This suggests that the base model exhibited omitted variable bias that the fuller model at least partially addressed. The South still had the largest coefficient among the `region` factor variables.
+After including the year factor variables, the economic variables, and the demographic variables, the coefficients on all variables remained statistically significant. However, the coefficient on `inequality` declined to `r lm_days_4$coefficients[[2]]` in the fourth model (which included the most variables). This suggests that the base model exhibited omitted variable bias that the fuller model at least partially addressed. The South still had the largest coefficient among the `region` factor variables.
 
 In general, The other economic variables demonstrated relationships with mental health that were expected. For instance, higher rates for`unempl`, `child_poverty`, `single_parent`, and `severe_housing` were all associated with worse mental health. A better food environment, higher median household incomes, and having a larger percentage of the population with some post-secondary education were associated with better mental health. Interestingly, a higher high-school graduation rate was positively associated with poor mental health.
 
 After adding so many different variables, we want to check for multicollinearity. Thus, we also evaluated the VIF for each of the above models.
 
-The majority of VIF results are below 5, which is acceptable. However, several variables have extremely high VIFs – specifically, the demographic variables for ethnic groups. The following model removed `pct_white`, which improved the VIFs significantly. It also removed `child_poverty`, which had a relatively high VIF of `r vif(lm_days_4)['child_poverty'][[1]]`.
+The majority of VIF results are below 5, which is acceptable. However, several variables have extremely high VIFs – specifically, the demographic variables for ethnic groups. The following model removed `pct_white`, which improved the VIFs significantly. It also removed `child_poverty`, which had a relatively high VIF of `r vif(lm_days_4)['child_poverty'][[1]]`. After removing the collinear variables, the VIFs of the model were all below 5.
 
 ```{r lm_days_b, results='asis'}
 
@@ -461,7 +461,7 @@ summ(lm_days_5, vifs = T)
 
 ```
 
-To permit the coefficients to differ by region, we included an interaction term between `inequality` and `region`.
+To permit the coefficients for `inequality` to differ by region, we included an interaction term between `inequality` and `region`.
 
 ```{r lm_days_c, results='asis'}
 
@@ -473,10 +473,10 @@ summ(lm_days_6)
 
 The equations for each region with interaction terms are as follows:
 
-* `regionMidwest`:  `mental_health_days` = 2.3639 + 0.3214 * `inequality`
-* `regionNortheast`:  `mental_health_days` = 2.3639 + 1.6126 + (0.3214 - 0.3143) * `inequality`
-* `regionSouth`:  `mental_health_days` = 2.3639 + 0.8029 + (0.3214 - 0.0786) * `inequality`
-* `regionWest`:  `mental_health_days` = 2.3639 + 0.4104 + (0.3214 - 0.0694) * `inequality`
+* `regionMidwest`:  `mental_health_days` = `r lm_days_6$coefficients[[1]]` + `r lm_days_6$coefficients[[2]]` * `inequality`
+* `regionNortheast`:  `mental_health_days` = `r lm_days_6$coefficients[[1]]` + `r lm_days_6$coefficients[[3]]` + (`r lm_days_6$coefficients[[2]]` + `r lm_days_6$coefficients[[6]]`) * `inequality`
+* `regionSouth`:  `mental_health_days` = `r lm_days_6$coefficients[[1]]` + `r lm_days_6$coefficients[[4]]` + (`r lm_days_6$coefficients[[2]]` + `r lm_days_6$coefficients[[7]]`) * `inequality`
+* `regionWest`:  `mental_health_days` = `r lm_days_6$coefficients[[1]]` + `r lm_days_6$coefficients[[5]]` + (`r lm_days_6$coefficients[[2]]` + `r lm_days_6$coefficients[[8]]`) * `inequality`
 
 These results suggest that the strength of the relationship between `mental_health_days` and `inequality` differs by region. In fact, while the Northeast has the highest estimated amount of poor mental health (see the intercept), the coefficient on `inequality` is near zero. Conversely, the Midwest has the lowest estimate of poor mental health, while exhibiting the strongest association. All the independent variables are statistically significant.
 
