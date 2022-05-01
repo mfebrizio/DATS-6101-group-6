@@ -1355,13 +1355,6 @@ test1=ranked[-train,"mental_health_days"]
 plot(yhat1,test1, main="Regression Tree: Test vs. Predicted Values", xlab="Predicted Values", ylab="Test Values")
 abline(0,1)
 
-#MSE
-#mean((yhat1-test)^2)
-
-#RMSE
-print("RMSE:")
-sqrt(mean((yhat1-test1)^2))
-
 
 #Prediction/Testing - Pruned Model
 yhat_prune1=predict(prune_model_ment_helth_day_tree,newdata=ranked[-train,])
@@ -1370,15 +1363,28 @@ yhat_prune1=predict(prune_model_ment_helth_day_tree,newdata=ranked[-train,])
 plot(yhat_prune1,test1, main="Pruned Regression Tree: Test vs. Predicted Values", xlab="Predicted Values", ylab="Test Values")
 abline(0,1)
 
+```
+
+Original Reg. Tree RMSE:
+```{r, results='markup'}
+#MSE
+#mean((yhat1-test)^2)
+
+#RMSE
+sqrt(mean((yhat1-test1)^2))
+
+```
+
+Pruned Tree RMSE:
+```{r, results='markup'}
 #MSE
 #mean((yhat_prune1-test)^2)
 
 #RMSE
-print("RMSE:")
 sqrt(mean((yhat_prune1-test1)^2))
-
-
 ```
+
+
 
 ### Regression Tree - mental_distress_rate
 
@@ -1497,14 +1503,6 @@ test2=ranked[-train,"mental_distress_rate"]
 plot(yhat2,test2, main="Regression Tree: Test vs. Predicted Values", xlab="Predicted Values", ylab="Test Values")
 abline(0,1)
 
-#MSE
-#mean((yhat2-test)^2)
-
-#RMSE
-print("RMSE:")
-sqrt(mean((yhat2-test2)^2))
-
-
 #Prediction/Testing - Pruned Model
 yhat_prune2=predict(prune_model_ment_dis_rate_tree,newdata=ranked[-train,])
 
@@ -1512,16 +1510,26 @@ yhat_prune2=predict(prune_model_ment_dis_rate_tree,newdata=ranked[-train,])
 plot(yhat_prune2,test2, main="Pruned Regression Tree: Test vs. Predicted Values", xlab="Predicted Values", ylab="Test Values")
 abline(0,1)
 
+
+```
+
+Original Reg. Tree RMSE:
+```{r, results='markup'}
+#MSE
+#mean((yhat2-test)^2)
+
+#RMSE
+sqrt(mean((yhat2-test2)^2))
+```
+
+Pruned Tree RMSE:
+```{r, results='markup'}
 #MSE
 #mean((yhat_prune2-test)^2)
 
 #RMSE
-print("RMSE:")
 sqrt(mean((yhat_prune2-test2)^2))
-
-
 ```
-
 
 
 ## Random Forest Models
@@ -1546,11 +1554,15 @@ yhat.bag1 = predict(bag_ment_hlth_days,newdata=ranked[-train,])
 plot(yhat.bag1, test1, main="Random Forest: Test vs. Predicted Values", xlab="Predicted Values", ylab="Test Values")
 abline(0,1)
 
+
+```
+
+RMSE:
+```{r, results='markup'}
 #MSE
 #mean((yhat.bag1-test)^2)
 
 #RMSE
-print("RMSE:")
 sqrt(mean((yhat.bag1-test1)^2))
 
 
@@ -1583,13 +1595,16 @@ yhat.bag2 = predict(bag_ment_dis_rate,newdata=ranked[-train,])
 plot(yhat.bag2, test2, main="Random Forest: Test vs. Predicted Values", xlab="Predicted Values", ylab="Test Values")
 abline(0,1)
 
+
+```
+
+RMSE:
+```{r, results='markup'}
 #MSE
-#mean((yhat.bag2-test)^2)
+#mean((yhat.bag1-test)^2)
 
 #RMSE
-print("RMSE:")
 sqrt(mean((yhat.bag2-test2)^2))
-
 
 #Determine Variable Importance
 #importance(bag_ment_dis_rate)
@@ -1597,7 +1612,9 @@ sqrt(mean((yhat.bag2-test2)^2))
 #Plot Variable Importance 
 varImpPlot(bag_ment_dis_rate, main = "Random Forest Vars. Importance: Target Y - mental_distress_rate (all vars.)")
 
+
 ```
+
 
 Overall, the random forest models were better predicting models relative to the regression tree models as indicated by their lower RMSE values for each respective target mental health variable.
 
