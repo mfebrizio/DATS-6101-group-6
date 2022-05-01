@@ -40,6 +40,7 @@ loadPkg("gridExtra")
 loadPkg("patchwork")
 loadPkg("purrr")
 loadPkg("tidyr")
+loadPkg("jtools")
 
 #Libraries for Regression Trees and Random Forests
 library(rpart)
@@ -198,9 +199,6 @@ Our data are identified at the county-year level. Our data set contains `r nrow(
 
 
 # Exploratory Data Analysis
-Assigned to: *Mark*
-
-Summarize from Midterm Project.
 
 ## Descriptive Statistics
 
