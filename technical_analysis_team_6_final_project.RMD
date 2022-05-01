@@ -1686,6 +1686,7 @@ plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = 
 abline(a2019W)
 ### The regression equation is: mental_distress_rate = 0.010694 * inequality + 0.070536
 ### The model can explain 22.9% variance.
+##
 
 
 
