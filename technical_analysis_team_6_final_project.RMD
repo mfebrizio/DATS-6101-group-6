@@ -33,24 +33,11 @@ library(corrplot)
 library(psych)
 library(broom)
 library(kableExtra)
-library(lattice)
-library(ggpubr)
 loadPkg("ggplot2")
 loadPkg("gridExtra")
 loadPkg("patchwork")
 loadPkg("purrr")
 loadPkg("tidyr")
-
-#Libraries for Regression Trees and Random Forests
-library(rpart)
-library(rattle)
-library(pROC)
-library(tree)
-library(MASS)
-library(caTools)
-library(modelr)
-library(randomForest)
-
 
 ```
 
@@ -365,7 +352,7 @@ In general, the mental health variables do not diverge too far from normality. A
 
 ```{r norm_qq, results='markup', warning=FALSE}
 
-# plot qq-norm plots
+# plot histograms
 ranked[keep_var] %>% 
   gather() %>% 
   ggplot(aes(sample=value), na.rm=T) + 
@@ -527,9 +514,7 @@ After including the set of control variables, the coefficients for `inequality` 
 
 
 ## Dependent variable: `mental_distress_rate`
-
-Linear regression models for frequent mental distress rate as the dependent variable -- Xuan
-
+Assigned to: *Xuan*
 ```{r}
 library(readxl)
 data = data.frame(read.csv("data/processed/analytic_data_2016_2021_with_regions.csv"))
@@ -538,234 +523,446 @@ a1=lm(mental_distress_rate~inequality,data = newdata)
 summary(a1)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a1)
- ### mental_distress_rate = 0.068436 + 0.012920 * inequality
+### The regression equation is: mental_distress_rate = 0.012920 * inequality + 0.068436
 ### The model a1 can explain 16.4% variance.
+### The following is the figure of model a1. It can be seen that the fitting effect is not very good, and the points and lines are not collinear. This is because the R-Squared is relatively small and the percentage of variance explained is small, so the model fitting effect is not good, so this graph is actually meaningless. If R-Squared can reach about 90%, then the points and lines of this graph should basically coincide.
+
+```
+
+```{r}
+### Because the fitting effect of model a1 was not very good (low variance), I made a model a2. In model a2, I add other independent variables, including the median household income (median_inc), the percentage of households with severe housing problems (severe_housing), the unemployment rate (unempl), and the child poverty rate (child_poverty).
 
 a2=lm(mental_distress_rate~inequality+median_inc+severe_housing+unempl+child_poverty,data = newdata)
 summary(a2)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2)
 
-### All variables are significant, but the model a2 can only explain 35.5% of the variance.
+### It can be seen from the statistical results of model a2 that all independent variables in the model 2 have significant predictive effects, that is, these independent variables (factors) will significantly affect the frequent mental distress rate.
+### However, the R-squared of model a2 is still very low, only 35.5%. (In the process of model analysis, in general, the R-squared must reach 0.8 or more so that we can determine that this model is better).
+```
 
-## 2016
+```{r}
+#### Linear regression model of inequality and mental_distress_rate in the U.S. from 2016 to 2021
+## Linear regression model of inequality and mental_distress_rate in the United States in 2016
 D2016<-subset(newdata,year == "2016")
 a2016=lm(mental_distress_rate~inequality,data = D2016)
 summary(a2016)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2016)
+### The regression equation is: mental_distress_rate = 0.014374 * inequality + 0.049295
+### The model can explain 25.3% variance.
 
-## 2017
+
+## Linear regression model of inequality and mental_distress_rate in the United States in 2017
 D2017<-subset(newdata,year == "2017")
 a2017=lm(mental_distress_rate~inequality,data = D2017)
 summary(a2017)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2017)
+### The regression equation is: mental_distress_rate = 0.013137 * inequality + 0.058445
+### The model can explain 27.4% variance.
 
-### 2018
+
+### Linear regression model of inequality and mental_distress_rate in the United States in 2018
 D2018<-subset(newdata,year == "2018")
 a2018=lm(mental_distress_rate~inequality,data = D2018)
 summary(a2018)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2018)
+### The regression equation is: mental_distress_rate = 0.012085 * inequality + 0.068410
+### The model can explain 23.8% variance.
 
-### 2019
+
+### Linear regression model of inequality and mental_distress_rate in the United States in 2019
 D2019<-subset(newdata,year == "2019")
 a2019=lm(mental_distress_rate~inequality,data = D2019)
 summary(a2019)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2019)
+### The regression equation is: mental_distress_rate = 0.012539 * inequality + 0.066072
+### The model can explain 24.5% variance.
 
-### 2020
+
+### Linear regression model of inequality and mental_distress_rate in the United States in 2020
 D2020<-subset(newdata,year == "2020")
 a2020=lm(mental_distress_rate~inequality,data = D2020)
 summary(a2020)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2020)
+### The regression equation is: mental_distress_rate = 0.01334 * inequality + 0.07046
+### The model can explain 26.3% variance.
 
-### 2021
+
+### Linear regression model of inequality and mental_distress_rate in the United States in 2021
 D2021<-subset(newdata,year == "2021")
 a2021=lm(mental_distress_rate~inequality,data = D2021)
 summary(a2021)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2021)
+### The regression equation is: mental_distress_rate = 0.012272 * inequality + 0.097132
+### The model can explain 15.3% variance.
 
-### 2016 Midwest
+# From above, we can see that in U.S. from 2016 to 2021, the inequality as independent variable is significant.But the R-squareds are separately 25.3%, 27.4%, 23.8%, 24.5%, 26.3%, and 15.3%, which means that the model is not good.
+```
+
+```{r}
+#### Linear regression model of inequality and mental_distress_rate in the Midwest region of U.S. from 2016 to 2021
+### Linear regression model of inequality and mental_distress_rate in the Midwest region of U.S. in 2016
 D2016M<-subset(D2016,region=="Midwest")
 a2016M=lm(mental_distress_rate~inequality,data = D2016M)
 summary(a2016M)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2016M)
+### The regression equation is: mental_distress_rate = 0.01074 * inequality + 0.05856
+### The model can explain 11.2% variance.
 
-### 2017 Midwest
+
+
+### Linear regression model of inequality and mental_distress_rate in the Midwest region of U.S. in 2017
 D2017M<-subset(D2017,region=="Midwest")
 a2017M=lm(mental_distress_rate~inequality,data = D2017M)
 summary(a2017M)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2017M)
+### The regression equation is: mental_distress_rate = 0.010752 * inequality + 0.063096
+### The model can explain 13.7% variance.
 
-### 2018 Midwest
+
+
+### Linear regression model of inequality and mental_distress_rate in the Midwest region of U.S. in 2018
 D2018M<-subset(D2018,region=="Midwest")
 a2018M=lm(mental_distress_rate~inequality,data = D2018M)
 summary(a2018M)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2018M)
+### The regression equation is: mental_distress_rate = 0.001156 * inequality + 0.06577
+### The model can explain 14.9% variance.
 
-### 2019 Midwest
+
+
+### Linear regression model of inequality and mental_distress_rate in the Midwest region of U.S. in 2019
 D2019M<-subset(D2019,region=="Midwest")
 a2019M=lm(mental_distress_rate~inequality,data = D2019M)
 summary(a2019M)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2019M)
+### The regression equation is: mental_distress_rate = 0.012505 * inequality + 0.061629
+### The model can explain 16.4% variance.
 
-### 2020 Midwest
+
+
+### Linear regression model of inequality and mental_distress_rate in the Midwest region of U.S. in 2020
 D2020M<-subset(D2020,region=="Midwest")
 a2020M=lm(mental_distress_rate~inequality,data = D2020M)
 summary(a2020M)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2020M)
+### The regression equation is: mental_distress_rate = 0.012961 * inequality + 0.067486
+### The model can explain 16.0% variance.
 
-### 2021 Midwest
+
+
+### Linear regression model of inequality and mental_distress_rate in the Midwest region of U.S. in 2021
 D2021M<-subset(D2021,region=="Midwest")
 a2021M=lm(mental_distress_rate~inequality,data = D2021M)
 summary(a2021M)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2021M)
+### The regression equation is: mental_distress_rate = 0.01050 * inequality + 0.09908
+### The model can explain 6.88% variance.
 
-### 2016 Northeast
+
+# From above, we can see that the midwest region of U.S. from 2016 to 2021, the inequality as independent variable is significant.But the R-squareds are separately 11.2%, 13.7%, 14.9%, 16.4%, 16.0%, and 6.88%, which means that the model is not good.
+```
+
+```{r}
+#### Linear regression model of inequality and mental_distress_rate in the Northeast region of U.S. from 2016 to 2021
+### Linear regression model of inequality and mental_distress_rate in the Northeast region of U.S. in 2016
 D2016N<-subset(D2016,region=="Northeast")
 a2016N=lm(mental_distress_rate~inequality,data = D2016N)
 summary(a2016N)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2016N)
+### The regression equation is: mental_distress_rate = 0.00329 * inequality + 0.09435
+### The model can explain 4.18% variance.
 
-### 2017 Northeast
+
+
+### Linear regression model of inequality and mental_distress_rate in the Northeast region of U.S. in 2017
 D2017N<-subset(D2017,region=="Northeast")
 a2017N=lm(mental_distress_rate~inequality,data = D2017N)
 summary(a2017N)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2016N)
+### The regression equation is: mental_distress_rate = 0.003944 * inequality + 0.093585
+### The model can explain 10% variance.
 
-### 2018 Northeast
+
+
+### Linear regression model of inequality and mental_distress_rate in the Northeast region of U.S. in 2018
 D2018N<-subset(D2018,region=="Northeast")
 a2018N=lm(mental_distress_rate~inequality,data = D2018N)
 summary(a2018N)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2016N)
+### The regression equation is: mental_distress_rate = 0.00146 * inequality + 0.11001
+### The model can explain 1.16% variance.
 
-### 2019 Northeast
+
+
+### Linear regression model of inequality and mental_distress_rate in the Northeast region of U.S. in 2019
 D2019N<-subset(D2019,region=="Northeast")
 a2019N=lm(mental_distress_rate~inequality,data = D2019N)
 summary(a2019N)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2016N)
+### The regression equation is: mental_distress_rate = 0.001385 * inequality + 0.110462
+### The model can explain 1.09% variance.
 
-### 2020 Northeast
+
+
+### Linear regression model of inequality and mental_distress_rate in the Northeast region of U.S. in 2020
 D2020N<-subset(D2020,region=="Northeast")
 a2020N=lm(mental_distress_rate~inequality,data = D2020N)
 summary(a2020N)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2020N)
+### The regression equation is: mental_distress_rate = 0.000358 * inequality + 0.122363
+### The model can explain 0.0635% variance.
 
-### 2021 Northeast
+
+
+### Linear regression model of inequality and mental_distress_rate in the Northeast region of U.S. in 2021
 D2021N<-subset(D2021,region=="Northeast")
 a2021N=lm(mental_distress_rate~inequality,data = D2021N)
 summary(a2021N)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2021N)
+### The regression equation is: mental_distress_rate = -0.00523 * inequality + 0.16714
+### The model can explain 5.04% variance.
 
-### 2016 South
+
+# From above, we can see that the northeast region of U.S. from 2016 to 2021, the inequality as independent variable is significant in 2016, 2017 and 2021, is not significant in 2018, 2019 and 2020. And the R-squareds are separately 4.18%, 10%, 1.16%, 1.09%, 0.0635%, and 5.04%, which means that the model is not good. So the models of northeast region in 2018, 2019 and 2020 are meaningless.
+```
+
+```{r}
+#### Linear regression model of inequality, median_inc, severe_housing, unempl, child_poverty and mental_distress_rate in the Northeast region of U.S. from 2016 to 2021
+### Linear regression model of inequality, median_inc, severe_housing, unempl, child_poverty and mental_distress_rate in the Northeast region of U.S. in 2016
+D2016N<-subset(D2016,region=="Northeast")
+a2016N=lm(mental_distress_rate~inequality+median_inc+severe_housing+unempl+child_poverty,data = D2016N)
+summary(a2016N)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2016N)
+### The model can explain 64% variance.
+
+
+
+### Linear regression model of inequality, median_inc, severe_housing, unempl, child_poverty and mental_distress_rate in the Northeast region of U.S. in 2017
+D2017N<-subset(D2017,region=="Northeast")
+a2017N=lm(mental_distress_rate~inequality+median_inc+severe_housing+unempl+child_poverty,data = D2017N)
+summary(a2017N)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2016N)
+### The model can explain 72.2% variance.
+
+
+
+### Linear regression model of inequality, median_inc, severe_housing, unempl, child_poverty and mental_distress_rate in the Northeast region of U.S. in 2018
+D2018N<-subset(D2018,region=="Northeast")
+a2018N=lm(mental_distress_rate~inequality+median_inc+severe_housing+unempl+child_poverty,data = D2018N)
+summary(a2018N)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2016N)
+### The model can explain 71.3% variance.
+
+
+
+### Linear regression model of inequality, median_inc, severe_housing, unempl, child_poverty and mental_distress_rate in the Northeast region of U.S. in 2019
+D2019N<-subset(D2019,region=="Northeast")
+a2019N=lm(mental_distress_rate~inequality+median_inc+severe_housing+unempl+child_poverty,data = D2019N)
+summary(a2019N)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2016N)
+### The regression equation is: mental_distress_rate = 0.001385 * inequality + 0.110462
+### The model can explain 69.5% variance.
+
+
+
+### Linear regression model of inequality, median_inc, severe_housing, unempl, child_poverty and mental_distress_rate in the Northeast region of U.S. in 2020
+D2020N<-subset(D2020,region=="Northeast")
+a2020N=lm(mental_distress_rate~inequality+median_inc+severe_housing+unempl+child_poverty,data = D2020N)
+summary(a2020N)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2020N)
+### The regression equation is: mental_distress_rate = 0.000358 * inequality + 0.122363
+### The model can explain 67.9% variance.
+
+
+
+### Linear regression model of inequality, median_inc, severe_housing, unempl, child_poverty and mental_distress_rate in the Northeast region of U.S. in 2021
+D2021N<-subset(D2021,region=="Northeast")
+a2021N=lm(mental_distress_rate~inequality+median_inc+severe_housing+unempl+child_poverty,data = D2021N)
+summary(a2021N)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2021N)
+### The model can explain 74.2% variance.
+
+
+# From above, we can see that the northeast region of U.S. from 2016 to 2021, after add more independent variables, the R-Squared also increase.
+```
+
+```{r}
+#### Linear regression model of inequality and mental_distress_rate in the South region of U.S. from 2016 to 2021
+### Linear regression model of inequality and mental_distress_rate in the South region of U.S. in 2016
 D2016S<-subset(D2016,region=="South")
 a2016S=lm(mental_distress_rate~inequality,data = D2016S)
 summary(a2016S)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2016S)
+### The regression equation is: mental_distress_rate = 0.01218 * inequality + 0.06553
+### The model can explain 19.5% variance.
 
-### 2017 South
+
+
+### Linear regression model of inequality and mental_distress_rate in the South region of U.S. in 2017
 D2017S<-subset(D2017,region=="South")
 a2017S=lm(mental_distress_rate~inequality,data = D2017S)
 summary(a2017S)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2017S)
+### The regression equation is: mental_distress_rate = 0.010856 * inequality + 0.074482
+### The model can explain 21.4% variance.
 
-### 2018 South
+
+
+### Linear regression model of inequality and mental_distress_rate in the South region of U.S. in 2018
 D2018S<-subset(D2018,region=="South")
 a2018S=lm(mental_distress_rate~inequality,data = D2018S)
 summary(a2018S)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2018S)
+### The regression equation is: mental_distress_rate = 0.009553 * inequality + 0.085625
+### The model can explain 17.4% variance.
 
-### 2019 South
+
+
+### Linear regression model of inequality and mental_distress_rate in the South region of U.S. in 2019
 D2019S<-subset(D2019,region=="South")
 a2019S=lm(mental_distress_rate~inequality,data = D2019S)
 summary(a2019S)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2019S)
+### The regression equation is: mental_distress_rate = 0.009599 * inequality + 0.085632
+### The model can explain 16.9% variance.
 
-### 2020 South
+
+
+### Linear regression model of inequality and mental_distress_rate in the South region of U.S. in 2020
 D2020S<-subset(D2020,region=="South")
 a2020S=lm(mental_distress_rate~inequality,data = D2020S)
 summary(a2020S)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2020S)
+### The regression equation is: mental_distress_rate = 0.010878 * inequality + 0.088040
+### The model can explain 21.2% variance.
 
-### 2021 South
+
+
+### Linear regression model of inequality and mental_distress_rate in the South region of U.S. in 2021
 D2021S<-subset(D2021,region=="South")
 a2021S=lm(mental_distress_rate~inequality,data = D2021S)
 summary(a2021S)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2021S)
+### The regression equation is: mental_distress_rate = 0.010021 * inequality + 0.115671
+### The model can explain 13% variance.
 
-### 2016 West
+
+# From above, we can see that the south region of U.S. from 2016 to 2021, the inequality as independent variable is significant. But the R-squareds are separately 19.5%, 21.4%, 17.4%, 16.9%, 21.2%, and 13%, which means that the model is not good.
+```
+
+```{r}
+#### Linear regression model of inequality and mental_distress_rate in the West region of U.S. from 2016 to 2021
+### Linear regression model of inequality and mental_distress_rate in the West region of U.S. in 2016
 D2016W<-subset(D2016,region=="West")
 a2016W=lm(mental_distress_rate~inequality,data = D2016W)
 summary(a2016W)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2016W)
+### The regression equation is: mental_distress_rate = 0.01030 * inequality + 0.06330
+### The model can explain 18.7% variance.
 
-### 2017 West
+
+
+### Linear regression model of inequality and mental_distress_rate in the West region of U.S. in 2017
 D2017W<-subset(D2017,region=="West")
 a2017W=lm(mental_distress_rate~inequality,data = D2017W)
 summary(a2017W)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2017W)
+### The regression equation is: mental_distress_rate = 0.01055 * inequality + 0.06715
+### The model can explain 21.4% variance.
 
-### 2018 West
+
+
+### Linear regression model of inequality and mental_distress_rate in the West region of U.S. in 2018
 D2018W<-subset(D2018,region=="West")
 a2018W=lm(mental_distress_rate~inequality,data = D2018W)
 summary(a2018W)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2018W)
+### The regression equation is: mental_distress_rate = 0.01025 * inequality + 0.07286
+### The model can explain 20% variance.
 
-### 2019 West
+
+
+### Linear regression model of inequality and mental_distress_rate in the West region of U.S. in 2019
 D2019W<-subset(D2019,region=="West")
 a2019W=lm(mental_distress_rate~inequality,data = D2019W)
 summary(a2019W)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2019W)
+### The regression equation is: mental_distress_rate = 0.010694 * inequality + 0.070536
+### The model can explain 22.9% variance.
 
-### 2020 West
+
+
+### Linear regression model of inequality and mental_distress_rate in the West region of U.S. in 2020
 D2020W<-subset(D2020,region=="West")
 a2020W=lm(mental_distress_rate~inequality,data = D2020W)
 summary(a2020W)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2020W)
+### The regression equation is: mental_distress_rate = 0.010574 * inequality + 0.078467
+### The model can explain 21.7% variance.
 
-### 2021 West
+
+
+### Linear regression model of inequality and mental_distress_rate in the West region of U.S. in 2021
 D2021W<-subset(D2021,region=="West")
 a2021W=lm(mental_distress_rate~inequality,data = D2021W)
 summary(a2021W)
 plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
 abline(a2021W)
+### The regression equation is: mental_distress_rate = 0.00829 * inequality + 0.10403
+### The model can explain 9.3% variance.
 
+
+# From above, we can see that the west region of U.S. from 2016 to 2021, the inequality as independent variable is significant. But the R-squareds are separately 18.7%, 21.4%, 20%, 22.9%, 21.7%, and 9.3%, which means that the model is not good.
 ```
 
 
-## Comparing the Dependent Variables
-- Mark to do
+## Comparing the Dependent Variables -- Xuan
+All of the results of the models have statistical meaning. Our data analysis models, whether by year or by region, are just linear equations in one variable. There is only one independent variable and one dependent variable in this model.So more independent variables may provide stronger persuasion.
+In the four regions, the northeast region is the most special region. In Mark's models, the Northeast has the highest estimated amount of poor mental health (see the intercept), the coefficient on `inequality` is near zero. In Xuan's models, the inequality as independent variable is significant in 2016, 2017 and 2021, is not significant in 2018, 2019 and 2020. And the R-squareds are separately 4.18%, 10%, 1.16%, 1.09%, 0.0635%, and 5.04%, which means that the model is not good. So the models of northeast region in 2018, 2019 and 2020 are meaningless. We all know that the economy of the Northeast region is the most developed, so I think more variables can be used to analyze the Northeast region.
+
+Assigned to: *Shumel*
+# feature selection and Linear Model Evaluation
 
 
-# Feature Selection and Linear Model Evaluation
+
+#Feature Selection
+
 
 One thing we can do right away is to clean up the data a little. Remove variables that we know for sure are useless.
 In our case, let us remove some cumulative player stats to make the dataframe more manageable.
@@ -775,9 +972,7 @@ In our case, let us remove some cumulative player stats to make the dataframe mo
 rankedfs = ranked [c(10:33)] 
 head(rankedfs)
 ```
-
-## Details
-
+#Details
 Since this function returns separate best models of all sizes up to nvmax and since different model
 selection criteria such as AIC, BIC, CIC, DIC, ... differ only in how models of different sizes are
 compared, the results do not depend on the choice of cost-complexity tradeoff.
@@ -788,34 +983,26 @@ The model search does not actually fit each model, so the returned object does n
 can be obtained with the coef and vcov methods.
 
 
-## Target Variable: mental_health_days
-
-### 1. Perform Linear Regression with All Predictors
-
+## mental health days (target variable)
+#1.Perform Linear Regression with All Predictors
 ```{r}
 #Before selecting the best subset of predictors for our regression, let’s run a simple linear regression on our dataset with all predictors to set the base adjusted r² for comparison.
 
 lm1 <- lm(rankedfs,formula=mental_health_days ~. -mental_distress_rate)
 summary(lm1)
 ```
-
-
+#which all feature selection methods we can perform:
 ```{r}
-
-# which all feature selection methods we can perform:
 library(ISLR)
 library(leaps)
 rankedfs <- na.omit(rankedfs)
 regfit.full = regsubsets(mental_health_days ~.-mental_distress_rate,rankedfs, nvmax=23)
 reg.summary <- summary(regfit.full)
 names(reg.summary)
-
 ```
 
-
+#Feature Selection: mental_health_days
 ```{r}
-
-# Feature Selection: mental_health_days
 library(leaps)
 reg.best10 <- regsubsets(mental_health_days~. - mental_distress_rate , data = rankedfs, nvmax = NULL, nbest = 1, method = "exhaustive")
                              
@@ -826,10 +1013,9 @@ reg.best10
 summary.out <- summary(reg.best10)
 as.data.frame(summary.out$outmat)
 ```
+#Best model at each variable number
 
-Best model at each variable number
-
-The best model in the 10-variable case includes all variables, as that is the only way to have 10 variables.
+#The best model in the 10-variable case includes all variables, as that is the only way to have 10 variables.
 
 ```{r}
 plot(reg.best10, scale = "adjr2", main = "Adjusted R^2")
@@ -838,21 +1024,17 @@ plot(reg.best10, scale = "bic", main = "BIC")
 plot(reg.best10, scale = "Cp", main = "Cp")
 coef(reg.best10, 10, scale = "adjr2") # default BIC
 ```
-
-### 2. Perform Linear Regression with selected variables after feature selection
-
+#1.Perform Linear Regression with selected variables after feature selection
 ```{r}
 lm2 <- lm(rankedfs,formula=mental_health_days ~ child_poverty + inequality + unempl + college + mh_providers + pop_provider_ratio + unempl + single_parent + pct_hispanic + pct_native_am)
 summary(lm2)
 
 ```
 
-Plot Output from regsubsets Function in leaps package
+#Plot Output from regsubsets Function in leaps package
 
-This is just another way of presenting the same information for adjusted \( R^2 \). 
-
-Mallow Cp is used to decide on the number of predictors to include. The stopping rule is to start with the smallest model and gradually increase number of variables, and stop when Mallow Cp is approximately (number of regressors + 1, broken line) for the first time.
-
+#This is just another way of presenting the same information for adjusted \( R^2 \). 
+#Mallow Cp is used to decide on the number of predictors to include. The stopping rule is to start with the smallest model and gradually increase number of variables, and stop when Mallow Cp is approximately (number of regressors + 1, broken line) for the first time.
 ```{r}
 library(car)
 library(carData)
@@ -875,61 +1057,51 @@ abline(a = 1, b = 1, lty = 2)
 
 res.legend
 ```
-
+#See which model has the highest R Square :
 
 ```{r}
-
-# See which model has the highest R Square :
 which.max(summary.out$rsq)
-
 ```
 
-The model with 24 variables has the highest RSquare. Variables marked with TRUE are the ones chosen.
+#The model with 24 variables has the highest RSquare. Variables marked with TRUE are the ones chosen.
 
 ```{r}
 plot(summary.out$adjr2,xlab="number of variables", ylab="R Square", type="l")
 points(24, summary.out$rsq[24], col='red', cex=2, pch=20)
 ```
 
-
+#See which model has the highest adjusted R2 :
 
 ```{r}
-# See which model has the highest adjusted R2 :
 which.max(summary.out$adjr2)
-
 ```
 
-The model with 24 variables has the highest adjusted \( R^2 \). Variables marked with TRUE are the ones chosen.
+#The model with 24 variables has the highest adjusted \( R^2 \). Variables marked with TRUE are the ones chosen.
 
 ```{r}
 plot(summary.out$adjr2,xlab="number of variables", ylab="adjr2", type="l")
 points(24, summary.out$adjr2[24], col='red', cex=2, pch=20)
 ```
 
+#See which model has the lowest CP :
 
 ```{r}
-
-#See which model has the lowest CP :
 which.min(summary.out$cp)
-
 ```
-
-The model with 24 variables has the lowest CP.
+#The model with 24 variables has the lowest CP.
 
 ```{r}
 plot(summary.out$cp,xlab="number of variables", ylab="cp", type="l")
 points(24, summary.out$cp[24], col='red', cex=2, pch=20)
 ```
 
+#See which model has the lowest BIC :
 
 ```{r}
-
-#See which model has the lowest BIC :
 which.min(summary.out$bic)
-
 ```
 
-The model with 24 variables has the lowest CP.
+#The model with 24 variables has the lowest CP.
 
 ```{r}
 plot(summary.out$bic,xlab="number of variables", ylab="BIC", type="l")
@@ -955,9 +1127,8 @@ which.min(val.errors)
 coef(regfit.best,23)
 ```
 
-## Target Variable: mental_distress_rate
-
-### 1.Perform Linear Regression with All Predictors
+## mental distress rate (target variable)
+#1.Perform Linear Regression with All Predictors
 ```{r}
 #1.Perform Linear Regression with All Predictors
 #Before selecting the best subset of predictors for our regression, let’s run a simple linear regression on our dataset with all predictors to set the base adjusted r² for comparison.
@@ -967,16 +1138,13 @@ summary(lm3)
 
 ```
 
-
+#feature selection(mental distress rate)
 ```{r}
-
-# feature selection(mental distress rate)
 library(leaps)
 reg2.best10 <- regsubsets(mental_distress_rate~. -mental_health_days, data = rankedfs, nvmax = NULL, nbest = 1, method = "exhaustive")
                              
 reg2.best10                   
 ```
-
 ```{r}
 summary2.out <- summary(reg2.best10)
 as.data.frame(summary2.out$outmat)
@@ -989,21 +1157,16 @@ plot(reg2.best10, scale = "bic", main = "BIC")
 plot(reg2.best10, scale = "Cp", main = "Cp")
 coef(reg2.best10, 10, scale = "adjr2") # default BIC
 ```
-
-### 2.Perform Linear Regression with selected variables after feature selection
-
+#1.Perform Linear Regression with selected variables after feature selection
 ```{r}
 lm4 <- lm(rankedfs,formula=mental_distress_rate ~  inequality + college + mh_providers + pct_female + child_poverty  + unempl + single_parent + region_abb + pct_hispanic + pct_native_am)
 summary(lm4)
 
 ```
+#Plot Output from regsubsets Function in leaps package
 
-Plot Output from regsubsets Function in leaps package
-
-This is just another way of presenting the same information for adjusted \( R^2 \). 
-
-Mallow Cp is used to decide on the number of predictors to include. The stopping rule is to start with the smallest model and gradually increase number of variables, and stop when Mallow Cp is approximately (number of regressors + 1, broken line) for the first time.
-
+#This is just another way of presenting the same information for adjusted \( R^2 \). 
+#Mallow Cp is used to decide on the number of predictors to include. The stopping rule is to start with the smallest model and gradually increase number of variables, and stop when Mallow Cp is approximately (number of regressors + 1, broken line) for the first time.
 ```{r}
 library(car)
 library(carData)
@@ -1027,64 +1190,51 @@ abline(a = 1, b = 1, lty = 2)
 res.legend
 ```
 
-
+#See which model has the highest R Square :
 
 ```{r}
-
-#See which model has the highest R Square :
 which.max(summary2.out$rsq)
-
 ```
 
-The model with 24 variables has the highest RSquare. Variables marked with TRUE are the ones chosen.
+#The model with 24 variables has the highest RSquare. Variables marked with TRUE are the ones chosen.
 
 ```{r}
 plot(summary2.out$adjr2,xlab="number of variables", ylab="R Square", type="l")
 points(24, summary2.out$rsq[24], col='red', cex=2, pch=20)
 ```
 
-
+#See which model has the highest adjusted R2 :
 
 ```{r}
-
-#See which model has the highest adjusted R2 :
 which.max(summary2.out$adjr2)
-
 ```
 
-The model with 24 variables has the highest adjusted \( R^2 \). Variables marked with TRUE are the ones chosen.
+#The model with 24 variables has the highest adjusted \( R^2 \). Variables marked with TRUE are the ones chosen.
 
 ```{r}
 plot(summary2.out$adjr2,xlab="number of variables", ylab="adjr2", type="l")
 points(24, summary2.out$adjr2[24], col='red', cex=2, pch=20)
 ```
 
-
+#See which model has the lowest CP :
 
 ```{r}
-
-#See which model has the lowest CP :
 which.min(summary2.out$cp)
-
 ```
-
-The model with 24 variables has the lowest CP.
+#The model with 24 variables has the lowest CP.
 
 ```{r}
 plot(summary2.out$cp,xlab="number of variables", ylab="cp", type="l")
 points(24, summary2.out$cp[24], col='red', cex=2, pch=20)
 ```
 
-
+#See which model has the lowest BIC :
 
 ```{r}
-
-#See which model has the lowest BIC :
 which.min(summary2.out$bic)
-
 ```
 
-The model with 21 variables has the lowest CP.
+#The model with 21 variables has the lowest CP.
 
 ```{r}
 plot(summary2.out$bic,xlab="number of variables", ylab="BIC", type="l")
@@ -1110,8 +1260,6 @@ which.min(val.errors)
 coef(regfit.best,23)
 ```
 
-## ANOVA Comparison of Models
-
 ```{r anova_lm}
 
 anovaRes_mental_health_days <- anova(lm1,lm2)
@@ -1123,266 +1271,6 @@ xkabledply(anovaRes_mental_distress_rate, title = "ANOVA comparison between two 
 ```
 
 
-## Regression Tree Models
-
-In addition to the linear models above, regression tree models were also experimented with to determine if other model types could improve predicting the prevalence of the mental health variables and variable importance for predicting each mental health variable.
-
-The regression tree model analyzes the relationship between number of poor mental health days versus all the economic inequality variables included in our dataset. Additionally, a region was included as an explanatory variable to observe the impact that a specific region has on the dependent variable. In other words, the model regresses mental_health_days against inequality, median_inc, hs_grad, college, unempl, child_poverty, single_parent, severe_housing, food_index, mh_providers, pop_provider_ratio, and region.
-
-For the first regression tree the complexity parameter (cp), also known as the complexity penalty, value was initially chosen to be 0.005 and the max depth value was chosen to be 8. These values were chosen to allow for a large tree to be constructed in order to observe how well the model could fit the data. However by allowing the model to closely fit the data, the model runs the risk of over fitting the data making the model poor for predicting the target variable (dependent variable).  
-
-```{r}
-#Regression Tree - Number of Mentally Unhealthy Days
-
-#View(ranked)
-#str(ranked)
-
-#Remove NA values.
-ranked <- na.omit(ranked)
-
-#Creating Train and Test Set - ranked
-set.seed(123)
-train = sample(1:nrow(ranked), nrow(ranked)/1.25)
-
-#First Model for Number of Mentally Unhealthy Days (ranked; all vars.)
-model_ment_helth_day_tree <- rpart(mental_health_days ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region, ranked, subset=train, control = list(maxdepth=8, cp=0.004))
-
-#Summary for Number of Mentally Unhealthy Days
-summ_table1<-summary(model_ment_helth_day_tree)
-summ_table1$variable.importance
-
-#Plot Regression Tree
-#rpart.plot(model_ment_helth_day_tree)
-fancyRpartPlot(model_ment_helth_day_tree, main = "Regression Tree: Target Y - mental_health_days (all vars.)")
-
-#Print Complexity Penalty
-printcp(model_ment_helth_day_tree)
-
-#Plotting Complexity Parameters 
-par(mar = c(5, 5, 10, 5)) 
-plotcp(model_ment_helth_day_tree, minline = TRUE, lty = 3, col = 1, main="Regression Tree: CP Plot")
-
-#R-squared
-#rsq.rpart(model_ment_helth_day_tree)
-
-```
-
-```{r}
-#Prune Tree - Number of Mentally Unhealthy Days
-
-#Prune Tree Model
-prune_model_ment_helth_day_tree=prune.rpart(model_ment_helth_day_tree, cp=0.0072, best=5)
-
-#prune_model_ment_helth_day_tree=prune.rpart(model_ment_helth_day_tree, cp=model_ment_helth_day_tree$cptable[which.min(model_ment_helth_day_tree$cptable[,"xerror"]),"CP"], best=5)
-
-
-#Summary of Pruned Tree
-summ_table2<-summary(prune_model_ment_helth_day_tree)
-summ_table2$variable.importance
-
-#Plot Pruned Tree
-fancyRpartPlot(prune_model_ment_helth_day_tree, main = "Pruned Regression Tree: Target Y - mental_health_days (all vars.)")
-
-#Print Complexity Penalty of Prune Tree
-printcp(prune_model_ment_helth_day_tree)
-
-#Plot Complexity Penalty of Prune Tree 
-par(mar = c(5, 5, 10, 5)) 
-plotcp(prune_model_ment_helth_day_tree,minline = TRUE, lty = 3, col = 1, main="Pruned Regression Tree: CP Plot")
-
-#R-squared
-#rsq.rpart(prune_model_ment_helth_day_tree)
-
-```
-
-```{r}
-#Predicting and MSE for Regression Trees
-
-#Prediction/Testing - Original Model
-yhat1=predict(model_ment_helth_day_tree,newdata=ranked[-train,])
-test=ranked[-train,"mental_health_days"]
-
-plot(yhat1,test, main="Regression Tree: Test vs. Predicted Values", xlab="Predicted Values", ylab="Test Values")
-abline(0,1)
-
-#MSE
-mean((yhat1-test)^2)
-
-#RMSE
-sqrt(mean((yhat1-test)^2))
-
-
-#Prediction/Testing - Pruned Model
-yhat_prune1=predict(prune_model_ment_helth_day_tree,newdata=ranked[-train,])
-test=ranked[-train,"mental_health_days"]
-
-plot(yhat_prune1,test, main="Pruned Regression Tree: Test vs. Predicted Values", xlab="Predicted Values", ylab="Test Values")
-abline(0,1)
-
-#MSE
-mean((yhat_prune1-test)^2)
-
-#RMSE
-sqrt(mean((yhat_prune1-test)^2))
-
-
-```
-
-
-```{r}
-#Random Forest - Num. of Mentally Unhealthy Days
-
-#Generate Random Forest Model - Num. of Mentally Unhealthy Days (all vars.)
-set.seed(123)
-bag_ment_hlth_days=randomForest(mental_health_days ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region, data=ranked, subset=train, mtry=11, importance=TRUE)
-
-bag_ment_hlth_days
-
-#Predict/Test Random Forest Model
-yhat.bag1 = predict(bag_ment_hlth_days,newdata=ranked[-train,])
-plot(yhat.bag1, test, main="Random Forest: Test vs. Predicted Values", xlab="Predicted Values", ylab="Test Values")
-abline(0,1)
-
-#MSE
-mean((yhat.bag1-test)^2)
-
-#RMSE
-sqrt(mean((yhat.bag1-test)^2))
-
-
-#Determine Variable Importance
-importance(bag_ment_hlth_days)
-
-#Plot Variable Importance 
-varImpPlot(bag_ment_hlth_days, main = "Random Forest Vars. Importance: Target Y - mental_health_days (all vars.)")
-
-```
-
-
-
-```{r}
-#Regression Trees - Mental Health Distress Rate
-
-#Creating Train and Test Set - ranked
-set.seed(123)
-train = sample(1:nrow(ranked), nrow(ranked)/1.25)
-
-#First Model for Mental Health Distress Rate (ranked; all vars.)
-model_ment_dis_rate_tree <- rpart(mental_distress_rate ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region, ranked, subset=train, control = list(maxdepth=8, cp=0.004))
-
-#Summary for Number of Mentally Unhealthy Days
-summ_table1<-summary(model_ment_dis_rate_tree)
-summ_table1$variable.importance
-
-#Plot Regression Tree
-#rpart.plot(model_ment_dis_rate_tree)
-fancyRpartPlot(model_ment_dis_rate_tree, main = "Regression Tree: Target Y - mental_distress_rate (all vars.)")
-
-#Print Complexity Penalty
-printcp(model_ment_dis_rate_tree)
-
-
-#Plotting Complexity Parameters
-par(mar = c(5, 5, 10, 5))
-plotcp(model_ment_dis_rate_tree, minline = TRUE, lty = 3, col = 1, main="Regression Tree: CP Plot")
-
-#R-squared
-#rsq.rpart(model_ment_dis_rate_tree)
-
-```
-
-
-```{r}
-#Prune Tree - Mental Health Distress Rate 
-
-#Prune Tree Model
-prune_model_ment_dis_rate_tree=prune.rpart(model_ment_dis_rate_tree, cp=0.0095, best=5)
-
-#prune_model_ment_helth_day_tree=prune.rpart(model_ment_helth_day_tree, cp=model_ment_helth_day_tree$cptable[which.min(model_ment_helth_day_tree$cptable[,"xerror"]),"CP"], best=5)
-
-
-#Summary of Pruned Tree
-summ_table2<-summary(prune_model_ment_dis_rate_tree)
-summ_table2$variable.importance
-
-#Plot Pruned Tree
-fancyRpartPlot(prune_model_ment_dis_rate_tree, main = "Pruned Regression Tree: Target Y - mental_distress_rate (all vars.)")
-
-#Print Complexity Penalty of Prune Tree
-printcp(prune_model_ment_dis_rate_tree)
-
-#Plot Complexity Penalty of Prune Tree 
-par(mar = c(5, 5, 10, 5))
-plotcp(prune_model_ment_dis_rate_tree,minline = TRUE, lty = 3, col = 1, main="Pruned Regression Tree: CP Plot")
-
-#R-squared
-#rsq.rpart(prune_model_ment_dis_rate_tree)
-```
-
-
-```{r}
-#Predicting and MSE for Regression Trees
-
-#Prediction/Testing - Original Model
-yhat2=predict(model_ment_dis_rate_tree,newdata=ranked[-train,])
-test=ranked[-train,"mental_distress_rate"] 
-
-plot(yhat2,test, main="Regression Tree: Test vs. Predicted Values", xlab="Predicted Values", ylab="Test Values")
-abline(0,1)
-
-#MSE
-mean((yhat2-test)^2)
-
-#RMSE
-sqrt(mean((yhat2-test)^2))
-
-
-#Prediction/Testing - Pruned Model
-yhat_prune2=predict(prune_model_ment_dis_rate_tree,newdata=ranked[-train,])
-test=ranked[-train,"mental_distress_rate"]
-
-plot(yhat_prune2,test, main="Pruned Regression Tree: Test vs. Predicted Values", xlab="Predicted Values", ylab="Test Values")
-abline(0,1)
-
-#MSE
-mean((yhat_prune2-test)^2)
-
-#RMSE
-sqrt(mean((yhat_prune2-test)^2))
-
-
-```
-
-
-```{r}
-#Random Forest - Mental Distress Rate
-
-#Generate Random Forest Model - Mental Health Distress Rate 
-set.seed(123)
-bag_ment_dis_rate=randomForest(mental_distress_rate ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region, data=ranked, subset=train, mtry=11, importance=TRUE)
-
-bag_ment_dis_rate
-
-#Predict/Test Random Forest Model
-yhat.bag2 = predict(bag_ment_dis_rate,newdata=ranked[-train,])
-plot(yhat.bag2, test, main="Random Forest: Test vs. Predicted Values", xlab="Predicted Values", ylab="Test Values")
-abline(0,1)
-
-#MSE
-mean((yhat.bag2-test)^2)
-
-#RMSE
-sqrt(mean((yhat.bag2-test)^2))
-
-
-#Determine Variable Importance
-importance(bag_ment_dis_rate)
-
-#Plot Variable Importance 
-varImpPlot(bag_ment_dis_rate, main = "Random Forest Vars. Importance: Target Y - mental_distress_rate (all vars.)")
-
-```
-
-
-
+# Regression Trees
+Assigned to: *Alex*
 
