@@ -1034,40 +1034,27 @@ However, when `mental_distress_rate` is the dependent variable, the strength of 
 
 # Feature Selection and Linear Model Evaluation
 
-One thing we can do right away is to clean up the data a little. Remove variables that we know for sure are useless.
-In our case, let us remove some cumulative player stats to make the dataframe more manageable.
+One thing we can do right away is to clean up the data a little. Remove variables that we know are least relevant.
 
-```{r}
+```{r, results='hide'}
 #rankedfsf = ranked[ -c(1:9) ] # cleaned datasetnndf <- nndf1[c(1:23)]
 rankedfs = ranked [c(10:33)] 
 head(rankedfs)
 ```
 
-## Details
-
-Since this function returns separate best models of all sizes up to nvmax and since different model
-selection criteria such as AIC, BIC, CIC, DIC, ... differ only in how models of different sizes are
-compared, the results do not depend on the choice of cost-complexity tradeoff.
-When x is a biglm object it is assumed to be the full model, so force.out is not relevant. If there
-is an intercept it is forced in by default; specify a force.in as a logical vector with FALSE as the
-first element to allow the intercept to be dropped.
-The model search does not actually fit each model, so the returned object does not contain coefficients or standard errors. Coefficients and the variance-covariance matrix for one or model models
-can be obtained with the coef and vcov methods.
-
-
 ## Target Variable: mental_health_days
 
 ### 1. Perform Linear Regression with All Predictors
 
-```{r, results='markup'}
+```{r, results='asis'}
 #Before selecting the best subset of predictors for our regression, let’s run a simple linear regression on our dataset with all predictors to set the base adjusted r² for comparison.
 
 lm1 <- lm(rankedfs,formula=mental_health_days ~. -mental_distress_rate)
-summary(lm1)
+summ(lm1)
+
 ```
 
-
-```{r, results='markup'}
+```{r, results='hide'}
 
 # which all feature selection methods we can perform:
 library(ISLR)
@@ -1079,22 +1066,21 @@ names(reg.summary)
 
 ```
 
-
 ```{r, results='markup'}
 
 # Feature Selection: mental_health_days
-library(leaps)
 reg.best10 <- regsubsets(mental_health_days~. - mental_distress_rate , data = rankedfs, nvmax = NULL, nbest = 1, method = "exhaustive")
                              
 reg.best10                   
 ```
 
-```{r}
+```{r, results='markup'}
+
+# Best model at each variable number
 summary.out <- summary(reg.best10)
 as.data.frame(summary.out$outmat)
-```
 
-Best model at each variable number
+```
 
 The best model in the 10-variable case includes all variables, as that is the only way to have 10 variables.
 
@@ -1106,26 +1092,26 @@ plot(reg.best10, scale = "Cp", main = "Cp")
 coef(reg.best10, 10, scale = "adjr2") # default BIC
 ```
 
-```{r, results='markup'}
+```{r, results='asis'}
 summary.out$which[10,]
 ```
+
 ### 2. Perform Linear Regression with selected variables after feature selection
 
-```{r, results='markup'}
+```{r, results='asis'}
+
 lm2 <- lm(rankedfs,formula=mental_health_days ~ child_poverty + inequality + unempl + college + mh_providers + pop_provider_ratio + region_abb + single_parent + pct_hispanic + pct_female)
-summary(lm2)
+summ(lm2, vifs=T)
 
 ```
 
-Plot Output from regsubsets Function in leaps package
-
-This is just another way of presenting the same information for adjusted \( R^2 \). 
-
-Mallow Cp is used to decide on the number of predictors to include. The stopping rule is to start with the smallest model and gradually increase number of variables, and stop when Mallow Cp is approximately (number of regressors + 1, broken line) for the first time.
+### 3. Plot Output from regsubsets Function in leaps package
 
 ```{r, results='markup'}
+
 library(car)
 library(carData)
+
 res.legend <-
     subsets(regsubsets(mental_health_days~. -mental_distress_rate , data = rankedfs, nvmax = 10, nbest = 1, method = "exhaustive"), statistic="adjr2", legend = FALSE, min.size = 5, main = "Adjusted R^2")
 ## Mallow Cp
@@ -1146,64 +1132,63 @@ abline(a = 1, b = 1, lty = 2)
 res.legend
 ```
 
-
-```{r, results='markup'}
+```{r, results='hide'}
 
 # See which model has the highest R Square :
-which.max(summary.out$rsq)
+days_maxR2 <- which.max(summary.out$rsq)
+days_maxR2
 
 ```
 
-The model with 24 variables has the highest RSquare. Variables marked with TRUE are the ones chosen.
+The model with `r days_maxR2` variables has the highest R-squared. Variables marked with TRUE are the ones chosen.
 
 ```{r, results='markup'}
 plot(summary.out$adjr2,xlab="number of variables", ylab="R Square", type="l")
-points(24, summary.out$rsq[24], col='red', cex=2, pch=20)
+points(days_maxR2, summary.out$rsq[days_maxR2], col='red', cex=2, pch=20)
 ```
 
-
-
-```{r, results='markup'}
+```{r, results='hide'}
 # See which model has the highest adjusted R2 :
-which.max(summary.out$adjr2)
+days_maxAdjR2 <- which.max(summary.out$adjr2)
+days_maxAdjR2
 
 ```
 
-The model with 24 variables has the highest adjusted \( R^2 \). Variables marked with TRUE are the ones chosen.
+The model with `r days_maxAdjR2` variables has the highest adjusted \( R^2 \). Variables marked with TRUE are the ones chosen.
 
 ```{r, results='markup'}
 plot(summary.out$adjr2,xlab="number of variables", ylab="adjr2", type="l")
-points(24, summary.out$adjr2[24], col='red', cex=2, pch=20)
+points(days_maxAdjR2, summary.out$adjr2[days_maxAdjR2], col='red', cex=2, pch=20)
 ```
 
-
-```{r, results='markup'}
+```{r, results='hide'}
 
 #See which model has the lowest CP :
-which.min(summary.out$cp)
+days_minCP <- which.min(summary.out$cp)
+days_minCP
 
 ```
 
-The model with 24 variables has the lowest CP.
+The model with `r days_minCP` variables has the lowest CP.
 
 ```{r, results='markup'}
 plot(summary.out$cp,xlab="number of variables", ylab="cp", type="l")
-points(24, summary.out$cp[24], col='red', cex=2, pch=20)
+points(days_minCP, summary.out$cp[days_minCP], col='red', cex=2, pch=20)
 ```
 
-
-```{r, results='markup'}
+```{r, results='hide'}
 
 #See which model has the lowest BIC :
-which.min(summary.out$bic)
+days_minBIC <- which.min(summary.out$bic)
+days_minBIC
 
 ```
 
-The model with 24 variables has the lowest CP.
+The model with `r days_minBIC` variables has the lowest BIC.
 
 ```{r, results='markup'}
 plot(summary.out$bic,xlab="number of variables", ylab="BIC", type="l")
-points(24, summary.out$bic[24], col='red', cex=2, pch=20)
+points(days_minBIC, summary.out$bic[days_minBIC], col='red', cex=2, pch=20)
 #forward and backward selection is same as exhaustive just slight different in forward it start will no variable and iterate till the max variable and backward selection is otherway around.
 ```
 
@@ -1228,17 +1213,17 @@ coef(regfit.best,23)
 ## Target Variable: mental_distress_rate
 
 ### 1.Perform Linear Regression with All Predictors
-```{r, results='markup'}
+
+```{r, results='asis'}
 #1.Perform Linear Regression with All Predictors
 #Before selecting the best subset of predictors for our regression, let’s run a simple linear regression on our dataset with all predictors to set the base adjusted r² for comparison.
 
 lm3 <- lm(rankedfs,formula=mental_distress_rate ~. -mental_health_days )
-summary(lm3)
+summ(lm3)
 
 ```
 
-
-```{r, results='markup'}
+```{r, results='hide'}
 
 # feature selection(mental distress rate)
 library(leaps)
@@ -1247,7 +1232,7 @@ reg2.best10 <- regsubsets(mental_distress_rate~. -mental_health_days, data = ran
 reg2.best10                   
 ```
 
-```{r}
+```{r, results='markup'}
 summary2.out <- summary(reg2.best10)
 as.data.frame(summary2.out$outmat)
 ```
@@ -1259,21 +1244,20 @@ plot(reg2.best10, scale = "bic", main = "BIC")
 plot(reg2.best10, scale = "Cp", main = "Cp")
 coef(reg2.best10, 10, scale = "adjr2") # default BIC
 ```
-```{r, results='markup'}
+```{r, results='asis'}
 summary2.out$which[10,]
 ```
+
 ### 2.Perform Linear Regression with selected variables after feature selection
 
-```{r, results='markup'}
+```{r, results='asis'}
+
 lm4 <- lm(rankedfs,formula=mental_distress_rate ~  inequality + college + mh_providers + pct_female + child_poverty  + unempl + single_parent + region_abb + pct_hispanic + pct_native_am)
-summary(lm4)
+summ(lm4)
+
 ```
 
-Plot Output from regsubsets Function in leaps package
-
-This is just another way of presenting the same information for adjusted \( R^2 \). 
-
-Mallow Cp is used to decide on the number of predictors to include. The stopping rule is to start with the smallest model and gradually increase number of variables, and stop when Mallow Cp is approximately (number of regressors + 1, broken line) for the first time.
+### 3. Plot Output from regsubsets Function in leaps package
 
 ```{r, results='markup'}
 library(car)
@@ -1298,68 +1282,65 @@ abline(a = 1, b = 1, lty = 2)
 res.legend
 ```
 
-
-
-```{r, results='markup'}
+```{r, results='hide'}
 
 #See which model has the highest R Square :
-which.max(summary2.out$rsq)
+rate_maxR2 <- which.max(summary2.out$rsq)
+rate_maxR2
 
 ```
 
-The model with 24 variables has the highest RSquare. Variables marked with TRUE are the ones chosen.
+The model with `r rate_maxR2` variables has the highest R-squared. Variables marked with TRUE are the ones chosen.
 
 ```{r, results='markup'}
 plot(summary2.out$adjr2,xlab="number of variables", ylab="R Square", type="l")
-points(24, summary2.out$rsq[24], col='red', cex=2, pch=20)
+points(rate_maxR2, summary2.out$rsq[rate_maxR2], col='red', cex=2, pch=20)
 ```
 
-
-
-```{r, results='markup'}
+```{r, results='hide'}
 
 #See which model has the highest adjusted R2 :
-which.max(summary2.out$adjr2)
+rate_maxAdjR2 <- which.max(summary2.out$adjr2)
+rate_maxAdjR2
 
 ```
 
-The model with 24 variables has the highest adjusted \( R^2 \). Variables marked with TRUE are the ones chosen.
+The model with `r rate_maxAdjR2` variables has the highest adjusted \( R^2 \). Variables marked with TRUE are the ones chosen.
 
 ```{r, results='markup'}
 plot(summary2.out$adjr2,xlab="number of variables", ylab="adjr2", type="l")
-points(24, summary2.out$adjr2[24], col='red', cex=2, pch=20)
+points(rate_maxAdjR2, summary2.out$adjr2[rate_maxAdjR2], col='red', cex=2, pch=20)
 ```
 
-
-
-```{r, results='markup'}
+```{r, results='hide'}
 
 #See which model has the lowest CP :
-which.min(summary2.out$cp)
+rate_minCP <- which.min(summary2.out$cp)
+rate_minCP
 
 ```
 
-The model with 24 variables has the lowest CP.
+The model with `r rate_minCP` variables has the lowest CP.
 
 ```{r, results='markup'}
+
 plot(summary2.out$cp,xlab="number of variables", ylab="cp", type="l")
-points(24, summary2.out$cp[24], col='red', cex=2, pch=20)
+points(rate_minCP, summary2.out$cp[rate_minCP], col='red', cex=2, pch=20)
+
 ```
-
-
 
 ```{r, results='markup'}
 
 #See which model has the lowest BIC :
-which.min(summary2.out$bic)
-
+rate_minBIC <- which.min(summary2.out$bic)
+rate_minBIC
 ```
 
-The model with 21 variables has the lowest CP.
+The model with `r rate_minBIC` variables has the lowest BIC.
 
 ```{r, results='markup'}
 plot(summary2.out$bic,xlab="number of variables", ylab="BIC", type="l")
-points(21, summary2.out$bic[21], col='red', cex=2, pch=20)
+points(rate_minBIC, summary2.out$bic[rate_minBIC], col='red', cex=2, pch=20)
 #forward and backward selection is same as exhaustive just slight different in forward it start will no variable and iterate till the max variable and backward selection is otherway around.
 ```
 
@@ -1863,5 +1844,4 @@ df2 %>%
 
 
 ```
-
 
