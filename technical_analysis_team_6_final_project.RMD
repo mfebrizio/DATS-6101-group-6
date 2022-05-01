@@ -1241,7 +1241,7 @@ The following regression tree has 17 leaf nodes.
 
 The summary table of the regression tree indicates the order of variable importance for each variable within the regression. Interestingly, the top three most important variables in order of importance is year, child_pov, and median_inc.
 
-```{r, results='markup'}
+```{r, results='hide'}
 
 #Regression Tree - Number of Mentally Unhealthy Days
 
@@ -1259,9 +1259,15 @@ train = sample(1:nrow(ranked), nrow(ranked)/1.25)
 model_ment_helth_day_tree <- rpart(mental_health_days ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region + year, ranked, subset=train, control = list(maxdepth=8, cp=0.004))
 
 #Summary for Number of Mentally Unhealthy Days
-summ_table1<-summary(model_ment_helth_day_tree)
+summ_table1=summary(model_ment_helth_day_tree)
 table1_FI_tree<-data.frame(summ_table1$variable.importance)
 
+
+
+```
+
+
+```{r, results='markup'}
 table1_FI_tree %>%
   kbl(caption="Variable Importance: Target Y - mental_health_days (all vars.) ",
        format= "html", col.names = c("Feature Importance"),
@@ -1282,6 +1288,8 @@ plotcp(model_ment_helth_day_tree, minline = TRUE, lty = 3, col = 1, main="Regres
 #R-squared
 #rsq.rpart(model_ment_helth_day_tree)
 
+
+
 ```
 
 ### Pruned Regression Tree - mental_health_days
@@ -1292,7 +1300,7 @@ The following pruned tree has 13 leaf nodes.
 
 The summary table of the regression tree indicates the order of variable importance for each variable within the regression. Again, the top three most important variables in order of importance is year, child_pov, and median_inc.
 
-```{r, results='markup'}
+```{r, results='hide'}
 #Prune Tree - Number of Mentally Unhealthy Days
 
 #Prune Tree Model
@@ -1300,11 +1308,16 @@ prune_model_ment_helth_day_tree=prune.rpart(model_ment_helth_day_tree, cp=0.0067
 
 
 #Summary of Pruned Tree
-summ_table2<-summary(prune_model_ment_helth_day_tree)
+summ_table2=summary(prune_model_ment_helth_day_tree)
 #summ_table2$variable.importance
 
 table2_FI_tree<-data.frame(summ_table2$variable.importance)
 
+
+
+```
+
+```{r, results='markup'}
 table2_FI_tree %>%
   kbl(caption="Pruned Variable Importance: Target Y - mental_health_days (all vars.) ",
        format= "html", col.names = c("Feature Importance"),
@@ -1326,6 +1339,7 @@ plotcp(prune_model_ment_helth_day_tree,minline = TRUE, lty = 3, col = 1, main="P
 #rsq.rpart(prune_model_ment_helth_day_tree)
 
 ```
+
 
 ### Predicting/RMSE for Regression Trees - mental_health_days
 
@@ -1375,7 +1389,7 @@ The following regression tree has 16 leaf nodes.
 The summary table of the regression tree indicates the order of variable importance for each variable within the regression. Interestingly, the top three most important variables in order of importance is child_pov, year, and median_inc.
 
 
-```{r, results='markup'}
+```{r, results='hide'}
 #Regression Trees - Mental Health Distress Rate
 
 #Creating Train and Test Set - ranked
@@ -1386,11 +1400,15 @@ train = sample(1:nrow(ranked), nrow(ranked)/1.25)
 model_ment_dis_rate_tree <- rpart(mental_distress_rate ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region + year, ranked, subset=train, control = list(maxdepth=8, cp=0.004))
 
 #Summary for Number of Mentally Unhealthy Days
-summ_table3<-summary(model_ment_dis_rate_tree)
+summ_table3=summary(model_ment_dis_rate_tree)
 #summ_table3$variable.importance
 
 table3_FI_tree<-data.frame(summ_table3$variable.importance)
 
+```
+
+
+```{r, results='markup'}
 table3_FI_tree %>%
   kbl(caption="Variable Importance: Target Y - mental_distress_rate (all vars.) ",
        format= "html", col.names = c("Feature Importance"),
@@ -1412,6 +1430,7 @@ plotcp(model_ment_dis_rate_tree, minline = TRUE, lty = 3, col = 1, main="Regress
 #R-squared
 #rsq.rpart(model_ment_dis_rate_tree)
 
+
 ```
 
 ### Pruned Regression Tree - mental_distress_rate
@@ -1422,16 +1441,21 @@ The following pruned tree has 11 leaf nodes.
 
 The summary table of the regression tree indicates the order of variable importance for each variable within the regression. Again, the top three most important variables in order of importance is child_pov, median_inc, and year.
 
-```{r, results='markup'}
+```{r, results='hide'}
 #Prune Tree - Mental Health Distress Rate 
 
 #Prune Tree Model
 prune_model_ment_dis_rate_tree=prune.rpart(model_ment_dis_rate_tree, cp=0.01, best=5)
 
 #Summary of Pruned Tree
-summ_table4<-summary(prune_model_ment_dis_rate_tree)
+summ_table4=summary(prune_model_ment_dis_rate_tree)
 #summ_table4$variable.importance
 
+
+```
+
+
+```{r, results='markup'}
 table4_FI_tree<-data.frame(summ_table4$variable.importance)
 
 table4_FI_tree %>%
@@ -1453,13 +1477,15 @@ plotcp(prune_model_ment_dis_rate_tree,minline = TRUE, lty = 3, col = 1, main="Pr
 
 #R-squared
 #rsq.rpart(prune_model_ment_dis_rate_tree)
+
+
 ```
 
 ### Predicting/RMSE for Regression Trees - mental_distress_rate
 
 The next section is focuses on how good the regression trees are at predicting the target variable. The models will be evaluated using RMSE. The lower the RMSE value the more accurate the model. The RMSE value of original regression tree is 0.0126. The RMSE value of the pruned regression tree is 0.0134. These RMSE values suggest that the original regression is a slightly better predicting model.
 
-```{r, results='asis'}
+```{r, results='markup'}
 #Predicting and RMSE for Regression Trees
 
 #Prediction/Testing - Original Model
@@ -1502,7 +1528,7 @@ Finally, random forest models were constructed to further analyze the variable i
 
 The top three most important variables in order of importance by %IncMSE are year, median_inc, and region. The top three most important variables in order of importance by IncNudePurity are year, median_inc, and region. The RMSE value of this random forest is 0.327.
 
-```{r, results='asis'}
+```{r, results='markup'}
 #Random Forest - Num. of Mentally Unhealthy Days
 
 #Generate Random Forest Model - Num. of Mentally Unhealthy Days (all vars.)
@@ -1538,7 +1564,7 @@ The second random forest model regresses the number of mental health distress ra
 
 The top three most important variables in order of importance by %IncMSE are year, median_inc, and region. The top three most important variables in order of importance by IncNudePurity are year, child_poverty, and median_inc. The RMSE value of this random forest is 0.00915.
 
-```{r, results='asis'}
+```{r, results='markup'}
 #Random Forest - Mental Distress Rate
 
 #Generate Random Forest Model - Mental Health Distress Rate 
