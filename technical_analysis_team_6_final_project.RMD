@@ -943,10 +943,13 @@ plot(reg.best10, scale = "Cp", main = "Cp")
 coef(reg.best10, 10, scale = "adjr2") # default BIC
 ```
 
+```{r, results='markup'}
+summary.out$which[10,]
+```
 ### 2. Perform Linear Regression with selected variables after feature selection
 
 ```{r, results='markup'}
-lm2 <- lm(rankedfs,formula=mental_health_days ~ child_poverty + inequality + unempl + college + mh_providers + pop_provider_ratio + unempl + single_parent + pct_hispanic + pct_native_am)
+lm2 <- lm(rankedfs,formula=mental_health_days ~ child_poverty + inequality + unempl + college + mh_providers + pop_provider_ratio + region_abb + single_parent + pct_hispanic + pct_female)
 summary(lm2)
 
 ```
@@ -1093,13 +1096,14 @@ plot(reg2.best10, scale = "bic", main = "BIC")
 plot(reg2.best10, scale = "Cp", main = "Cp")
 coef(reg2.best10, 10, scale = "adjr2") # default BIC
 ```
-
+```{r, results='markup'}
+summary2.out$which[10,]
+```
 ### 2.Perform Linear Regression with selected variables after feature selection
 
 ```{r, results='markup'}
 lm4 <- lm(rankedfs,formula=mental_distress_rate ~  inequality + college + mh_providers + pct_female + child_poverty  + unempl + single_parent + region_abb + pct_hispanic + pct_native_am)
-summary(lm4)
-
+summary(lm4)s
 ```
 
 Plot Output from regsubsets Function in leaps package
