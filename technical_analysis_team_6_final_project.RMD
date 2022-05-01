@@ -1567,6 +1567,83 @@ varImpPlot(bag_ment_dis_rate, main = "Random Forest Vars. Importance: Target Y -
 
 ```
 
+Overall, the random forest models were better predicting models relative to the regression tree models as indicated by their lower RMSE values for each respective target mental health variable.
 
+
+## RMSE Comparison for All Models
+
+# RMSE Model Comparisons - mental_health_days
+
+Below is RMSE comparisons between all the models used in this project. Each model compares the target variable mental_health_days against the independent variables inequality, college, hs_grad, unempl, child_poverty, single_parent, severe_housing, food_index, median_inc, mh_providers, pop_provider_ratio, region, and year. 
+
+Based on the RMSE values the random forest is the best predicting model because it has the lowest RMSE value of 0.327. A low RMSE value indicates that the simulated predicted data is close to the observed test data, indicating better accuracy relative to higher RMSE values.
+
+```{r}
+#RMSE Model Comparisons - mental_health_days
+
+lm_days_train <- lm(mental_health_days ~ inequality + college + hs_grad + unempl
+                + child_poverty + single_parent + severe_housing + food_index
+                + median_inc + mh_providers + pop_provider_ratio
+                + region + year, data=ranked, subset=train)
+
+yhat_lm_1 = predict(lm_days_train,newdata=ranked[-train,])
+
+#RMSE: Linear Model
+a1<-sqrt(mean((yhat_lm_1-test1)^2))
+
+#RMSE: Regression Tree
+b1<-sqrt(mean((yhat1-test1)^2))
+
+#RMSE: Pruned Regression Tree
+c1<-sqrt(mean((yhat_prune1-test1)^2))
+
+#RMSE: Random Forest
+d1<-sqrt(mean((yhat.bag1-test1)^2))
+
+df1 <- data.frame(Models1 <- c("Linear Model", "Reg. Tree", "Pruned Tree", "Random Forest"), RMSE1 <- c(a1, b1, c1, d1) )
+
+df1 %>%
+  kbl(caption="RMSE Comparisons - mental_health_days",
+       format= "html", digits = 4, col.names = c("Models","RMSE"),
+      align="r") %>%
+   kable_classic_2(full_width = F, html_font = "helvetica")
+
+
+```
+
+Each model below compares the target variable mental_distress_rate against the independent variables inequality, college, hs_grad, unempl, child_poverty, single_parent, severe_housing, food_index, median_inc, mh_providers, pop_provider_ratio, region, and year. 
+
+Based on the RMSE values the random forest is the best predicting model because it has the lowest RMSE value of 0.0091. A low RMSE value indicates that the simulated predicted data is close to the observed test data, indicating better accuracy relative to higher RMSE values.
+
+```{r}
+lm_dist_train <- lm(mental_distress_rate ~ inequality + college + hs_grad + unempl
+                + child_poverty + single_parent + severe_housing + food_index
+                + median_inc + mh_providers + pop_provider_ratio
+                + region + year, data=ranked, subset=train)
+
+yhat_lm_2 = predict(lm_dist_train,newdata=ranked[-train,])
+
+#RMSE: Linear Model
+a2<-sqrt(mean((yhat_lm_2-test2)^2))
+
+#RMSE: Regression Tree
+b2<-sqrt(mean((yhat2-test2)^2))
+
+#RMSE: Pruned Regression Tree
+c2<-sqrt(mean((yhat_prune2-test2)^2))
+
+#RMSE: Random Forest
+d2<-sqrt(mean((yhat.bag2-test2)^2))
+
+df2 <- data.frame(Models2 <- c("Linear Model", "Reg. Tree", "Pruned Tree", "Random Forest"), RMSE2 <- c(a2, b2, c2, d2) )
+
+df2 %>%
+  kbl(caption="RMSE Comparisons - mental_distress_rate",
+       format= "html", digits = 4, col.names = c("Models","RMSE"),
+      align="r") %>%
+   kable_classic_2(full_width = F, html_font = "helvetica")
+
+
+```
 
 
