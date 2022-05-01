@@ -525,6 +525,122 @@ export_summs(lm_days_1, lm_days_4, lm_days_5, lm_days_7,
 ## Dependent variable: `mental_distress_rate`
 
 Assigned to: *Xuan*
+My Code is from line 532 to line 979. My code on lines 532 to 642 refers to Mark's, and I followed his advice. His code is beautiful, for which I really appreciate it. Thanks Mark!
+
+In the following models, I used different combinations of variables to find the most suitable model.
+
+```{r lm_rate_a, results='asis'}
+
+# x1: base model by region
+lm_rate_1 <- lm(mental_distress_rate ~ inequality + region, data = ranked)
+summary(lm_rate_1)
+
+# x2: include year as factor variable
+lm_rate_2 <- lm(mental_distress_rate ~ inequality + region + year, data = ranked)
+summary(lm_rate_2)
+
+# x3: include economic vars
+lm_rate_3 <- lm(mental_distress_rate ~ inequality + college + hs_grad + unempl
+                + child_poverty + single_parent + severe_housing + food_index
+                + median_inc + pop_provider_ratio
+                + region + year, data = ranked)
+summary(lm_rate_3)
+
+# x4: include demographic vars
+lm_rate_4 <- lm(mental_distress_rate ~ inequality + college + hs_grad + unempl
+                + child_poverty + single_parent + severe_housing + food_index
+                + median_inc + pop_provider_ratio
+                + pop + pct_below18 + pct_female + pct_rural
+                + pct_black + pct_native_am + pct_asian + pct_pacific + pct_hispanic + pct_white
+                + region + year, data = ranked)
+summary(lm_rate_4)
+
+
+#From the first model, we can see that the equations for each region are below:
+# regionMidwest: mental_distress_rate = 0.073 + 0.010 * inequality
+# regionNortheast: mental_distress_rate = 0.073 + 0.001 + 0.010 * inequality
+# regionSouth: mental_distress_rate = 0.073 + 0.014 + 0.010 * inequality
+# regionWest: mental_distress_rate = 0.073 + 0.002 + 0.010 * inequality
+# From above, we can see that the Midwest has the lowest estimate for mental_distress_rate, and the South has the highest estimate. The northeast region shows not significant, others are significant.
+# After including the year factor variables, the economic variables, and the demographic variables, the coefficients on all variables remained significant. The northeast continue to show not significant. However, the coefficient on 'inequality' declined from 0.0101 to 0.00274 in the fourth model, which suggests that the base model exhibited omitted variable bias that the fuller model at least partially addressed. The South region still has the largest coefficient among the 'region' factor variables.
+
+```
+
+```{r lm_rate_a, results='asis'}
+#After adding so many different variables, we need to check for multicollinearity. Thus, we also evaluated the VIF for each of the above models.
+
+summ(lm_rate_1, vifs = T)
+summ(lm_rate_2, vifs = T)
+summ(lm_rate_3, vifs = T)
+summ(lm_rate_4, vifs = T)
+
+# The majority of VIF results are below 5, which is acceptable. However, several variables have extremely high VIFs – specifically, such as 'child_poverty', 'pct_black', 'pct_white' and 'pct_hispanic'. We would remove these in the following model.
+```
+
+```{r lm_rate_b, results='asis'}
+
+# x5: remove vars to reduce vif
+lm_rate_5 <- lm(mental_distress_rate ~ inequality + college + hs_grad + unempl
+                + single_parent + severe_housing + food_index
+                + pop + pop_provider_ratio + pct_female + pct_rural + pct_below18
+                + pct_native_am + pct_asian + pct_pacific 
+                + region + year, data = ranked)
+summary(lm_rate_5)
+summ(lm_rate_5, vifs = T)
+
+```
+
+```{r lm_rate_c, results='asis'}
+## To permit the coefficients to differ by region, we included an interaction term between `inequality` and `region`.
+# x6: base model by region with interaction terms
+lm_rate_6 <- lm(mental_distress_rate ~ inequality*region, data = ranked)
+summary(lm_rate_6)
+
+#From the model x6, we can see that the equations for each region are below:
+# regionMidwest: mental_distress_rate = 0.064421 + 0.012271 * inequality
+# regionNortheast: mental_distress_rate = 0.064421 + 0.050482 + (0.012271 - 0.011059) * inequality
+# regionSouth: mental_distress_rate = 0.064421 + 0.022052 + (0.012271 - 0.001928) * inequality
+# regionWest: mental_distress_rate = 0.064421 + 0.013255 + (0.012271 - 0.002526) * inequality
+# From the above equations, we can see that the strength of the relationship between 'mental_distress_rate' and 'inequality' differs by region. In fact, while the Northeast has the highest estimated amount of mental distress rate (because the intercerpt of northeast region is '0.114903'). The coefficient on 'inequality' of northeast region is '0.001212' near 0. Conversely, the midwest region has the lowest estimate of mental distress rate (0.064421), while exhibiting the strongest association. All the independent variables are statistically significant. 
+```
+
+```{r lm_rate_d, results='asis'}
+
+# x7: larger model with interaction terms
+lm_rate_7 <- lm(mental_health_days ~ inequality*region + college + hs_grad + unempl
+                + single_parent + severe_housing + food_index
+                + pop + pop_provider_ratio + pct_female + pct_rural + pct_below18
+                + pct_native_am + pct_asian + pct_pacific
+                + year, data = ranked)
+summary(lm_days_7)
+summ(lm_days_7, vifs = T)
+
+
+# The equations for the fuller models with interaction terms are below, where V~c~ is a vector of additional control variables:
+# regionMidwest: mental_distress_rate = 2.13 + 0.182 * inequality + V~c~
+# regionNortheast: mental_distress_rate = 2.13 + 0.448 + (0.182 - 0.0616) * inequality + V~c~
+# regionSouth: mental_distress_rate = 2.13 + 0.734 + (0.01821 - 0.0944) * inequality + V~c~
+# regionWest: mental_distress_rate = 2.13 + 0.186 + (0.0182 - 0.0121) * inequality + V~c~
+
+# After including the set of control variables, the coefficients for `inequality` still differ by region. However, now it appears that the South has the weakest association between `inequality` and `mental_distress_rate` and the Midwest still has the strongest.
+```
+
+```{r lm_table_b, results='asis'}
+
+export_summs(lm_rate_1, lm_rate_4, lm_rate_5, lm_rate_7,
+             statistics = c(Num.obs = "nobs", R2 = "r.squared", adj.R2 = "adj.r.squared"), 
+             model.names = c("1", "4", "5", "7"), 
+             coefs = c("(Intercept)", "inequality", 
+                       "Northeast" = "regionNortheast", "South" = "regionSouth", "West" = "regionWest", 
+                       "inequality:NE" = "inequality:regionNortheast", 
+                       "inequality:SO" = "inequality:regionSouth", 
+                       "inequality:WE" = "inequality:regionWest",
+                       "college", "hs_grad", "unempl", "child_poverty", "single_parent", 
+                        "severe_housing", "food_index", "median_inc")
+             )
+
+```
+
 ```{r}
 library(readxl)
 data = data.frame(read.csv("data/processed/analytic_data_2016_2021_with_regions.csv"))
@@ -864,8 +980,11 @@ abline(a2021W)
 
 
 ## Comparing the Dependent Variables -- Xuan
-All of the results of the models have statistical meaning. Our data analysis models, whether by year or by region, are just linear equations in one variable. There is only one independent variable and one dependent variable in this model.So more independent variables may provide stronger persuasion.
-In the four regions, the northeast region is the most special region. In Mark's models, the Northeast has the highest estimated amount of poor mental health (see the intercept), the coefficient on `inequality` is near zero. In Xuan's models, the inequality as independent variable is significant in 2016, 2017 and 2021, is not significant in 2018, 2019 and 2020. And the R-squareds are separately 4.18%, 10%, 1.16%, 1.09%, 0.0635%, and 5.04%, which means that the model is not good. So the models of northeast region in 2018, 2019 and 2020 are meaningless. We all know that the economy of the Northeast region is the most developed, so I think more variables can be used to analyze the Northeast region.
+The results come from mental health days and mental distress rate are same.
+All of the results of the models have statistical meaning. Our data analysis models, whether by year or by region, are just linear equations in one variable. To make our model more convincing, we added more independent variables.
+When we want to permit the coefficients to differ by region, we included an interaction term between `inequality` and `region`. Both Mark and Xuan found that while the Northeast has the highest estimated amount of mental health days and mental distress rate. The coefficient on 'inequality' of northeast region is near 0. Conversely, the midwest region has the lowest estimate of mental health days and mental distress rate, while exhibiting the strongest association.
+And after including the set of control variables, the coefficients for `inequality` and mental health days or mental distress rate differ by region. However, now it appears that the South has the weakest association between `inequality` and `mental_distress_rate` and the Midwest still has the strongest. All of them happens in the two dependet variables.
+
 
 
 
