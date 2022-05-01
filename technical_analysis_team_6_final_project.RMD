@@ -1235,7 +1235,7 @@ xkabledply(anovaRes_mental_distress_rate, title = "ANOVA comparison between two 
 
 In addition to the linear models above, regression tree models were also experimented with to determine if other model types could improve predicting the prevalence of the mental health variables and variable importance for predicting each mental health variable.
 
-The regression tree model analyzes the relationship between number of poor mental health days versus all the economic inequality variables included in our dataset. Additionally, a region was included as an expalnatory variable to observe the impact that a specific region has on the dependent variable. In other words, the model regresses mental_health_days against inequality, median_inc, hs_grad, college, unempl, child_poverty, single_parent, severe_housing, food_index, mh_providers, pop_provider_ratio, and region.
+The regression tree model analyzes the relationship between number of poor mental health days versus all the economic inequality variables included in our dataset. Additionally, a region was included as an explanatory variable to observe the impact that a specific region has on the dependent variable. In other words, the model regresses mental_health_days against inequality, median_inc, hs_grad, college, unempl, child_poverty, single_parent, severe_housing, food_index, mh_providers, pop_provider_ratio, and region.
 
 ```{r}
 
