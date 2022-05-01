@@ -1326,7 +1326,7 @@ plotcp(prune_model_ment_helth_day_tree,minline = TRUE, lty = 3, col = 1, main="P
 The next section is focuses on how good the regression trees are at predicting the target variable. The models will be evaluated using RMSE. The lower the RMSE value the more accurate the model. The RMSE value of original regression tree is 0.427. The RMSE value of the pruned regression tree is 0.435. These RMSE values suggest that the original regression is a slightly better predicting model.
 
 ```{r}
-#Predicting and MSE for Regression Trees
+#Predicting and RMSE for Regression Trees
 
 #Prediction/Testing - Original Model
 yhat1=predict(model_ment_helth_day_tree,newdata=ranked[-train,])
@@ -1449,7 +1449,7 @@ plotcp(prune_model_ment_dis_rate_tree,minline = TRUE, lty = 3, col = 1, main="Pr
 The next section is focuses on how good the regression trees are at predicting the target variable. The models will be evaluated using RMSE. The lower the RMSE value the more accurate the model. The RMSE value of original regression tree is 0.0126. The RMSE value of the pruned regression tree is 0.0134. These RMSE values suggest that the original regression is a slightly better predicting model.
 
 ```{r}
-#Predicting and MSE for Regression Trees
+#Predicting and RMSE for Regression Trees
 
 #Prediction/Testing - Original Model
 yhat2=predict(model_ment_dis_rate_tree,newdata=ranked[-train,])
@@ -1485,6 +1485,10 @@ sqrt(mean((yhat_prune2-test)^2))
 
 ## Random Forest Models
 
+Finally, random forest models were constructed to further analyze the variable importance and how accurately a different model type can predict the metal health target variables. The first random forest model regresses the number of poor mental health days versus all the economic inequality variables included in our dataset. Additionally, a region and year variables were included as explanatory variables to observe the impact that a specific region and year have on predicting the dependent variable. 
+
+The top three most important variables in order of importance by %IncMSE are year, median_inc, and region. The top three most important variables in order of importance by IncNudePurity are year, median_inc, and region.
+
 ```{r}
 #Random Forest - Num. of Mentally Unhealthy Days
 
@@ -1492,7 +1496,7 @@ sqrt(mean((yhat_prune2-test)^2))
 set.seed(123)
 bag_ment_hlth_days=randomForest(mental_health_days ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region + year, data=ranked, subset=train, mtry=13, importance=TRUE)
 
-bag_ment_hlth_days
+#bag_ment_hlth_days
 
 #Predict/Test Random Forest Model
 yhat.bag1 = predict(bag_ment_hlth_days,newdata=ranked[-train,])
@@ -1500,7 +1504,7 @@ plot(yhat.bag1, test, main="Random Forest: Test vs. Predicted Values", xlab="Pre
 abline(0,1)
 
 #MSE
-mean((yhat.bag1-test)^2)
+#mean((yhat.bag1-test)^2)
 
 #RMSE
 sqrt(mean((yhat.bag1-test)^2))
@@ -1527,7 +1531,7 @@ varImpPlot(bag_ment_hlth_days, main = "Random Forest Vars. Importance: Target Y 
 set.seed(123)
 bag_ment_dis_rate=randomForest(mental_distress_rate ~ inequality + median_inc + hs_grad + college + unempl + child_poverty + single_parent + severe_housing + food_index + mh_providers + pop_provider_ratio + region + year, data=ranked, subset=train, mtry=13, importance=TRUE)
 
-bag_ment_dis_rate
+#bag_ment_dis_rate
 
 #Predict/Test Random Forest Model
 yhat.bag2 = predict(bag_ment_dis_rate,newdata=ranked[-train,])
@@ -1535,7 +1539,7 @@ plot(yhat.bag2, test, main="Random Forest: Test vs. Predicted Values", xlab="Pre
 abline(0,1)
 
 #MSE
-mean((yhat.bag2-test)^2)
+#mean((yhat.bag2-test)^2)
 
 #RMSE
 sqrt(mean((yhat.bag2-test)^2))
