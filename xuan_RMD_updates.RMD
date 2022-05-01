@@ -1,0 +1,354 @@
+---
+title: "Untitled"
+author: "Team 6"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Dependent variable: `mental_distress_rate`
+Assigned to: *Xuan*
+```{r}
+library(readxl)
+data = data.frame(read.csv("data/processed/analytic_data_2016_2021_with_regions.csv"))
+newdata=na.omit(data)
+a1=lm(mental_distress_rate~inequality,data = newdata)
+summary(a1)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a1)
+### The regression equation is: mental_distress_rate = 0.012920 * inequality + 0.068436
+### The model a1 can explain 16.4% variance.
+### The following is the figure of model a1. It can be seen that the fitting effect is not very good, and the points and lines are not collinear. This is because the R-Squared is relatively small and the percentage of variance explained is small, so the model fitting effect is not good, so this graph is actually meaningless. If R-Squared can reach about 90%, then the points and lines of this graph should basically coincide.
+```
+
+```{r}
+### Because the fitting effect of model a1 was not very good (low variance), I made a model a2. In model a2, I add other independent variables, including the median household income (median_inc), the percentage of households with severe housing problems (severe_housing), the unemployment rate (unempl), and the child poverty rate (child_poverty).
+a2=lm(mental_distress_rate~inequality+median_inc+severe_housing+unempl+child_poverty,data = newdata)
+summary(a2)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2)
+### It can be seen from the statistical results of model a2 that all independent variables in the model 2 have significant predictive effects, that is, these independent variables (factors) will significantly affect the frequent mental distress rate.
+### However, the R-squared of model a2 is still very low, only 35.5%. (In the process of model analysis, in general, the R-squared must reach 0.8 or more so that we can determine that this model is better).
+```
+
+```{r}
+#### Linear regression model of inequality and mental_distress_rate in the U.S. from 2016 to 2021
+## Linear regression model of inequality and mental_distress_rate in the United States in 2016
+D2016<-subset(newdata,year == "2016")
+a2016=lm(mental_distress_rate~inequality,data = D2016)
+summary(a2016)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2016)
+### The regression equation is: mental_distress_rate = 0.014374 * inequality + 0.049295
+### The model can explain 25.3% variance.
+## Linear regression model of inequality and mental_distress_rate in the United States in 2017
+D2017<-subset(newdata,year == "2017")
+a2017=lm(mental_distress_rate~inequality,data = D2017)
+summary(a2017)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2017)
+### The regression equation is: mental_distress_rate = 0.013137 * inequality + 0.058445
+### The model can explain 27.4% variance.
+### Linear regression model of inequality and mental_distress_rate in the United States in 2018
+D2018<-subset(newdata,year == "2018")
+a2018=lm(mental_distress_rate~inequality,data = D2018)
+summary(a2018)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2018)
+### The regression equation is: mental_distress_rate = 0.012085 * inequality + 0.068410
+### The model can explain 23.8% variance.
+### Linear regression model of inequality and mental_distress_rate in the United States in 2019
+D2019<-subset(newdata,year == "2019")
+a2019=lm(mental_distress_rate~inequality,data = D2019)
+summary(a2019)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2019)
+### The regression equation is: mental_distress_rate = 0.012539 * inequality + 0.066072
+### The model can explain 24.5% variance.
+### Linear regression model of inequality and mental_distress_rate in the United States in 2020
+D2020<-subset(newdata,year == "2020")
+a2020=lm(mental_distress_rate~inequality,data = D2020)
+summary(a2020)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2020)
+### The regression equation is: mental_distress_rate = 0.01334 * inequality + 0.07046
+### The model can explain 26.3% variance.
+### Linear regression model of inequality and mental_distress_rate in the United States in 2021
+D2021<-subset(newdata,year == "2021")
+a2021=lm(mental_distress_rate~inequality,data = D2021)
+summary(a2021)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2021)
+### The regression equation is: mental_distress_rate = 0.012272 * inequality + 0.097132
+### The model can explain 15.3% variance.
+# From above, we can see that in U.S. from 2016 to 2021, the inequality as independent variable is significant.But the R-squareds are separately 25.3%, 27.4%, 23.8%, 24.5%, 26.3%, and 15.3%, which means that the model is not good.
+```
+
+```{r}
+#### Linear regression model of inequality and mental_distress_rate in the Midwest region of U.S. from 2016 to 2021
+### Linear regression model of inequality and mental_distress_rate in the Midwest region of U.S. in 2016
+D2016M<-subset(D2016,region=="Midwest")
+a2016M=lm(mental_distress_rate~inequality,data = D2016M)
+summary(a2016M)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2016M)
+### The regression equation is: mental_distress_rate = 0.01074 * inequality + 0.05856
+### The model can explain 11.2% variance.
+### Linear regression model of inequality and mental_distress_rate in the Midwest region of U.S. in 2017
+D2017M<-subset(D2017,region=="Midwest")
+a2017M=lm(mental_distress_rate~inequality,data = D2017M)
+summary(a2017M)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2017M)
+### The regression equation is: mental_distress_rate = 0.010752 * inequality + 0.063096
+### The model can explain 13.7% variance.
+### Linear regression model of inequality and mental_distress_rate in the Midwest region of U.S. in 2018
+D2018M<-subset(D2018,region=="Midwest")
+a2018M=lm(mental_distress_rate~inequality,data = D2018M)
+summary(a2018M)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2018M)
+### The regression equation is: mental_distress_rate = 0.001156 * inequality + 0.06577
+### The model can explain 14.9% variance.
+### Linear regression model of inequality and mental_distress_rate in the Midwest region of U.S. in 2019
+D2019M<-subset(D2019,region=="Midwest")
+a2019M=lm(mental_distress_rate~inequality,data = D2019M)
+summary(a2019M)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2019M)
+### The regression equation is: mental_distress_rate = 0.012505 * inequality + 0.061629
+### The model can explain 16.4% variance.
+### Linear regression model of inequality and mental_distress_rate in the Midwest region of U.S. in 2020
+D2020M<-subset(D2020,region=="Midwest")
+a2020M=lm(mental_distress_rate~inequality,data = D2020M)
+summary(a2020M)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2020M)
+### The regression equation is: mental_distress_rate = 0.012961 * inequality + 0.067486
+### The model can explain 16.0% variance.
+### Linear regression model of inequality and mental_distress_rate in the Midwest region of U.S. in 2021
+D2021M<-subset(D2021,region=="Midwest")
+a2021M=lm(mental_distress_rate~inequality,data = D2021M)
+summary(a2021M)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2021M)
+### The regression equation is: mental_distress_rate = 0.01050 * inequality + 0.09908
+### The model can explain 6.88% variance.
+# From above, we can see that the midwest region of U.S. from 2016 to 2021, the inequality as independent variable is significant.But the R-squareds are separately 11.2%, 13.7%, 14.9%, 16.4%, 16.0%, and 6.88%, which means that the model is not good.
+```
+
+```{r}
+#### Linear regression model of inequality and mental_distress_rate in the Northeast region of U.S. from 2016 to 2021
+### Linear regression model of inequality and mental_distress_rate in the Northeast region of U.S. in 2016
+D2016N<-subset(D2016,region=="Northeast")
+a2016N=lm(mental_distress_rate~inequality,data = D2016N)
+summary(a2016N)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2016N)
+### The regression equation is: mental_distress_rate = 0.00329 * inequality + 0.09435
+### The model can explain 4.18% variance.
+### Linear regression model of inequality and mental_distress_rate in the Northeast region of U.S. in 2017
+D2017N<-subset(D2017,region=="Northeast")
+a2017N=lm(mental_distress_rate~inequality,data = D2017N)
+summary(a2017N)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2016N)
+### The regression equation is: mental_distress_rate = 0.003944 * inequality + 0.093585
+### The model can explain 10% variance.
+### Linear regression model of inequality and mental_distress_rate in the Northeast region of U.S. in 2018
+D2018N<-subset(D2018,region=="Northeast")
+a2018N=lm(mental_distress_rate~inequality,data = D2018N)
+summary(a2018N)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2016N)
+### The regression equation is: mental_distress_rate = 0.00146 * inequality + 0.11001
+### The model can explain 1.16% variance.
+### Linear regression model of inequality and mental_distress_rate in the Northeast region of U.S. in 2019
+D2019N<-subset(D2019,region=="Northeast")
+a2019N=lm(mental_distress_rate~inequality,data = D2019N)
+summary(a2019N)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2016N)
+### The regression equation is: mental_distress_rate = 0.001385 * inequality + 0.110462
+### The model can explain 1.09% variance.
+### Linear regression model of inequality and mental_distress_rate in the Northeast region of U.S. in 2020
+D2020N<-subset(D2020,region=="Northeast")
+a2020N=lm(mental_distress_rate~inequality,data = D2020N)
+summary(a2020N)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2020N)
+### The regression equation is: mental_distress_rate = 0.000358 * inequality + 0.122363
+### The model can explain 0.0635% variance.
+### Linear regression model of inequality and mental_distress_rate in the Northeast region of U.S. in 2021
+D2021N<-subset(D2021,region=="Northeast")
+a2021N=lm(mental_distress_rate~inequality,data = D2021N)
+summary(a2021N)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2021N)
+### The regression equation is: mental_distress_rate = -0.00523 * inequality + 0.16714
+### The model can explain 5.04% variance.
+# From above, we can see that the northeast region of U.S. from 2016 to 2021, the inequality as independent variable is significant in 2016, 2017 and 2021, is not significant in 2018, 2019 and 2020. And the R-squareds are separately 4.18%, 10%, 1.16%, 1.09%, 0.0635%, and 5.04%, which means that the model is not good. So the models of northeast region in 2018, 2019 and 2020 are meaningless.
+```
+
+```{r}
+#### Linear regression model of inequality, median_inc, severe_housing, unempl, child_poverty and mental_distress_rate in the Northeast region of U.S. from 2016 to 2021
+### Linear regression model of inequality, median_inc, severe_housing, unempl, child_poverty and mental_distress_rate in the Northeast region of U.S. in 2016
+D2016N<-subset(D2016,region=="Northeast")
+a2016N=lm(mental_distress_rate~inequality+median_inc+severe_housing+unempl+child_poverty,data = D2016N)
+summary(a2016N)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2016N)
+### The model can explain 64% variance.
+### Linear regression model of inequality, median_inc, severe_housing, unempl, child_poverty and mental_distress_rate in the Northeast region of U.S. in 2017
+D2017N<-subset(D2017,region=="Northeast")
+a2017N=lm(mental_distress_rate~inequality+median_inc+severe_housing+unempl+child_poverty,data = D2017N)
+summary(a2017N)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2016N)
+### The model can explain 72.2% variance.
+### Linear regression model of inequality, median_inc, severe_housing, unempl, child_poverty and mental_distress_rate in the Northeast region of U.S. in 2018
+D2018N<-subset(D2018,region=="Northeast")
+a2018N=lm(mental_distress_rate~inequality+median_inc+severe_housing+unempl+child_poverty,data = D2018N)
+summary(a2018N)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2016N)
+### The model can explain 71.3% variance.
+### Linear regression model of inequality, median_inc, severe_housing, unempl, child_poverty and mental_distress_rate in the Northeast region of U.S. in 2019
+D2019N<-subset(D2019,region=="Northeast")
+a2019N=lm(mental_distress_rate~inequality+median_inc+severe_housing+unempl+child_poverty,data = D2019N)
+summary(a2019N)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2016N)
+### The regression equation is: mental_distress_rate = 0.001385 * inequality + 0.110462
+### The model can explain 69.5% variance.
+### Linear regression model of inequality, median_inc, severe_housing, unempl, child_poverty and mental_distress_rate in the Northeast region of U.S. in 2020
+D2020N<-subset(D2020,region=="Northeast")
+a2020N=lm(mental_distress_rate~inequality+median_inc+severe_housing+unempl+child_poverty,data = D2020N)
+summary(a2020N)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2020N)
+### The regression equation is: mental_distress_rate = 0.000358 * inequality + 0.122363
+### The model can explain 67.9% variance.
+### Linear regression model of inequality, median_inc, severe_housing, unempl, child_poverty and mental_distress_rate in the Northeast region of U.S. in 2021
+D2021N<-subset(D2021,region=="Northeast")
+a2021N=lm(mental_distress_rate~inequality+median_inc+severe_housing+unempl+child_poverty,data = D2021N)
+summary(a2021N)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2021N)
+### The model can explain 74.2% variance.
+# From above, we can see that the northeast region of U.S. from 2016 to 2021, after add more independent variables, the R-Squared also increase.
+```
+
+```{r}
+#### Linear regression model of inequality and mental_distress_rate in the South region of U.S. from 2016 to 2021
+### Linear regression model of inequality and mental_distress_rate in the South region of U.S. in 2016
+D2016S<-subset(D2016,region=="South")
+a2016S=lm(mental_distress_rate~inequality,data = D2016S)
+summary(a2016S)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2016S)
+### The regression equation is: mental_distress_rate = 0.01218 * inequality + 0.06553
+### The model can explain 19.5% variance.
+### Linear regression model of inequality and mental_distress_rate in the South region of U.S. in 2017
+D2017S<-subset(D2017,region=="South")
+a2017S=lm(mental_distress_rate~inequality,data = D2017S)
+summary(a2017S)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2017S)
+### The regression equation is: mental_distress_rate = 0.010856 * inequality + 0.074482
+### The model can explain 21.4% variance.
+### Linear regression model of inequality and mental_distress_rate in the South region of U.S. in 2018
+D2018S<-subset(D2018,region=="South")
+a2018S=lm(mental_distress_rate~inequality,data = D2018S)
+summary(a2018S)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2018S)
+### The regression equation is: mental_distress_rate = 0.009553 * inequality + 0.085625
+### The model can explain 17.4% variance.
+### Linear regression model of inequality and mental_distress_rate in the South region of U.S. in 2019
+D2019S<-subset(D2019,region=="South")
+a2019S=lm(mental_distress_rate~inequality,data = D2019S)
+summary(a2019S)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2019S)
+### The regression equation is: mental_distress_rate = 0.009599 * inequality + 0.085632
+### The model can explain 16.9% variance.
+### Linear regression model of inequality and mental_distress_rate in the South region of U.S. in 2020
+D2020S<-subset(D2020,region=="South")
+a2020S=lm(mental_distress_rate~inequality,data = D2020S)
+summary(a2020S)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2020S)
+### The regression equation is: mental_distress_rate = 0.010878 * inequality + 0.088040
+### The model can explain 21.2% variance.
+### Linear regression model of inequality and mental_distress_rate in the South region of U.S. in 2021
+D2021S<-subset(D2021,region=="South")
+a2021S=lm(mental_distress_rate~inequality,data = D2021S)
+summary(a2021S)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2021S)
+### The regression equation is: mental_distress_rate = 0.010021 * inequality + 0.115671
+### The model can explain 13% variance.
+# From above, we can see that the south region of U.S. from 2016 to 2021, the inequality as independent variable is significant. But the R-squareds are separately 19.5%, 21.4%, 17.4%, 16.9%, 21.2%, and 13%, which means that the model is not good.
+```
+
+```{r}
+#### Linear regression model of inequality and mental_distress_rate in the West region of U.S. from 2016 to 2021
+### Linear regression model of inequality and mental_distress_rate in the West region of U.S. in 2016
+D2016W<-subset(D2016,region=="West")
+a2016W=lm(mental_distress_rate~inequality,data = D2016W)
+summary(a2016W)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2016W)
+### The regression equation is: mental_distress_rate = 0.01030 * inequality + 0.06330
+### The model can explain 18.7% variance.
+### Linear regression model of inequality and mental_distress_rate in the West region of U.S. in 2017
+D2017W<-subset(D2017,region=="West")
+a2017W=lm(mental_distress_rate~inequality,data = D2017W)
+summary(a2017W)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2017W)
+### The regression equation is: mental_distress_rate = 0.01055 * inequality + 0.06715
+### The model can explain 21.4% variance.
+### Linear regression model of inequality and mental_distress_rate in the West region of U.S. in 2018
+D2018W<-subset(D2018,region=="West")
+a2018W=lm(mental_distress_rate~inequality,data = D2018W)
+summary(a2018W)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2018W)
+### The regression equation is: mental_distress_rate = 0.01025 * inequality + 0.07286
+### The model can explain 20% variance.
+### Linear regression model of inequality and mental_distress_rate in the West region of U.S. in 2019
+D2019W<-subset(D2019,region=="West")
+a2019W=lm(mental_distress_rate~inequality,data = D2019W)
+summary(a2019W)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2019W)
+### The regression equation is: mental_distress_rate = 0.010694 * inequality + 0.070536
+### The model can explain 22.9% variance.
+### Linear regression model of inequality and mental_distress_rate in the West region of U.S. in 2020
+D2020W<-subset(D2020,region=="West")
+a2020W=lm(mental_distress_rate~inequality,data = D2020W)
+summary(a2020W)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2020W)
+### The regression equation is: mental_distress_rate = 0.010574 * inequality + 0.078467
+### The model can explain 21.7% variance.
+### Linear regression model of inequality and mental_distress_rate in the West region of U.S. in 2021
+D2021W<-subset(D2021,region=="West")
+a2021W=lm(mental_distress_rate~inequality,data = D2021W)
+summary(a2021W)
+plot(newdata$inequality,newdata$mental_distress_rate,xlab = "inequality",ylab = "mental_distress_rate")
+abline(a2021W)
+### The regression equation is: mental_distress_rate = 0.00829 * inequality + 0.10403
+### The model can explain 9.3% variance.
+# From above, we can see that the west region of U.S. from 2016 to 2021, the inequality as independent variable is significant. But the R-squareds are separately 18.7%, 21.4%, 20%, 22.9%, 21.7%, and 9.3%, which means that the model is not good.
+```
+
+
+## Comparing the Dependent Variables -- Xuan
+All of the results of the models have statistical meaning. Our data analysis models, whether by year or by region, are just linear equations in one variable. There is only one independent variable and one dependent variable in this model.So more independent variables may provide stronger persuasion.
+In the four regions, the northeast region is the most special region. In Mark's models, the Northeast has the highest estimated amount of poor mental health (see the intercept), the coefficient on `inequality` is near zero. In Xuan's models, the inequality as independent variable is significant in 2016, 2017 and 2021, is not significant in 2018, 2019 and 2020. And the R-squareds are separately 4.18%, 10%, 1.16%, 1.09%, 0.0635%, and 5.04%, which means that the model is not good. So the models of northeast region in 2018, 2019 and 2020 are meaningless. We all know that the economy of the Northeast region is the most developed, so I think more variables can be used to analyze the Northeast region.
