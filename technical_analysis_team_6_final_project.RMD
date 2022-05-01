@@ -1229,6 +1229,8 @@ xkabledply(anovaRes_mental_distress_rate, title = "ANOVA comparison between two 
 
 ## Regression Tree Models
 
+#Regression Tree - mental_health_days
+
 In addition to the linear models above, regression tree models were also experimented with to determine if other model types could improve predicting the prevalence of the mental health variables and variable importance for predicting each mental health variable.
 
 The regression tree model analyzes the relationship between number of poor mental health days versus all the economic inequality variables included in our dataset. Additionally, a region was included as an explanatory variable to observe the impact that a specific region has on the dependent variable. In other words, the model regresses mental_health_days against inequality, median_inc, hs_grad, college, unempl, child_poverty, single_parent, severe_housing, food_index, mh_providers, pop_provider_ratio, region, and year.
@@ -1282,6 +1284,8 @@ plotcp(model_ment_helth_day_tree, minline = TRUE, lty = 3, col = 1, main="Regres
 
 ```
 
+# Pruned Regression Tree - mental_health_days
+
 The next regression is a pruned version of the previous regression tree. The regression tree is being pruned to see if a smaller model can improve the prediction capabilities of the model. The cp value is 0.0067 for the pruned regression. This cp value was chosen because in the cp plot of the previous regression shows that cp values above 0.0067 do not drastically improve the model's X-val relative error. In other words, cp values above 0.0067 do not further drastically minimize the X-val relative error. 
 
 The following pruned tree has 13 leaf nodes.
@@ -1323,6 +1327,8 @@ plotcp(prune_model_ment_helth_day_tree,minline = TRUE, lty = 3, col = 1, main="P
 
 ```
 
+# Predicting/RMSE for Regression Trees - mental_health_days
+
 The next section is focuses on how good the regression trees are at predicting the target variable. The models will be evaluated using RMSE. The lower the RMSE value the more accurate the model. The RMSE value of original regression tree is 0.427. The RMSE value of the pruned regression tree is 0.435. These RMSE values suggest that the original regression is a slightly better predicting model.
 
 ```{r}
@@ -1358,6 +1364,7 @@ sqrt(mean((yhat_prune1-test1)^2))
 
 ```
 
+# Regression Tree - mental_distress_rate
 
 This section focuses on the mental_distress_rate variable. The regression tree model below analyzes the relationship between the poor mental health distress rate versus all the economic inequality variables included in our dataset. Additionally, a region and year variables were included as explanatory variables to observe the impact that a specific region and year have on predicting the dependent variable. In other words, the model regresses mental_distress_rate against inequality, median_inc, hs_grad, college, unempl, child_poverty, single_parent, severe_housing, food_index, mh_providers, pop_provider_ratio, region, and year.
 
@@ -1407,6 +1414,8 @@ plotcp(model_ment_dis_rate_tree, minline = TRUE, lty = 3, col = 1, main="Regress
 
 ```
 
+# Pruned Regression Tree - mental_distress_rate
+
 The next regression is a pruned version of the previous regression tree. The regression tree is being pruned to see if a smaller model can improve the prediction capabilities of the model. The cp value is 0.001 for the pruned regression. This cp value was chosen because in the cp plot of the previous regression shows that cp values above 0.01 do not drastically improve the model's X-val relative error. In other words, cp values above 0.01 do not further drastically minimize the X-val relative error. 
 
 The following pruned tree has 11 leaf nodes.
@@ -1445,6 +1454,8 @@ plotcp(prune_model_ment_dis_rate_tree,minline = TRUE, lty = 3, col = 1, main="Pr
 #R-squared
 #rsq.rpart(prune_model_ment_dis_rate_tree)
 ```
+
+# Predicting/RMSE for Regression Trees - mental_distress_rate
 
 The next section is focuses on how good the regression trees are at predicting the target variable. The models will be evaluated using RMSE. The lower the RMSE value the more accurate the model. The RMSE value of original regression tree is 0.0126. The RMSE value of the pruned regression tree is 0.0134. These RMSE values suggest that the original regression is a slightly better predicting model.
 
@@ -1485,9 +1496,11 @@ sqrt(mean((yhat_prune2-test2)^2))
 
 ## Random Forest Models
 
+# Random Forest - Num. of Mentally Unhealthy Days
+
 Finally, random forest models were constructed to further analyze the variable importance and how accurately a different model type can predict the metal health target variables. The first random forest model regresses the number of poor mental health days versus all the economic inequality variables included in our dataset. Additionally, a region and year variables were included as explanatory variables to observe the impact that a specific region and year have on predicting the dependent variable. 
 
-The top three most important variables in order of importance by %IncMSE are year, median_inc, and region. The top three most important variables in order of importance by IncNudePurity are year, median_inc, and region.
+The top three most important variables in order of importance by %IncMSE are year, median_inc, and region. The top three most important variables in order of importance by IncNudePurity are year, median_inc, and region. The RMSE value of this random forest is 0.327.
 
 ```{r}
 #Random Forest - Num. of Mentally Unhealthy Days
@@ -1519,10 +1532,11 @@ varImpPlot(bag_ment_hlth_days, main = "Random Forest Vars. Importance: Target Y 
 ```
 
 
+# Random Forest - Mental Distress Rate
 
+The second random forest model regresses the number of mental health distress rate versus all the economic inequality variables included in our dataset. Additionally, a region and year variables were included as explanatory variables to observe the impact that a specific region and year have on predicting the dependent variable. 
 
-
-
+The top three most important variables in order of importance by %IncMSE are year, median_inc, and region. The top three most important variables in order of importance by IncNudePurity are year, child_poverty, and median_inc. The RMSE value of this random forest is 0.00915.
 
 ```{r}
 #Random Forest - Mental Distress Rate
