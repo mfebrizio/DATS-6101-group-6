@@ -668,10 +668,10 @@ summ(lm_rate_7, vifs = T)
 ```
 
 The equations for the fuller models with interaction terms are below, where V~c~ is a vector of additional control variables:
-* `regionMidwest`: `mental_distress_rate` = 0.04 + 0.01 * `inequality` + V~c~
+* `regionMidwest`: `mental_distress_rate` = 0.0445 + 0.00696 * `inequality` + V~c~
 * `regionNortheast`: `mental_distress_rate` = 0.04 + 0.02 + (0.01 - 0.00348) * `inequality` + V~c~
-* `regionSouth`: `mental_distress_rate` = 0.04 + 0.02 + (0.01 - 0.00350) * `inequality` + V~c~
-* `regionWest`: `mental_distress_rate` = 0.04 + 0.01 + (0.01 - 0.00300) * `inequality` + V~c~
+* `regionSouth`: `mental_distress_rate` = 0.0445 + 0.0198 + (0.00696 - 0.00350) * `inequality` + V~c~
+* `regionWest`: `mental_distress_rate` = 0.0445 + 0.0119 + (0.00696 - 0.00300) * `inequality` + V~c~
 
 After including the set of control variables, the coefficients for `inequality` and the interaction terms are so small that the differences by region are barely noticeable. Looking at these smaller coefficients, the Midwest has strongest association, while South has the weakest association. However, as a whole, while there is still a statistically significant relationship between `mental_distress_rate` and `inequality`, the strength of the relationship seems very minor.
 
