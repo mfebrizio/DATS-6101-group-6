@@ -1233,9 +1233,11 @@ In addition to the linear models above, regression tree models were also experim
 
 The regression tree model analyzes the relationship between number of poor mental health days versus all the economic inequality variables included in our dataset. Additionally, a region was included as an explanatory variable to observe the impact that a specific region has on the dependent variable. In other words, the model regresses mental_health_days against inequality, median_inc, hs_grad, college, unempl, child_poverty, single_parent, severe_housing, food_index, mh_providers, pop_provider_ratio, region, and year.
 
-The initial regression tree model below has a max depth of 8 and a complexity penalty (cp), or complexity parameter, of 0.004. This is to allow for a large regression tree in order to produce a model that can best fit the data. However, it must be acknowledge that a larger tree will run the risk of over fitting the data making the model worse at predicing the target variable (i.e. the dependent variable). 
+The initial regression tree model below has a max depth of 8 and a complexity penalty (cp), or complexity parameter, of 0.004. This is to allow for a large regression tree in order to produce a model that can best fit the data. However, it must be acknowledge that a larger tree will run the risk of over fitting the data making the model worse at predicting the target variable (i.e. the dependent variable). 
 
 The following regression tree has 17 leaf nodes. 
+
+The summary table of the regression tree indicate the order of varibale importance for each variable within the regression. In order of importance the variables are ranked:
 
 ```{r}
 
@@ -1256,7 +1258,16 @@ model_ment_helth_day_tree <- rpart(mental_health_days ~ inequality + median_inc 
 
 #Summary for Number of Mentally Unhealthy Days
 summ_table1<-summary(model_ment_helth_day_tree)
-summ_table1$variable.importance
+table1_FI_tree<-summ_table1$variable.importance
+
+data.frame(table1_FI_tree)
+#table1_FI_tree
+
+table1_FI_tree %>%
+  kbl(caption="Variable Importance: Target Y - mental_health_days (all vars.) ",
+       format= "html", col.names = c("Feature Importance"),
+      align="r") %>%
+   kable_classic_2(full_width = F, html_font = "helvetica")
 
 #Plot Regression Tree
 #rpart.plot(model_ment_helth_day_tree)
@@ -1276,14 +1287,13 @@ plotcp(model_ment_helth_day_tree, minline = TRUE, lty = 3, col = 1, main="Regres
 
 The next regression is a pruned version of the previous regression tree. The regression tree is being pruned to see if a smaller model can improve the prediction capabilities of the model. The cp value is 0.0067 for the pruned regression. This cp value was chosen because in the cp plot of the previous regression shows that cp values above 0.0067 do not drastically improve the model's X-val relative error. In other words, cp values above 0.0067 do not further drastically minimize the X-val relative error. 
 
+The following pruned tree has 13 leaf nodes.
 
 ```{r}
 #Prune Tree - Number of Mentally Unhealthy Days
 
 #Prune Tree Model
 prune_model_ment_helth_day_tree=prune.rpart(model_ment_helth_day_tree, cp=0.0067, best=5)
-
-#prune_model_ment_helth_day_tree=prune.rpart(model_ment_helth_day_tree, cp=model_ment_helth_day_tree$cptable[which.min(model_ment_helth_day_tree$cptable[,"xerror"]),"CP"], best=5)
 
 
 #Summary of Pruned Tree
@@ -1305,6 +1315,8 @@ plotcp(prune_model_ment_helth_day_tree,minline = TRUE, lty = 3, col = 1, main="P
 
 ```
 
+The next section is focuses on how good the regressions trees are at predicting the target variable. The models will be evaluated using RMSE. The lower the RMSE value the more accurate the model. The RMSE value of original regression tree is 0.427. The RMSE value of the pruned regression tree is 0.435. These RMSE values suggest that the original regression is a slight better predicting model.
+
 ```{r}
 #Predicting and MSE for Regression Trees
 
@@ -1316,7 +1328,7 @@ plot(yhat1,test, main="Regression Tree: Test vs. Predicted Values", xlab="Predic
 abline(0,1)
 
 #MSE
-mean((yhat1-test)^2)
+#mean((yhat1-test)^2)
 
 #RMSE
 sqrt(mean((yhat1-test)^2))
@@ -1330,7 +1342,7 @@ plot(yhat_prune1,test, main="Pruned Regression Tree: Test vs. Predicted Values",
 abline(0,1)
 
 #MSE
-mean((yhat_prune1-test)^2)
+#mean((yhat_prune1-test)^2)
 
 #RMSE
 sqrt(mean((yhat_prune1-test)^2))
