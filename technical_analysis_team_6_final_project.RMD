@@ -1509,7 +1509,7 @@ sqrt(mean((yhat_prune1-test1)^2))
 
 
 
-### Regression Tree - mental_distress_rate
+## Regression Tree - mental_distress_rate
 
 This section focuses on the mental_distress_rate variable. The regression tree model below analyzes the relationship between the poor mental health distress rate versus all the economic inequality variables included in our dataset. Additionally, a region and year variables were included as explanatory variables to observe the impact that a specific region and year have on predicting the dependent variable. In other words, the model regresses mental_distress_rate against inequality, median_inc, hs_grad, college, unempl, child_poverty, single_parent, severe_housing, food_index, mh_providers, pop_provider_ratio, region, and year.
 
