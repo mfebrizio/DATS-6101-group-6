@@ -1239,6 +1239,8 @@ The regression tree model analyzes the relationship between number of poor menta
 
 The initial regression tree model below has a max depth of 8 and a complexity penalty (cp), or complexity parameter, of 0.004. This is to allow for a large regression tree in order to produce a model that can best fit the data. However, it must be acknowledge that a larger tree will run the risk of over fitting the data making the model worse at predicing the target variable (i.e. the dependent variable). 
 
+The following regression tree has 17 leaf nodes. 
+
 ```{r}
 
 #Regression Tree - Number of Mentally Unhealthy Days
@@ -1276,11 +1278,14 @@ plotcp(model_ment_helth_day_tree, minline = TRUE, lty = 3, col = 1, main="Regres
 
 ```
 
+The next regression is a pruned version of the previous regression tree. The regression tree is being pruned to see if a smaller model can improve the prediction capabilities of the model. The cp value is 0.0067 for the pruned regression. This cp value was chosen because in the cp plot of the previous regression shows that cp values above 0.0067 do not drastically improve the model's X-val relative error. In other words, cp values above 0.0067 do not further drastically minimize the X-val relative error. 
+
+
 ```{r}
 #Prune Tree - Number of Mentally Unhealthy Days
 
 #Prune Tree Model
-prune_model_ment_helth_day_tree=prune.rpart(model_ment_helth_day_tree, cp=0.0072, best=5)
+prune_model_ment_helth_day_tree=prune.rpart(model_ment_helth_day_tree, cp=0.0067, best=5)
 
 #prune_model_ment_helth_day_tree=prune.rpart(model_ment_helth_day_tree, cp=model_ment_helth_day_tree$cptable[which.min(model_ment_helth_day_tree$cptable[,"xerror"]),"CP"], best=5)
 
