@@ -1241,7 +1241,7 @@ The following regression tree has 17 leaf nodes.
 
 The summary table of the regression tree indicates the order of variable importance for each variable within the regression. Interestingly, the top three most important variables in order of importance is year, child_pov, and median_inc.
 
-```{r}
+```{r, results='asis'}
 
 #Regression Tree - Number of Mentally Unhealthy Days
 
@@ -1273,7 +1273,7 @@ table1_FI_tree %>%
 fancyRpartPlot(model_ment_helth_day_tree, main = "Regression Tree: Target Y - mental_health_days (all vars.)")
 
 #Print Complexity Penalty
-printcp(model_ment_helth_day_tree)
+#printcp(model_ment_helth_day_tree)
 
 #Plotting Complexity Parameters 
 par(mar = c(5, 5, 10, 5)) 
@@ -1292,7 +1292,7 @@ The following pruned tree has 13 leaf nodes.
 
 The summary table of the regression tree indicates the order of variable importance for each variable within the regression. Again, the top three most important variables in order of importance is year, child_pov, and median_inc.
 
-```{r}
+```{r, results='asis'}
 #Prune Tree - Number of Mentally Unhealthy Days
 
 #Prune Tree Model
@@ -1316,7 +1316,7 @@ table2_FI_tree %>%
 fancyRpartPlot(prune_model_ment_helth_day_tree, main = "Pruned Regression Tree: Target Y - mental_health_days (all vars.)")
 
 #Print Complexity Penalty of Prune Tree
-printcp(prune_model_ment_helth_day_tree)
+#printcp(prune_model_ment_helth_day_tree)
 
 #Plot Complexity Penalty of Prune Tree 
 par(mar = c(5, 5, 10, 5)) 
@@ -1331,7 +1331,7 @@ plotcp(prune_model_ment_helth_day_tree,minline = TRUE, lty = 3, col = 1, main="P
 
 The next section is focuses on how good the regression trees are at predicting the target variable. The models will be evaluated using RMSE. The lower the RMSE value the more accurate the model. The RMSE value of original regression tree is 0.427. The RMSE value of the pruned regression tree is 0.435. These RMSE values suggest that the original regression is a slightly better predicting model.
 
-```{r}
+```{r, results='asis'}
 #Predicting and RMSE for Regression Trees
 
 #Prediction/Testing - Original Model
@@ -1375,7 +1375,7 @@ The following regression tree has 16 leaf nodes.
 The summary table of the regression tree indicates the order of variable importance for each variable within the regression. Interestingly, the top three most important variables in order of importance is child_pov, year, and median_inc.
 
 
-```{r}
+```{r, results='asis'}
 #Regression Trees - Mental Health Distress Rate
 
 #Creating Train and Test Set - ranked
@@ -1402,7 +1402,7 @@ table3_FI_tree %>%
 fancyRpartPlot(model_ment_dis_rate_tree, main = "Regression Tree: Target Y - mental_distress_rate (all vars.)")
 
 #Print Complexity Penalty
-printcp(model_ment_dis_rate_tree)
+#printcp(model_ment_dis_rate_tree)
 
 
 #Plotting Complexity Parameters
@@ -1422,7 +1422,7 @@ The following pruned tree has 11 leaf nodes.
 
 The summary table of the regression tree indicates the order of variable importance for each variable within the regression. Again, the top three most important variables in order of importance is child_pov, median_inc, and year.
 
-```{r}
+```{r, results='asis'}
 #Prune Tree - Mental Health Distress Rate 
 
 #Prune Tree Model
@@ -1445,7 +1445,7 @@ table4_FI_tree %>%
 fancyRpartPlot(prune_model_ment_dis_rate_tree, main = "Pruned Regression Tree: Target Y - mental_distress_rate (all vars.)")
 
 #Print Complexity Penalty of Prune Tree
-printcp(prune_model_ment_dis_rate_tree)
+#printcp(prune_model_ment_dis_rate_tree)
 
 #Plot Complexity Penalty of Prune Tree 
 par(mar = c(5, 5, 10, 5))
@@ -1459,7 +1459,7 @@ plotcp(prune_model_ment_dis_rate_tree,minline = TRUE, lty = 3, col = 1, main="Pr
 
 The next section is focuses on how good the regression trees are at predicting the target variable. The models will be evaluated using RMSE. The lower the RMSE value the more accurate the model. The RMSE value of original regression tree is 0.0126. The RMSE value of the pruned regression tree is 0.0134. These RMSE values suggest that the original regression is a slightly better predicting model.
 
-```{r}
+```{r, results='asis'}
 #Predicting and RMSE for Regression Trees
 
 #Prediction/Testing - Original Model
@@ -1502,7 +1502,7 @@ Finally, random forest models were constructed to further analyze the variable i
 
 The top three most important variables in order of importance by %IncMSE are year, median_inc, and region. The top three most important variables in order of importance by IncNudePurity are year, median_inc, and region. The RMSE value of this random forest is 0.327.
 
-```{r}
+```{r, results='asis'}
 #Random Forest - Num. of Mentally Unhealthy Days
 
 #Generate Random Forest Model - Num. of Mentally Unhealthy Days (all vars.)
@@ -1524,7 +1524,7 @@ sqrt(mean((yhat.bag1-test1)^2))
 
 
 #Determine Variable Importance
-importance(bag_ment_hlth_days)
+#importance(bag_ment_hlth_days)
 
 #Plot Variable Importance 
 varImpPlot(bag_ment_hlth_days, main = "Random Forest Vars. Importance: Target Y - mental_health_days (all vars.)")
@@ -1538,7 +1538,7 @@ The second random forest model regresses the number of mental health distress ra
 
 The top three most important variables in order of importance by %IncMSE are year, median_inc, and region. The top three most important variables in order of importance by IncNudePurity are year, child_poverty, and median_inc. The RMSE value of this random forest is 0.00915.
 
-```{r}
+```{r, results='asis'}
 #Random Forest - Mental Distress Rate
 
 #Generate Random Forest Model - Mental Health Distress Rate 
@@ -1560,7 +1560,7 @@ sqrt(mean((yhat.bag2-test2)^2))
 
 
 #Determine Variable Importance
-importance(bag_ment_dis_rate)
+#importance(bag_ment_dis_rate)
 
 #Plot Variable Importance 
 varImpPlot(bag_ment_dis_rate, main = "Random Forest Vars. Importance: Target Y - mental_distress_rate (all vars.)")
@@ -1578,7 +1578,7 @@ Below is RMSE comparisons between all the models used in this project. Each mode
 
 Based on the RMSE values the random forest is the best predicting model because it has the lowest RMSE value of 0.327. A low RMSE value indicates that the simulated predicted data is close to the observed test data, indicating better accuracy relative to higher RMSE values.
 
-```{r}
+```{r, results='asis'}
 #RMSE Model Comparisons - mental_health_days
 
 lm_days_train <- lm(mental_health_days ~ inequality + college + hs_grad + unempl
@@ -1615,7 +1615,7 @@ Each model below compares the target variable mental_distress_rate against the i
 
 Based on the RMSE values the random forest is the best predicting model because it has the lowest RMSE value of 0.0091. A low RMSE value indicates that the simulated predicted data is close to the observed test data, indicating better accuracy relative to higher RMSE values.
 
-```{r}
+```{r, results='asis'}
 lm_dist_train <- lm(mental_distress_rate ~ inequality + college + hs_grad + unempl
                 + child_poverty + single_parent + severe_housing + food_index
                 + median_inc + mh_providers + pop_provider_ratio
