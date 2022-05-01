@@ -607,13 +607,13 @@ summary(lm_rate_6)
 ```{r lm_rate_d, results='asis'}
 
 # x7: larger model with interaction terms
-lm_rate_7 <- lm(mental_health_days ~ inequality*region + college + hs_grad + unempl
+lm_rate_7 <- lm(mental_distress_rate ~ inequality*region + college + hs_grad + unempl
                 + single_parent + severe_housing + food_index
                 + pop + pop_provider_ratio + pct_female + pct_rural + pct_below18
                 + pct_native_am + pct_asian + pct_pacific
                 + year, data = ranked)
-summary(lm_days_7)
-summ(lm_days_7, vifs = T)
+summary(lm_rate_7)
+summ(lm_rate_7, vifs = T)
 
 
 # The equations for the fuller models with interaction terms are below, where V~c~ is a vector of additional control variables:
