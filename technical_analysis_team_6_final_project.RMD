@@ -1222,7 +1222,7 @@ summary2.out$which[10,]
 
 ```{r, results='markup'}
 lm4 <- lm(rankedfs,formula=mental_distress_rate ~  inequality + college + mh_providers + pct_female + child_poverty  + unempl + single_parent + region_abb + pct_hispanic + pct_native_am)
-summary(lm4)s
+summary(lm4)
 ```
 
 Plot Output from regsubsets Function in leaps package
