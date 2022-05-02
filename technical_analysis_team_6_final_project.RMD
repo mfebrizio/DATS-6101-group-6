@@ -550,18 +550,18 @@ Next, we considered a series of linear models with `mental_distress_rate` as the
 
 # x1: base model by region
 lm_rate_1 <- lm(mental_distress_rate ~ inequality + region, data = ranked)
-summary(lm_rate_1)
+summ(lm_rate_1)
 
 # x2: include year as factor variable
 lm_rate_2 <- lm(mental_distress_rate ~ inequality + region + year, data = ranked)
-summary(lm_rate_2)
+summ(lm_rate_2)
 
 # x3: include economic vars
 lm_rate_3 <- lm(mental_distress_rate ~ inequality + college + hs_grad + unempl
                 + child_poverty + single_parent + severe_housing + food_index
                 + median_inc + pop_provider_ratio
                 + region + year, data = ranked)
-summary(lm_rate_3)
+summ(lm_rate_3)
 
 # x4: include demographic vars
 lm_rate_4 <- lm(mental_distress_rate ~ inequality + college + hs_grad + unempl
@@ -570,7 +570,7 @@ lm_rate_4 <- lm(mental_distress_rate ~ inequality + college + hs_grad + unempl
                 + pop + pct_below18 + pct_female + pct_rural
                 + pct_black + pct_native_am + pct_asian + pct_pacific + pct_hispanic + pct_white
                 + region + year, data = ranked)
-summary(lm_rate_4)
+summ(lm_rate_4)
 
 
 #From the first model, we can see that the equations for each region are below:
@@ -583,7 +583,7 @@ summary(lm_rate_4)
 
 ```
 
-From the first model, we can see that the equations for each region are below:
+From the first model, we can see that the equations for each region are below:  
 
 * `regionMidwest`: `mental_distress_rate` = 0.073 + 0.010 * `inequality`
 * `regionNortheast`: `mental_distress_rate` = 0.073 + 0.001 + 0.010 * `inequality`
@@ -625,7 +625,7 @@ lm_rate_5 <- lm(mental_distress_rate ~ inequality + college + hs_grad + unempl
                 + pop + pop_provider_ratio + pct_female + pct_rural + pct_below18
                 + pct_native_am + pct_asian + pct_pacific 
                 + region + year, data = ranked)
-summary(lm_rate_5)
+#summary(lm_rate_5)
 summ(lm_rate_5, vifs = T)
 
 ```
@@ -636,7 +636,7 @@ To permit the coefficients to differ by region, we included an interaction term 
 ## To permit the coefficients to differ by region, we included an interaction term between `inequality` and `region`.
 # x6: base model by region with interaction terms
 lm_rate_6 <- lm(mental_distress_rate ~ inequality*region, data = ranked)
-summary(lm_rate_6)
+summ(lm_rate_6)
 
 #From the model x6, we can see that the equations for each region are below:
 # regionMidwest: mental_distress_rate = 0.064421 + 0.012271 * inequality
@@ -647,6 +647,7 @@ summary(lm_rate_6)
 ```
 
 From the model x6, we can see that the equations for each region are below:
+
 * `regionMidwest`: `mental_distress_rate` = 0.064421 + 0.012271 * `inequality`
 * `regionNortheast`: `mental_distress_rate` = 0.064421 + 0.050482 + (0.012271 - 0.011059) * `inequality`
 * `regionSouth`: `mental_distress_rate` = 0.064421 + 0.022052 + (0.012271 - 0.001928) * `inequality`
@@ -662,12 +663,13 @@ lm_rate_7 <- lm(mental_distress_rate ~ inequality*region + college + hs_grad + u
                 + pop + pop_provider_ratio + pct_female + pct_rural + pct_below18
                 + pct_native_am + pct_asian + pct_pacific
                 + year, data = ranked)
-summary(lm_rate_7)
+#summary(lm_rate_7)
 summ(lm_rate_7, vifs = T)
 
 ```
 
 The equations for the fuller models with interaction terms are below, where V~c~ is a vector of additional control variables:
+
 * `regionMidwest`: `mental_distress_rate` = 0.0445 + 0.00696 * `inequality` + V~c~
 * `regionNortheast`: `mental_distress_rate` = 0.04 + 0.02 + (0.01 - 0.00348) * `inequality` + V~c~
 * `regionSouth`: `mental_distress_rate` = 0.0445 + 0.0198 + (0.00696 - 0.00350) * `inequality` + V~c~
