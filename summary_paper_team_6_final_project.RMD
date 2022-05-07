@@ -1513,6 +1513,7 @@ df2 %>%
 
 # Conclusion
 
+Designing models that accurately represent the relationships between mental health and economic inequality is a difficult but important task. The growing body of academic literature outlines that economic inequality is worsening within the United States and  health disparities increasingly occur along socioeconomic gradients. As health inequity continues to grow, mental health is likely to be impacted by the widening economic divide.  
 
 # References
 
