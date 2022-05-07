@@ -71,6 +71,23 @@ work to control limitations?
 
 # Introduction
 
+This summary paper continues investigating the same topic as our midterm project – the relationship between mental health and economic inequality. The results of our midterm project indicated that there was a relationship between income inequality and mental health, which varied geographically across regions of the U.S. In this paper, we used statistical models to better understand the strength of the relationship.
+
+Specifically, we asked the following SMART questions:
+
+- Is the relationship between mental health and income inequality across U.S. counties robust when
+including other economic variables?
+- Does the relationship differ across regions of the U.S.?
+- Does the relationship depend on the measure used for mental health?
+
+Our independent variable for measuring income inequality is the “ratio of household income at the 80th percentile to income at the 20th percentile.” We have two alternative measures of mental health that can be used as dependent variables: the rate of frequent mental distress and the average number of poor mental health days reported in the past 30 days. We also plan to consider additional variables that are expected to affect mental health, including median household income, the percentage of households with severe housing problems, the unemployment rate, the child poverty rate, and county-level demographic information.
+
+Because the measures of mental health are continuous variables, we chose a linear regression model to assess the strength of the relationship. Additionally, we also used regression tree and random forest models to determine variable importance and better predict the prevalence of mental health issues.
+
+Our paper is structured as follows. First, we open by describing our data set and summarizing the exploratory data analysis (EDA) that informed our statistical modeling. Next, we carried out feature selection for the linear regression models to ascertain XX. Then, we evaluated a series of linear regression models, using both dependent variables, and compared the results. Finally, we built regression tree models and random forests as a secondary method of supervised learning.
+
+Our results suggest XX.
+
 
 # Description of the Dataset
 
@@ -117,7 +134,6 @@ The variables in the data set are:
 
 # import csv as dataframe
 dframe <- data.frame(read.csv("data/processed/analytic_data_2016_2021_with_regions.csv"))
-#View(dframe)
 
 # convert variables to factor
 dframe$region <- factor(dframe$region)
@@ -154,20 +170,6 @@ levels(ranked$region_abb) <- c("",
                               "NE",
                               "S", 
                               "W")
-
-# subset ranked data by region
-ranked_MW <- ranked %>% subset(region=="Midwest")
-ranked_NE <- ranked %>% subset(region=="Northeast")
-ranked_SO <- ranked %>% subset(region=="South")
-ranked_WE <- ranked %>% subset(region=="West")
-
-# subset ranked data into annual datasets
-ranked16 <- ranked %>% subset(year==2016)
-ranked17 <- ranked %>% subset(year==2017)
-ranked18 <- ranked %>% subset(year==2018)
-ranked19 <- ranked %>% subset(year==2019)
-ranked20 <- ranked %>% subset(year==2020)
-ranked21 <- ranked %>% subset(year==2021)
 
 # sort dataframe
 ranked <- ranked[order(ranked$year, ranked$region, ranked$division, ranked$statecode, ranked$countycode), ]
@@ -1521,15 +1523,12 @@ The regression tree models constructed for both mental health dependent variable
 
 The random forest models constructed produced somewhat similar results regarding variable importance. However, depending on the measure of variable importance, either %IncMSE and IncNodePurity, different variables were ranked within the top three most important. For both random forest models, the top three most important variables measured by %IncMSE include year, median income, and region. For both random forest models, the top three most important variables measured by IncNodePurity include year, percentage of child poverty, and median income. Again, income inequality ranked lower than expected for both random forest models. The income inequality variable was ranked as the eleventh most important variable by both measures of variable importance.  
 
-# References
 
-Ribeiro, W. S., Bauer, A., Andrade, M. C. R., York-Smith, M., Pan, P. M., Pingani, L., Coutinho, E.S.F., & Evans-Lacko, S. (2017). Income inequality and mental illness-related morbidity and resilience: a systematic review and meta-analysis. The Lancet Psychiatry, 4(7), 554-562.
+# References
 
 Robert Wood Johnson Foundation (RWJF) (2021). 2021 County Health Rankings National Data. County Health Rankings & Roadmaps. https://www.countyhealthrankings.org/explore-health-rankings/rankings-data-documentation. Accessed: March 13, 2022.
 
 Robert Wood Johnson Foundation (RWJF) (2021). County Health Rankings Model. County Health Rankings & Roadmaps. https://www.countyhealthrankings.org/explore-health-rankings/measures-data-sources/county-health-rankings-model. Accessed: March 13, 2022.
-
-Tibber, M. S., Walji, F., Kirkbride, J. B., & Huddy, V. (2021). The association between income inequality and adult mental health at the subnational level—a systematic review. Social psychiatry and psychiatric epidemiology, 1-24.
 
 U.S. Census Bureau. (2010). Census Regions and Divisions of the United States. U.S. Department of Commerce Economics and Statistics Administration. https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf. Accessed: March 13, 2022.
 
