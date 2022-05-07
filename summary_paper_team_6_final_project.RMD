@@ -391,7 +391,7 @@ head(rankedfs)
 
 Before selecting the best subset of predictors for our regression, we ran a simple linear regression on our dataset with all predictors to set the base adjusted R2 for comparison.
 
-We will run Linear Regression with all predictors having mental health days as a target variable and excluding mental distress rate. And we are doing this to know whether these two mental health variables have similar relationships with the other predictors or not. That is why we are developing models separately.
+We performed Linear Regression with all predictors having mental health days as a target variable and excluding mental distress rate. And we are doing this to know whether these two mental health variables have similar relationships with the other predictors or not. That is why we are developing models separately.
 
 
 ```{r, results='asis'}
