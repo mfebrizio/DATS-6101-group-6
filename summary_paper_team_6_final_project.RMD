@@ -925,6 +925,7 @@ summ(lm_rate_4, vifs = T)
 # The majority of VIF results are below 5, which is acceptable. However, several variables have extremely high VIFs – specifically, such as 'child_poverty', 'pct_black', 'pct_white' and 'pct_hispanic'. We would remove these in the following model.
 ```
 
+After adding so many different variables, we need to check for multicollinearity. Thus, we also evaluated the VIF for each of the above models.
 The majority of VIF results are below 5, which is acceptable. However, several variables have extremely high VIFs – specifically, such as `child_poverty`, `pct_black`, `pct_white` and `pct_hispanic`. We would remove these in the following model.
 
 ```{r lm_rate_b, results='asis'}
