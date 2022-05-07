@@ -389,6 +389,11 @@ head(rankedfs)
 
 ### 1. Perform Linear Regression with All Predictors
 
+Before selecting the best subset of predictors for our regression, we ran a simple linear regression on our dataset with all predictors to set the base adjusted R2 for comparison.
+
+We will run Linear Regression with all predictors having mental health days as a target variable and excluding mental distress rate. And we are doing this to know whether these two mental health variables have similar relationships with the other predictors or not. That is why we are developing models separately.
+
+
 ```{r, results='asis'}
 #Before selecting the best subset of predictors for our regression, let’s run a simple linear regression on our dataset with all predictors to set the base adjusted r² for comparison.
 
@@ -396,6 +401,8 @@ lm1 <- lm(rankedfs,formula=mental_health_days ~. -mental_distress_rate)
 summ(lm1)
 
 ```
+
+With all of our variables included in the model, we can see that the base adjusted R2 is 0.485 and the residual standard error is 0.479.
 
 ```{r, results='hide'}
 
@@ -435,11 +442,13 @@ plot(reg.best10, scale = "Cp", main = "Cp")
 coef(reg.best10, 10, scale = "adjr2") # default BIC
 ```
 
+The summary table below provides details on which predictors to use for the model. The best predictors are indicated by the word "true." And then we selected the best 10 features with the method adjusted R2 to build the model with the selected features.
+
 ```{r, results='asis'}
 summary.out$which[10,]
 ```
 
-### 2. Perform Linear Regression with selected variables after feature selection
+### 2. Perform Linear Regression with selected best 10 variables after feature selection
 
 ```{r, results='asis'}
 
@@ -447,6 +456,7 @@ lm2 <- lm(rankedfs,formula=mental_health_days ~ child_poverty + inequality + une
 summ(lm2, vifs=T)
 
 ```
+In model with best 10 selected feeature, adjusted r2 has declined significantly to 0.461.
 
 ### 3. Plot Output from regsubsets Function in leaps package
 
@@ -482,8 +492,7 @@ days_maxR2 <- which.max(summary.out$rsq)
 days_maxR2
 
 ```
-
-The model with `r days_maxR2` variables has the highest R-squared. Variables marked with TRUE are the ones chosen.
+As we can see, at 24, we are getting the highest R2 and we have plotted the graph below. 
 
 ```{r, results='markup'}
 plot(summary.out$adjr2,xlab="number of variables", ylab="R Square", type="l")
@@ -497,7 +506,7 @@ days_maxAdjR2
 
 ```
 
-The model with `r days_maxAdjR2` variables has the highest adjusted \( R^2 \). Variables marked with TRUE are the ones chosen.
+As we can see, at 23, we are getting the maximum adjusted R2 and we have plotted the graph below. 
 
 ```{r, results='markup'}
 plot(summary.out$adjr2,xlab="number of variables", ylab="adjr2", type="l")
@@ -512,7 +521,7 @@ days_minCP
 
 ```
 
-The model with `r days_minCP` variables has the lowest CP.
+As we can see, at 22, we are getting the lowest CP and we have plotted the graph below.
 
 ```{r, results='markup'}
 plot(summary.out$cp,xlab="number of variables", ylab="cp", type="l")
@@ -527,7 +536,7 @@ days_minBIC
 
 ```
 
-The model with `r days_minBIC` variables has the lowest BIC.
+As we can see, at 22, we are getting the minimum BIC. 
 
 ```{r, results='markup'}
 plot(summary.out$bic,xlab="number of variables", ylab="BIC", type="l")
@@ -557,6 +566,8 @@ coef(regfit.best,23)
 
 ### 1.Perform Linear Regression with All Predictors
 
+we performed linear regression with all predictors having mental distress rate as a target variable and excluding mental health days to set the base adjusted R2 for comparison.
+
 ```{r, results='asis'}
 #1.Perform Linear Regression with All Predictors
 #Before selecting the best subset of predictors for our regression, let’s run a simple linear regression on our dataset with all predictors to set the base adjusted r² for comparison.
@@ -565,6 +576,8 @@ lm3 <- lm(rankedfs,formula=mental_distress_rate ~. -mental_health_days )
 summ(lm3)
 
 ```
+
+With all of our variables included in the model, we can see that the base adjusted r2 is 0.521 and the residual standard error is 0.0159.
 
 ```{r, results='hide'}
 
@@ -587,11 +600,14 @@ plot(reg2.best10, scale = "bic", main = "BIC")
 plot(reg2.best10, scale = "Cp", main = "Cp")
 coef(reg2.best10, 10, scale = "adjr2") # default BIC
 ```
+
+The summary table below provides details on which predictors to use for the model. The best predictors are indicated by the word "true." And then we selected the best 10 features with the method adjusted R2 to build the model.
+
 ```{r, results='asis'}
 summary2.out$which[10,]
 ```
 
-### 2.Perform Linear Regression with selected variables after feature selection
+### 2.Perform Linear Regression with selected best 10 variables after feature selection
 
 ```{r, results='asis'}
 
@@ -599,6 +615,8 @@ lm4 <- lm(rankedfs,formula=mental_distress_rate ~  inequality + college + mh_pro
 summ(lm4)
 
 ```
+
+In model with best 10 selected feeature, adjusted r2 has declined significantly to 0.497.
 
 ### 3. Plot Output from regsubsets Function in leaps package
 
@@ -633,7 +651,7 @@ rate_maxR2
 
 ```
 
-The model with `r rate_maxR2` variables has the highest R-squared. Variables marked with TRUE are the ones chosen.
+As we can see, at 24, we are getting the highest R2 and we have plotted the graph below. 
 
 ```{r, results='markup'}
 plot(summary2.out$adjr2,xlab="number of variables", ylab="R Square", type="l")
@@ -648,7 +666,7 @@ rate_maxAdjR2
 
 ```
 
-The model with `r rate_maxAdjR2` variables has the highest adjusted \( R^2 \). Variables marked with TRUE are the ones chosen.
+As we can see, at 24, we are getting the highest adjusted R2 and we have plotted the graph below. 
 
 ```{r, results='markup'}
 plot(summary2.out$adjr2,xlab="number of variables", ylab="adjr2", type="l")
@@ -663,7 +681,7 @@ rate_minCP
 
 ```
 
-The model with `r rate_minCP` variables has the lowest CP.
+As we can see, at 23, we are getting the lowest CP and we have plotted the graph below. 
 
 ```{r, results='markup'}
 
@@ -679,7 +697,7 @@ rate_minBIC <- which.min(summary2.out$bic)
 rate_minBIC
 ```
 
-The model with `r rate_minBIC` variables has the lowest BIC.
+As we can see, at 19, we are getting the lowest BIC and we have plotted the graph below. 
 
 ```{r, results='markup'}
 plot(summary2.out$bic,xlab="number of variables", ylab="BIC", type="l")
