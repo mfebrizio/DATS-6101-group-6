@@ -90,9 +90,9 @@ Our independent variable for measuring income inequality is the “ratio of hous
 
 Because the measures of mental health are continuous variables, we chose a linear regression model to assess the strength of the relationship. Additionally, we also used regression tree and random forest models to determine variable importance and better predict the prevalence of mental health issues.
 
-Our paper is structured as follows. First, we open by describing our data set and summarizing the exploratory data analysis (EDA) that informed our statistical modeling. Next, we carried out feature selection for the linear regression models to ascertain XX. Then, we evaluated a series of linear regression models, using both dependent variables, and compared the results. Finally, we built regression tree models and random forests as a secondary method of supervised learning.
+Our paper is structured as follows. First, we open by describing our data set and summarizing the exploratory data analysis (EDA) that informed our statistical modeling. Next, we carried out feature selection for the linear regression models to ascertain which variables produced the best adjusted R-squared value. Then, we evaluated a series of linear regression models, using both dependent variables, and compared the results. Finally, we built regression tree models and random forests as a secondary method of supervised learning.
 
-Our results suggest XX.
+Our results suggest that mental health and economic inequality exhibit statistically significant correlations. Additionally, random forests were determined to be the best predicting models and variables ranked the consistently highest in feature importance include year, region, median_inc, and child_poverty. Finally, there are many limitations that negatively impact the reliability of this project's analysis including the use of self-reported mental health data, the use of only adjusted R-squared for feature selection, the strong influence of the year variable on the models, and poorly tuned models for accurate and precise predictions of the target variables.     
 
 
 # Description of the Dataset
