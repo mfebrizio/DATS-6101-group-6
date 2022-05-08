@@ -42,6 +42,12 @@ loadPkg("purrr")
 loadPkg("tidyr")
 loadPkg("jtools")
 
+# feature selection
+library(ISLR)
+library(leaps)
+library(car)
+library(carData)
+
 #Libraries for Regression Trees and Random Forests
 library(rpart)
 library(rattle)
@@ -379,10 +385,10 @@ In general, the results were not surprising. The two mental health variables are
 
 # Feature Selection for Linear Models
 
-One thing we can do right away is to clean up the data a little. Remove variables that we know are least relevant.
+Given the large set of variables that we have at our disposal. We used feature selection to help us identify key elements of the data to use in our models. We engaged in this exercise for both dependent variables: `mental_health_days` and `mental_distress_rate`.
 
 ```{r, results='hide'}
-#rankedfsf = ranked[ -c(1:9) ] # cleaned datasetnndf <- nndf1[c(1:23)]
+#rankedfsf = ranked[ -c(1:9) ]
 rankedfs = ranked [c(10:33)] 
 head(rankedfs)
 ```
@@ -393,8 +399,7 @@ head(rankedfs)
 
 Before selecting the best subset of predictors for our regression, we ran a simple linear regression on our dataset with all predictors to set the base adjusted R2 for comparison.
 
-We performed Linear Regression with all predictors having mental health days as a target variable and excluding mental distress rate. And we are doing this to know whether these two mental health variables have similar relationships with the other predictors or not. That is why we are developing models separately.
-
+We performed linear regression with all predictors having mental health days as a target variable and excluding mental distress rate. And we are doing this to know whether these two mental health variables have similar relationships with the other predictors or not. That is why we are developing models separately.
 
 ```{r, results='asis'}
 #Before selecting the best subset of predictors for our regression, let’s run a simple linear regression on our dataset with all predictors to set the base adjusted r² for comparison.
@@ -404,13 +409,12 @@ summ(lm1)
 
 ```
 
-With all of our variables included in the model, we can see that the base adjusted R2 is 0.485 and the residual standard error is 0.479.
+With all of our variables included in the model, we can see that the base adjusted R2 is `r summary(lm1)$r.squared` and the residual standard error is `r summary(lm1)$sigma`.
 
 ```{r, results='hide'}
 
 # which all feature selection methods we can perform:
-library(ISLR)
-library(leaps)
+
 rankedfs <- na.omit(rankedfs)
 regfit.full = regsubsets(mental_health_days ~.-mental_distress_rate,rankedfs, nvmax=23)
 reg.summary <- summary(regfit.full)
@@ -418,7 +422,7 @@ names(reg.summary)
 
 ```
 
-```{r, results='markup'}
+```{r, results='markup', warning=FALSE}
 
 # Feature Selection: mental_health_days
 reg.best10 <- regsubsets(mental_health_days~. - mental_distress_rate , data = rankedfs, nvmax = NULL, nbest = 1, method = "exhaustive")
@@ -458,14 +462,11 @@ lm2 <- lm(rankedfs,formula=mental_health_days ~ child_poverty + inequality + une
 summ(lm2, vifs=T)
 
 ```
-In model with best 10 selected feeature, adjusted r2 has declined significantly to 0.461.
+In the model with best 10 selected features, the adjusted R2 has declined significantly to 0.461.
 
 ### 3. Plot Output from regsubsets Function in leaps package
 
-```{r, results='markup'}
-
-library(car)
-library(carData)
+```{r, results='markup', warning=FALSE}
 
 res.legend <-
     subsets(regsubsets(mental_health_days~. -mental_distress_rate , data = rankedfs, nvmax = 10, nbest = 1, method = "exhaustive"), statistic="adjr2", legend = FALSE, min.size = 5, main = "Adjusted R^2")
@@ -479,10 +480,8 @@ res.legend <-
 abline(a = 1, b = 1, lty = 2)
 #r2
 res.legend <-
-    subsets(regsubsets(mental_health_days~. -mental_distress_rate , data = rankedfs, nvmax = 10, nbest = 1, method = "exhaustive"), statistic="rsq", legend = FALSE, min.size = 5, main = "R square")
+    subsets(regsubsets(mental_health_days~. -mental_distress_rate , data = rankedfs, nvmax = 10, nbest = 1, method = "exhaustive"), statistic="rsq", legend = FALSE, min.size = 5, main = "R squared")
 abline(a = 1, b = 1, lty = 2)
-
-
 
 res.legend
 ```
@@ -494,7 +493,7 @@ days_maxR2 <- which.max(summary.out$rsq)
 days_maxR2
 
 ```
-As we can see, at 24, we are getting the highest R2 and we have plotted the graph below. 
+As we can see, at 24 features, we are getting the highest R2 and we have plotted the graph below. 
 
 ```{r, results='markup'}
 plot(summary.out$adjr2,xlab="number of variables", ylab="R Square", type="l")
@@ -508,7 +507,7 @@ days_maxAdjR2
 
 ```
 
-As we can see, at 23, we are getting the maximum adjusted R2 and we have plotted the graph below. 
+As we can see, at 23 features, we are getting the maximum adjusted R2 and we have plotted the graph below. 
 
 ```{r, results='markup'}
 plot(summary.out$adjr2,xlab="number of variables", ylab="adjr2", type="l")
@@ -523,7 +522,7 @@ days_minCP
 
 ```
 
-As we can see, at 22, we are getting the lowest CP and we have plotted the graph below.
+As we can see, at 22 features, we are getting the lowest CP and we have plotted the graph below.
 
 ```{r, results='markup'}
 plot(summary.out$cp,xlab="number of variables", ylab="cp", type="l")
@@ -538,7 +537,7 @@ days_minBIC
 
 ```
 
-As we can see, at 22, we are getting the minimum BIC. 
+As we can see, at 22 features, we are getting the minimum BIC. 
 
 ```{r, results='markup'}
 plot(summary.out$bic,xlab="number of variables", ylab="BIC", type="l")
@@ -568,7 +567,7 @@ coef(regfit.best,23)
 
 ### 1.Perform Linear Regression with All Predictors
 
-we performed linear regression with all predictors having mental distress rate as a target variable and excluding mental health days to set the base adjusted R2 for comparison.
+We performed linear regression with all predictors having mental distress rate as a target variable and excluding mental health days to set the base adjusted R2 for comparison.
 
 ```{r, results='asis'}
 #1.Perform Linear Regression with All Predictors
@@ -579,12 +578,11 @@ summ(lm3)
 
 ```
 
-With all of our variables included in the model, we can see that the base adjusted r2 is 0.521 and the residual standard error is 0.0159.
+With all of our variables included in the model, we can see that the base adjusted R2 is 0.521 and the residual standard error is 0.0159.
 
 ```{r, results='hide'}
 
 # feature selection(mental distress rate)
-library(leaps)
 reg2.best10 <- regsubsets(mental_distress_rate~. -mental_health_days, data = rankedfs, nvmax = NULL, nbest = 1, method = "exhaustive")
                              
 reg2.best10                   
@@ -623,8 +621,7 @@ In model with best 10 selected feeature, adjusted r2 has declined significantly 
 ### 3. Plot Output from regsubsets Function in leaps package
 
 ```{r, results='markup'}
-library(car)
-library(carData)
+
 res.legend <-
     subsets(regsubsets(mental_distress_rate~. -mental_health_days, data = rankedfs, nvmax = 10, nbest = 1, method = "exhaustive"), statistic="adjr2", legend = FALSE, min.size = 5, main = "Adjusted R^2")
 ## Mallow Cp
@@ -653,10 +650,10 @@ rate_maxR2
 
 ```
 
-As we can see, at 24, we are getting the highest R2 and we have plotted the graph below. 
+As we can see, at 24 features, we are getting the highest R2 and we have plotted the graph below. 
 
 ```{r, results='markup'}
-plot(summary2.out$adjr2,xlab="number of variables", ylab="R Square", type="l")
+plot(summary2.out$adjr2,xlab="number of variables", ylab="R Squared", type="l")
 points(rate_maxR2, summary2.out$rsq[rate_maxR2], col='red', cex=2, pch=20)
 ```
 
@@ -668,7 +665,7 @@ rate_maxAdjR2
 
 ```
 
-As we can see, at 24, we are getting the highest adjusted R2 and we have plotted the graph below. 
+As we can see, at 24 features, we are getting the highest adjusted R2 and we have plotted the graph below. 
 
 ```{r, results='markup'}
 plot(summary2.out$adjr2,xlab="number of variables", ylab="adjr2", type="l")
@@ -683,7 +680,7 @@ rate_minCP
 
 ```
 
-As we can see, at 23, we are getting the lowest CP and we have plotted the graph below. 
+As we can see, at 23 features, we are getting the lowest CP and we have plotted the graph below. 
 
 ```{r, results='markup'}
 
@@ -699,7 +696,7 @@ rate_minBIC <- which.min(summary2.out$bic)
 rate_minBIC
 ```
 
-As we can see, at 19, we are getting the lowest BIC and we have plotted the graph below. 
+As we can see, at 19 features, we are getting the lowest BIC and we have plotted the graph below. 
 
 ```{r, results='markup'}
 plot(summary2.out$bic,xlab="number of variables", ylab="BIC", type="l")
@@ -728,15 +725,23 @@ coef(regfit.best,23)
 
 # Linear Models
 
-We assessed two sets of models with different dependent variables. The first set of models used `mental_health_days` as the dependent variable, while the second set used `mental_distress_rate` as the dependent variable.
+After the feature selection exercises, we continued with analyzing our data using linear regression models. We assessed two sets of models with different dependent variables. The first set of models used `mental_health_days` as the dependent variable, while the second set used `mental_distress_rate` as the dependent variable. Within these sets of models, we compared the models that were produced with feature selection to several other potential combinations of variables. We also considered the variance inflation factors (VIFs) for models to address the issue of multicollinearity.
+
+```{r, results='hide'}
+
+lm_days_fs <- lm2
+
+lm_rate_fs <- lm4
+
+```
 
 ## Dependent variable: `mental_health_days`
 
-We arranged several different combinations of variables to evaluate what different might make a suitable linear model with `mental_health_days` as the dependent variable. First, we regressed `mental_health_days` on the independent variable of interest – `inequality` – and a factor variable indicating the US Census Bureau region. Next, we included the factor variable `year` to control for unobserved differences over time. Third, we integrated a set of economic variables that also might relate to mental health outcomes. Finally, we added demographic variables to the model.
+We arranged several different combinations of variables to evaluate what different might make a suitable linear model with `mental_health_days` as the dependent variable. First, we regressed `mental_health_days` on the independent variable of interest – `inequality` – and a factor variable for `region`. Next, we included a factor variable for `year` to control for unobserved differences over time. Third, we integrated a vector of economic variables that also might relate to mental health outcomes, as well as a vector of demographic variables.
 
 ```{r lm_days_a, results='asis'}
 
-# v1: base model by region
+# v1: base specification
 lm_days_1 <- lm(mental_health_days ~ inequality + region, data = ranked)
 summ(lm_days_1, vifs = T)
 
@@ -744,21 +749,17 @@ summ(lm_days_1, vifs = T)
 lm_days_2 <- lm(mental_health_days ~ inequality + region + year, data = ranked)
 summ(lm_days_2, vifs = T)
 
-# v3: include economic vars
+# v3: include economic and demographic vars
 lm_days_3 <- lm(mental_health_days ~ inequality + college + hs_grad + unempl
-                + child_poverty + single_parent + severe_housing + food_index
-                + median_inc + pop_provider_ratio
-                + region + year, data = ranked)
-summ(lm_days_3, vifs = T)
-
-# v4: include demographic vars
-lm_days_4 <- lm(mental_health_days ~ inequality + college + hs_grad + unempl
                 + child_poverty + single_parent + severe_housing + food_index
                 + median_inc + pop_provider_ratio
                 + pop + pct_below18 + pct_female + pct_rural
                 + pct_black + pct_native_am + pct_asian + pct_pacific + pct_hispanic + pct_white
                 + region + year, data = ranked)
-summ(lm_days_4, vifs = T)
+summ(lm_days_3, vifs = T)
+
+# v4: feature selection
+summ(lm_days_fs, vifs = T)
 
 ```
 
@@ -771,11 +772,11 @@ For the first (base) model, the equations for each region are as follows:
 
 Similar to the initial results from our EDA, the Midwest region (which is included in the intercept) has the lowest estimate for mental_health_days and the South has the highest. All the coefficients are statistically significant. Our measure for income inequality is statistically significant at the 0.001 level with a coefficient of `r lm_days_1$coefficients[[2]]`, indicating a positive association with poor mental health days.
 
-After including the year factor variables, the economic variables, and the demographic variables, the coefficients on all variables remained statistically significant. However, the coefficient on `inequality` declined to `r lm_days_4$coefficients[[2]]` in the fourth model (which included the most variables). This suggests that the base model exhibited omitted variable bias that the fuller model at least partially addressed. The South still had the largest coefficient among the `region` factor variables.
+After including the year factor variables, the economic variables, and the demographic variables, the coefficients on all variables remained statistically significant. However, the coefficient on `inequality` declined to `r lm_days_3$coefficients[[2]]` in the third model (which included the most variables). This suggests that the base model exhibited omitted variable bias that the fuller model at least partially addressed. The South still had the largest coefficient among the `region` factor variables.
 
 In general, The other economic variables demonstrated relationships with mental health that were expected. For instance, higher rates for`unempl`, `child_poverty`, `single_parent`, and `severe_housing` were all associated with worse mental health. A better food environment, higher median household incomes, and having a larger percentage of the population with some post-secondary education were associated with better mental health. Interestingly, a higher high-school graduation rate was positively associated with poor mental health.
 
-The following table shows the regression results for models 1, 2, 3, and 4 (from above).
+The following table shows the regression results for the models discussed above (#1, #2, and #3) and the model produced by feature selection (#4).
 
 ```{r lm_table_a, results='asis'}
 
@@ -785,7 +786,7 @@ tables_a_c <- c("(Intercept)", "inequality",
                        "severe_housing", "food_index", "median_inc", 
                        "pop_provider_ratio", "pop")
 
-export_summs(lm_days_1, lm_days_2, lm_days_3, lm_days_4, 
+export_summs(lm_days_1, lm_days_2, lm_days_3, lm_days_fs, 
              #error_format = "({p.value})",
              statistics = c(Num.obs = "nobs", R2 = "r.squared", adj.R2 = "adj.r.squared"), 
              model.names = c("1", "2", "3", "4"), 
@@ -794,9 +795,9 @@ export_summs(lm_days_1, lm_days_2, lm_days_3, lm_days_4,
 
 ```
 
-After adding so many different variables, we want to check for multicollinearity. Thus, we also evaluated the VIF for each model.
+The model produced by feature selection has a relatively low adjusted R2, compared to the models with the full set of control variables. As a result, we decided to focus on the models that explain a larger degree of variance.
 
-The majority of VIF results are below 5, which is acceptable. However, several variables have extremely high VIFs – specifically, the demographic variables for ethnic groups. The following model removed `pct_white`, which improved the VIFs significantly. It also removed `child_poverty`, which had a relatively high VIF of `r vif(lm_days_4)['child_poverty'][[1]]`. After removing the collinear variables, the VIFs of the model were all below 5.
+After adding so many different variables, we want to check for multicollinearity. Thus, we also evaluated the VIFs for each model. The majority of VIF results are below 5, which is acceptable. However, several variables have extremely high VIFs – specifically, the demographic variables for ethnic groups. The following model removed `pct_white`, which improved the VIFs significantly. It also removed `child_poverty`, which had a relatively high VIF of `r vif(lm_days_3)['child_poverty'][[1]]`. After removing the collinear variables, the VIFs of the model were all below 5.
 
 ```{r lm_days_b, results='asis'}
 
@@ -827,7 +828,7 @@ The equations for each region with interaction terms are as follows:
 * `regionSouth`:  `mental_health_days` = `r lm_days_6$coefficients[[1]]` + `r lm_days_6$coefficients[[4]]` + (`r lm_days_6$coefficients[[2]]` + `r lm_days_6$coefficients[[7]]`) * `inequality`
 * `regionWest`:  `mental_health_days` = `r lm_days_6$coefficients[[1]]` + `r lm_days_6$coefficients[[5]]` + (`r lm_days_6$coefficients[[2]]` + `r lm_days_6$coefficients[[8]]`) * `inequality`
 
-These results suggest that the strength of the relationship between `mental_health_days` and `inequality` differs by region. In fact, while the Northeast has the highest estimated amount of poor mental health (see the intercept), the coefficient on `inequality` is near zero. Conversely, the Midwest has the lowest estimate of poor mental health, while exhibiting the strongest association. All the independent variables are statistically significant.
+These results suggest that the strength of the relationship between `mental_health_days` and `inequality` differs by region. In fact, the coefficient on `inequality` is near zero for the Northeast. Conversely, the Midwest exhibits the strongest association. All the independent variables are statistically significant.
 
 ```{r lm_days_d, results='asis'}
 
@@ -836,9 +837,13 @@ lm_days_7 <- lm(mental_health_days ~ inequality*region + college + hs_grad + une
                 + single_parent + severe_housing + food_index
                 + pop + pop_provider_ratio + pct_female + pct_rural + pct_below18
                 + pct_black + pct_native_am + pct_asian + pct_pacific + pct_hispanic
-                + year, data = ranked)
+                + year, data = ranked) #, terms = 'marginal')
 summ(lm_days_7)
-vif(lm_days_7)
+
+# check vifs but use "high-order" because of interaction terms
+# this method computes a GVIF for each high-order term in the model
+# GVIF^[1/(2*df)], the last of which is intended to be comparable across terms of different dimension
+vif(lm_days_7, type = "high-order")
 
 ```
 
@@ -851,7 +856,7 @@ The equations for the fuller models with interaction terms are below, where V~c~
 
 After including the set of control variables, the coefficients for `inequality` still differ by region. However, now it appears that the South has the weakest association between `inequality` and `mental_health_days` and the Midwest still has the strongest.
 
-The following table shows the regression results for models 1, 5, 6, and 7 (from above).
+The following table shows the regression results for models #1, #5, #6, and #7 (from above).
 
 ```{r lm_table_b, results='asis'}
 
@@ -871,45 +876,34 @@ export_summs(lm_days_1, lm_days_5, lm_days_6, lm_days_7,
 
 ```
 
+After removing the collinear variables, the larger models still perform well, with an adjusted R2 of 0.72. Including the interaction terms between `inequality` and `region` do not change the adjusted R2, but they suggest that there are meaningful differences across regions for the relationship between mental health and inequality.
+
 
 ## Dependent variable: `mental_distress_rate`
 
-Next, we considered a series of linear models with `mental_distress_rate` as the dependent variable. In the following models, we used different combinations of variables to find the most suitable model.
+Next, we considered a series of linear models with `mental_distress_rate` as the dependent variable. In the following models, we used different combinations of variables to find the most suitable model. Just as above, we also incorporated the model produced by feature selection.
 
 ```{r lm_rate_a, results='asis'}
 
 # x1: base model by region
 lm_rate_1 <- lm(mental_distress_rate ~ inequality + region, data = ranked)
-summ(lm_rate_1)
+summ(lm_rate_1, vifs = T)
 
 # x2: include year as factor variable
 lm_rate_2 <- lm(mental_distress_rate ~ inequality + region + year, data = ranked)
-summ(lm_rate_2)
+summ(lm_rate_2, vifs = T)
 
-# x3: include economic vars
+# x3: include economic and demographic vars
 lm_rate_3 <- lm(mental_distress_rate ~ inequality + college + hs_grad + unempl
-                + child_poverty + single_parent + severe_housing + food_index
-                + median_inc + pop_provider_ratio
-                + region + year, data = ranked)
-summ(lm_rate_3)
-
-# x4: include demographic vars
-lm_rate_4 <- lm(mental_distress_rate ~ inequality + college + hs_grad + unempl
                 + child_poverty + single_parent + severe_housing + food_index
                 + median_inc + pop_provider_ratio
                 + pop + pct_below18 + pct_female + pct_rural
                 + pct_black + pct_native_am + pct_asian + pct_pacific + pct_hispanic + pct_white
                 + region + year, data = ranked)
-summ(lm_rate_4)
+summ(lm_rate_3, vifs = T)
 
-
-#From the first model, we can see that the equations for each region are below:
-# regionMidwest: mental_distress_rate = 0.073 + 0.010 * inequality
-# regionNortheast: mental_distress_rate = 0.073 + 0.001 + 0.010 * inequality
-# regionSouth: mental_distress_rate = 0.073 + 0.014 + 0.010 * inequality
-# regionWest: mental_distress_rate = 0.073 + 0.002 + 0.010 * inequality
-# From above, we can see that the Midwest has the lowest estimate for mental_distress_rate, and the South has the highest estimate. The northeast region shows not significant, others are significant.
-# After including the year factor variables, the economic variables, and the demographic variables, the coefficients on all variables remained significant. The northeast continue to show not significant. However, the coefficient on 'inequality' declined from 0.0101 to 0.00274 in the fourth model, which suggests that the base model exhibited omitted variable bias that the fuller model at least partially addressed. The South region still has the largest coefficient among the 'region' factor variables.
+# x4: feature selection
+summ(lm_rate_fs, vifs = T)
 
 ```
 
@@ -918,15 +912,15 @@ From the first model, we can see that the equations for each region are below:
 * `regionMidwest`: `mental_distress_rate` = 0.073 + 0.010 * `inequality`
 * `regionNortheast`: `mental_distress_rate` = 0.073 + 0.001 + 0.010 * `inequality`
 * `regionSouth`: `mental_distress_rate` = 0.073 + 0.014 + 0.010 * `inequality`
-* `regionWest`: `mental_distress_rate` = 0.073 + 0.002 + 0.010 * `inequality`
+* `regionWest`: `mental_distress_rate` = 0.073 + 0.003 + 0.010 * `inequality`
 
-From above, we can see that the Midwest has the lowest estimate for `mental_distress_rate`, and the South has the highest estimate. The Northeast region shows not significant, others are significant.
+From above, we can see that the Midwest has the lowest estimate for `mental_distress_rate`, and the South has the highest estimate. The coefficient for the Northeast region is not significant at the 0.05 level, while the others are significant.
 
 After including the year factor variables, the economic variables, and the demographic variables, the coefficients on most variables remained significant. However, the coefficient on `inequality` declined from 0.0101 to 0.00274 in the fourth model, which suggests that the base model exhibited omitted variable bias that the fuller model at least partially addressed. The South region still has the largest coefficient among the `region` factor variables.
 
 ```{r lm_table_c, results='asis'}
 
-export_summs(lm_rate_1, lm_rate_2, lm_rate_3, lm_rate_4,
+export_summs(lm_rate_1, lm_rate_2, lm_rate_3, lm_rate_fs,
              statistics = c(Num.obs = "nobs", R2 = "r.squared", adj.R2 = "adj.r.squared"), 
              model.names = c("1", "2", "3", "4"), 
              coefs = tables_a_c
@@ -934,19 +928,9 @@ export_summs(lm_rate_1, lm_rate_2, lm_rate_3, lm_rate_4,
 
 ```
 
-```{r lm_rate_vifs, results='asis'}
-#After adding so many different variables, we need to check for multicollinearity. Thus, we also evaluated the VIF for each of the above models.
+Similar to the previous section, the model produced by feature selection has a much lower adjusted R2 than the model with the full set of control variables. In fact, the model with just `region` and `year` factor variables explains more variation in the dependent variable than the feature selection model.
 
-summ(lm_rate_1, vifs = T)
-summ(lm_rate_2, vifs = T)
-summ(lm_rate_3, vifs = T)
-summ(lm_rate_4, vifs = T)
-
-# The majority of VIF results are below 5, which is acceptable. However, several variables have extremely high VIFs – specifically, such as 'child_poverty', 'pct_black', 'pct_white' and 'pct_hispanic'. We would remove these in the following model.
-```
-
-After adding so many different variables, we need to check for multicollinearity. Thus, we also evaluated the VIF for each of the above models.
-The majority of VIF results are below 5, which is acceptable. However, several variables have extremely high VIFs – specifically, such as `child_poverty`, `pct_black`, `pct_white` and `pct_hispanic`. We would remove these in the following model.
+After adding so many different variables, we need to check for multicollinearity. Thus, we also evaluated the VIFs for each of the above models. The majority of VIF results are below 5, which is acceptable. However, several variables have high VIFs – such as `child_poverty`, `pct_black`, `pct_white` and `pct_hispanic`. We remove these in the following model.
 
 ```{r lm_rate_b, results='asis'}
 
@@ -984,7 +968,7 @@ From the model x6, we can see that the equations for each region are below:
 * `regionSouth`: `mental_distress_rate` = 0.064421 + 0.022052 + (0.012271 - 0.001928) * `inequality`
 * `regionWest`: `mental_distress_rate` = 0.064421 + 0.013255 + (0.012271 - 0.002526) * `inequality`
 
-From the above equations, we can see that the strength of the relationship between `mental_distress_rate` and `inequality` differs by region. In fact, while the Northeast has the highest estimated amount of mental distress rate (because the intercept of Northeast region is '0.114903'). The coefficient on `inequality` of Northeast region is '0.001212' near 0. Conversely, the Midwest region has the lowest estimate of mental distress rate (0.064421), while exhibiting the strongest association. All the independent variables are statistically significant.
+From the above equations, we can see that the strength of the relationship between `mental_distress_rate` and `inequality` differs by region. In fact, while the Northeast has the highest estimated amount of mental distress rate (because the intercept of Northeast region is `r 0.064421 + 0.050482`), it also has the smallest coefficient on `inequality` at `r 0.012271 - 0.011059`. Conversely, the Midwest region has the lowest estimate of mental distress rate (0.064421), while exhibiting the strongest association. All the independent variables are statistically significant.
 
 ```{r lm_rate_d, results='asis'}
 
@@ -995,18 +979,23 @@ lm_rate_7 <- lm(mental_distress_rate ~ inequality*region + college + hs_grad + u
                 + pct_native_am + pct_asian + pct_pacific
                 + year, data = ranked)
 #summary(lm_rate_7)
-summ(lm_rate_7, vifs = T)
+summ(lm_rate_7)
+
+# check vifs but use "high-order" because of interaction terms
+# this method computes a GVIF for each high-order term in the model
+# GVIF^[1/(2*df)], the last of which is intended to be comparable across terms of different dimension
+vif(lm_rate_7, type = "high-order")
 
 ```
 
 The equations for the fuller models with interaction terms are below, where V~c~ is a vector of additional control variables:
 
 * `regionMidwest`: `mental_distress_rate` = 0.0445 + 0.00696 * `inequality` + V~c~
-* `regionNortheast`: `mental_distress_rate` = 0.04 + 0.02 + (0.01 - 0.00348) * `inequality` + V~c~
+* `regionNortheast`: `mental_distress_rate` = 0.0445 + 0.0165 + (0.00696 - 0.00348) * `inequality` + V~c~
 * `regionSouth`: `mental_distress_rate` = 0.0445 + 0.0198 + (0.00696 - 0.00350) * `inequality` + V~c~
 * `regionWest`: `mental_distress_rate` = 0.0445 + 0.0119 + (0.00696 - 0.00300) * `inequality` + V~c~
 
-After including the set of control variables, the coefficients for `inequality` and the interaction terms are so small that the differences by region are barely noticeable. Looking at these smaller coefficients, the Midwest has strongest association, while South has the weakest association. However, as a whole, while there is still a statistically significant relationship between `mental_distress_rate` and `inequality`, the strength of the relationship seems very minor.
+After including the set of control variables, the coefficients for `inequality` and the interaction terms are so small that the differences by region are barely noticeable. Looking at these smaller coefficients, the Midwest has the strongest association, while South has the weakest association. However, as a whole, while there is still a statistically significant relationship between `mental_distress_rate` and `inequality`, the strength of the relationship seems very minor.
 
 ```{r lm_table_d, results='asis'}
 
@@ -1018,28 +1007,42 @@ export_summs(lm_rate_1, lm_rate_5, lm_rate_6, lm_rate_7,
 
 ```
 
+Without the collinear variables, the larger models perform well again, with an adjusted R2 above 0.75. Including the interaction terms between `inequality` and `region` do not change the adjusted R2 very much, but they suggest that there are meaningful differences across regions for the relationship between mental health and inequality.
+
 
 # Model Evaluation
 
 ## ANOVA Comparison of Models
 
-```{r, anova_lm, results='markup'}
+To evaluate our linear models, we conducted ANOVA tests on their residuals. In the following tables, we compare the ANOVA results for the model with the full set of control variables (#3), the model produced from feature selection (#4), the model removing several variables to reduce multicollinearity (#5), and the model including interaction terms and control variables (#7). We do this for each dependent variable.
 
-anovaRes_mental_health_days <- anova(lm1,lm2)
-anovaRes_mental_distress_rate <- anova(lm3,lm4)
+The results for `mental_health_days` suggest that the final model (#7) is the best model. This model includes interaction terms between `inequality` and `region` as well as a set of economic and demographic variables. The F-statistics for these comparisons are all statistically significant.
 
-xkabledply(anovaRes_mental_health_days, title = "ANOVA comparison between two linear models for mental health days : lm1 and lm2")
-xkabledply(anovaRes_mental_distress_rate, title = "ANOVA comparison between two linear models for mental distress rate : lm3 and lm4")
+```{r anova_lm_days, results='markup'}
+
+anovaRes_mental_health_days <- anova(lm_days_3, lm_days_fs, lm_days_5, lm_days_7)
+
+xkabledply(anovaRes_mental_health_days, title = "ANOVA comparison of linear models for mental health days")
+
+```
+
+Similar to the above results, the best model is the final model (#7) when `mental_distress_rate` is the dependent variable.  This model includes interaction terms between `inequality` and `region` as well as a set of economic and demographic variables. The F-statistics for these comparisons are all statistically significant.
+
+```{r anova_lm_days, results='markup'}
+
+anovaRes_mental_distress_rate <- anova(lm_rate_3, lm_rate_fs, lm_rate_5, lm_rate_7)
+
+xkabledply(anovaRes_mental_distress_rate, title = "ANOVA comparison of linear models for mental distress rate")
 
 ```
 
 ## Comparing the Dependent Variables
 
-The results from the linear models for both dependent variables – `mental_health_days` and `mental_distress_rate` – are similar. Every model has a statistically significant coefficient on `inequality` and for the majority of region coefficients. These general trends remained after adding more independent variables, to make our models more robust.
+The results from the linear models for both dependent variables – `mental_health_days` and `mental_distress_rate` – are similar. Every model has a statistically significant coefficient on `inequality`, and the coefficients for the majority of regions are statistically significant too. These general trends remained after adding more independent variables, to make our models more robust.
 
-When we want to permit the coefficients to differ by region, we included an interaction term between `inequality` and `region`. For both dependent variables, the Midwest region exhibits the strongest association between `inequality` and mental health and the South has the weakest association.
+When we want to permit the coefficients to differ by region, we included an interaction term between `inequality` and `region`. For both dependent variables, the Midwest region exhibits the strongest association between `inequality` and mental health, and the South has the weakest association.
 
-However, when `mental_distress_rate` is the dependent variable, the strength of the association is generally weaker than for the models with `mental_health_days` as the dependent variable. This could be partly due to how the variables are measured – where `mental_health_days` will be a number greater than zero (and usually 1), while `mental_distress_rate` is always a percentage below 1. Additionally, these differences could also suggest that the relationship between mental health and inequality also depends on the measure of mental health used.
+However, when `mental_distress_rate` is the dependent variable, the strength of the association is generally weaker than for the models with `mental_health_days` as the dependent variable. This could be partly due to how the variables are measured. For example, `mental_health_days` will be a number greater than zero (and usually > 1), while `mental_distress_rate` is always a percentage ranging from 0 to 1 (and typically < 0.25). Additionally, these differences could also suggest that the relationship between mental health and inequality also depends on the measure of mental health used.
 
 
 # Regression Tree Models
@@ -1517,11 +1520,19 @@ df2 %>%
 
 Designing models that accurately represent the relationships between mental health and economic inequality is a difficult but important task. The growing body of academic literature outlines that economic inequality is worsening within the United States and  health disparities increasingly occur along socioeconomic gradients. As health inequity continues to grow, mental health is likely to be impacted by the widening economic divide. 
 
-The EDA and hypothesis testing conducted in the Midterm Project suggested that the relationship the relationship between mental health and economic inequality differs by region. Linear modeling indicates that the relationship between mental health and economic inequality is statistically significant. However, the strength of association between mental and economic inequality does vary by region. Both measures of mental health exhibited similar relationships, but specifically the number of poor mental health days variable displayed more pronounced associations. The Midwest region had the strongest association between each mental health dependent variable. The South had the weakest association between each mental health dependent variable. 
+The EDA and hypothesis testing conducted in the Midterm Project suggested that the relationship between mental health and economic inequality differs by region. Linear modeling indicates that the relationship between mental health and economic inequality is statistically significant. However, the strength of association between mental and economic inequality does vary by region. Both measures of mental health exhibited similar relationships, but specifically the number of poor mental health days variable displayed more pronounced associations. The Midwest region had the strongest association between each mental health dependent variable. The South had the weakest association between each mental health dependent variable. 
+
+As a result, we draw the following conclusions related to our SMART questions:
+
+1. The relationship between mental health and income inequality in the U.S. remains statistically significant when including other economic variables.
+2. The relationship differs across U.S. regions, with the association being strongest in the Midwest and weakest in the South.
+3. The relationship remains consistent even when using two different measures for mental health. However, the strength of the association for `mental_health_days` seems stronger than the correlation for `mental_distress_rate`.
 
 The regression tree models constructed for both mental health dependent variables indicated that the top three most important variables are year, percentage of child poverty, and median income. Interestingly, for both mental health dependent variables the income inequality variable was considered to be the eighth most important variable. Although this finding does not outright contradict the notion that income inequality plays an important role in determining poor mental health, it must be noted that the income inequality variable does rank lower than expected. This is surprising given that the income inequality variable is the most direct measure of economic inequality as it is a ratio of household income between the 80th and 20th percentiles. One possible explanation for this is that the income inequality variable does not have a lot of variation within the dataset suggesting it does not have a lot of explanatory power for the variation in two mental health dependent variables. 
 
 The random forest models constructed produced somewhat similar results regarding variable importance. However, depending on the measure of variable importance, either %IncMSE and IncNodePurity, different variables were ranked within the top three most important. For both random forest models, the top three most important variables measured by %IncMSE include year, median income, and region. For both random forest models, the top three most important variables measured by IncNodePurity include year, percentage of child poverty, and median income. Again, income inequality ranked lower than expected for both random forest models. The income inequality variable was ranked as the eleventh most important variable by both measures of variable importance.  
+
+Overall, this project suggested to us that our initial hypothesis that mental health and economic inequality are related was largely on the right track. However, our results also indicate that other predictors might be more important than income inequality when considering the effects on mental health.
 
 
 # References
