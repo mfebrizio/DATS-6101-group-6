@@ -1034,7 +1034,7 @@ However, when `mental_distress_rate` is the dependent variable, the strength of 
 
 We also experimented with regression tree models to determine if other model types could improve predicting the prevalence of the mental health variables and variable importance for predicting each mental health variable.
 
-The regression tree model analyzes the relationship between number of poor mental health days and the frequent mental distress rate versus all the economic variables included in our dataset. Additionally, region and year were included as explanatory variables to observe the regional and temporal effects on the dependent variable. In other words, the model regresses mental_health_days against inequality, median_inc, hs_grad, college, unempl, child_poverty, single_parent, severe_housing, food_index, mh_providers, pop_provider_ratio, region, and year. 
+The regression tree model analyzes the relationship between number of poor mental health days and the frequent mental distress rate versus all the economic variables included in our dataset. Additionally, region and year were included as explanatory variables to observe the regional and temporal effects on the dependent variable. In other words, the model regresses mental_health_days against `inequality`, `median_inc`, `hs_grad`, `college`, `unempl`, `child_poverty`, `single_parent`, `severe_housing`, `food_index`, `mh_providers`, `pop_provider_ratio`, `region`, and `year`. 
 
 The complexity parameter (cp) and max depth values for each regression tree are listed below. The cp values were increased for the pruned trees to decrease the tree size to improve prediction accuracy.
 
