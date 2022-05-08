@@ -1058,11 +1058,11 @@ In addition to the linear models above, regression tree models were also experim
 
 The regression tree model analyzes the relationship between number of poor mental health days versus all the economic inequality variables included in our dataset. Additionally, region and year variables were included as an explanatory variables to observe the regional and time impact on the dependent variable. In other words, the model regresses mental_health_days against inequality, median_inc, hs_grad, college, unempl, child_poverty, single_parent, severe_housing, food_index, mh_providers, pop_provider_ratio, region, and year.
 
-The initial regression tree model below has a max depth of 8 and a complexity penalty (cp), or complexity parameter, of 0.004. This is to allow for a large regression tree in order to produce a model that can best fit the data. However, it must be acknowledge that a larger tree will run the risk of over fitting the data making the model worse at predicting the target variable (i.e. the dependent variable). 
+The initial regression tree model below has a max depth of 8 and a complexity penalty (cp), or complexity parameter, of 0.004. This is to allow for a large regression tree in order to produce a model that can best fit the data. However, it must be acknowledged that a larger tree will run the risk of over fitting the data making the model worse at predicting the target variable (i.e. the dependent variable). 
 
 The following regression tree has 17 leaf nodes. 
 
-The summary table of the regression tree indicates the order of variable importance for each variable within the regression. Interestingly, the top three most important variables in order of importance is year, child_pov, and median_inc.
+The summary table of the regression tree indicates the order of variable importance for each variable within the regression. Interestingly, the top three most important variables in order of importance is year, child_poverty, and median_inc.
 
 ```{r, results='hide'}
 
