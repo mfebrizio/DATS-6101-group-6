@@ -1,6 +1,6 @@
 ---
-title: "Final Project Summary Paper"
-author: "Team 6"
+title: "Investigating the Relationship between Mental Health and Economic Inequality"
+author: "Team 6: Mark Febrizio, Shumel Siraj, Alex Thiersch, Xuan Zou"
 date: "`r Sys.Date()`"
 output:
   html_document:
@@ -60,22 +60,8 @@ library(randomForest)
 
 ```
 
-# Instructions
 
-Summary paper, 25%. Due on May 8 Sunday. Write a roughly 10-page (no more than 5000
-words, charts do not count) summary of the research and EDA process of your project. The summary should be prepared in R-markdown, and knitted into HTML. You may take
-some of the work in part III (such as graphs and results) to include here. They can overlap. This summary is to-be presented to your boss, your client, or to-be submitted for publication in journals. Potential area of topics to address in this summary may include:
-
-- Very basic EDA.
-- How did you select and determine the correct model to answer your question?
-- What predictions can you make with your model? Examples.
-- How reliable are your results?
-- What additional information or analysis might improve your model results or
-work to control limitations?
-- References (APA style preferred)
-
-
-# Introduction
+# Final Project Summary Paper
 
 This summary paper continues investigating the same topic as our midterm project – the relationship between mental health and economic inequality. The results of our midterm project indicated that there was a relationship between income inequality and mental health, which varied geographically across regions of the U.S. In this paper, we used statistical models to better understand the strength of the relationship.
 
@@ -90,9 +76,9 @@ Our independent variable for measuring income inequality is the “ratio of hous
 
 Because the measures of mental health are continuous variables, we chose a linear regression model to assess the strength of the relationship. Additionally, we also used regression tree and random forest models to determine variable importance and better predict the prevalence of mental health issues.
 
-Our paper is structured as follows. First, we open by describing our data set and summarizing the exploratory data analysis (EDA) that informed our statistical modeling. Next, we carried out feature selection for the linear regression models to ascertain which variables produced the best adjusted R-squared value. Then, we evaluated a series of linear regression models, using both dependent variables, and compared the results. Finally, we built regression tree models and random forests as a secondary method of supervised learning.
+Our paper is structured as follows. First, we open by describing our data set and summarizing the exploratory data analysis (EDA) that informed our statistical modeling. Next, we carried out feature selection for the linear regression models to help us ascertain which variables to use in our models. Then, we evaluated a series of linear regression models, using both dependent variables, and compared the results. Finally, we built regression tree models and random forests as a secondary method of supervised learning.
 
-Our results suggest that mental health and economic inequality exhibit statistically significant correlations. Additionally, random forests were determined to be the best predicting models and variables ranked the consistently highest in feature importance include year, region, median_inc, and child_poverty. Finally, there are many limitations that negatively impact the reliability of this project's analysis including the use of self-reported mental health data, the use of only adjusted R-squared for feature selection, the strong influence of the year variable on the models, and poorly tuned models for accurate and precise predictions of the target variables.     
+Our results suggest that mental health and economic inequality exhibit statistically significant correlations. Additionally, random forests were determined to be the best predicting models, and the variables ranked the consistently highest in feature importance include `year`, `region`, `median_inc`, and `child_poverty`. Finally, there are many limitations that negatively impact the reliability of this project's analysis including the use of self-reported mental health data, the strong influence of the year variable on the models, and poorly tuned models for accurate and precise predictions of the target variables.
 
 
 # Description of the Dataset
@@ -188,7 +174,7 @@ ranked <- ranked[order(ranked$year, ranked$region, ranked$division, ranked$state
 
 ```
 
-Our data are identified at the county-year level. Our data set contains `r nrow(dframe)` observations and `r ncol(dframe)` variables, although `r nrow(aggregated)` of these observations are for aggregated data at the national or state level. In addition, `r nrow(unranked)` observations are for counties that are unranked by [RWJF](https://www.countyhealthrankings.org/explore-health-rankings/faq-page), suggesting that the data for these counties is less reliable. In total, we have `r nrow(ranked)` observations in the ranked data, combined across 6 annual reports (2016–2021). Each annual data set has between 3071 and 3084 observations, indicating that the number of ranked counties is consistent over time.
+Our data are identified at the county-year level. Our data set contains `r nrow(dframe)` observations and `r ncol(dframe)` variables, although `r nrow(aggregated)` of these observations are for aggregated data at the national or state level. In addition, `r nrow(unranked)` observations are for counties that are unranked by [RWJF](https://www.countyhealthrankings.org/explore-health-rankings/faq-page), suggesting that the data for these counties is less reliable. In total, we have `r nrow(ranked)` observations in the ranked data, combined across 6 annual reports (2016–2021).
 
 
 # Exploratory Data Analysis
@@ -198,7 +184,6 @@ Our data are identified at the county-year level. Our data set contains `r nrow(
 ```{r summary_stats, results='markup'}
 
 #Summary Statistics of all Variables in dataset
-# use ranked instead
 table1<-describeBy(ranked, type = 1) ## type of kurtosis and skewness to calculate
 table1 %>%
   kbl(caption="Summary Statistics for Master Dataset",
@@ -289,7 +274,7 @@ At this point in the EDA, it became clear that geographic differences in the rel
 
 ## Boxplots
 
-To better show the relationship between the economic variables and mental health in different regions of the United States, we generated boxplots of the data by region. Analyzing the economic inequality and mental health of people by region can more clearly assess whether the relationship varies by geography than direct analysis of the whole country.
+To better show the relationship between the economic variables and mental health in different regions, we generated boxplots of the data by region.
 
 ```{r boxplots, results='markup', warning=FALSE}
 
@@ -323,11 +308,11 @@ boxplot_a <- grid.arrange(b1,b2,b3,b4, nrow=2, ncol=2) #, top = text_grob("Boxpl
 
 Overall, what information can we conclude from these boxplots?
 
-1. In the four U.S. regions, the Northeast has the highest median household income and the South has the lowest.
+1. The Northeast has the highest median household income and the South has the lowest.
 2. Income inequality is highest in the South.
 3. Residents in the South also have the worst mental health, which correlates with their relatively low household income and higher levels of inequality.
 
-As a whole, there seems to be real differences across regions in these key variables. The boxplots also indicate that these variables have outliers. As a result, we should look into the normality of the data before hypothesis testing.
+As a whole, there seems to be real differences across regions in these key variables. The boxplots also indicate that these variables have outliers. As a result, we should look into the normality of the data before modeling.
 
 ## Normality
 
@@ -364,7 +349,7 @@ ranked[keep_var] %>%
 
 ```
 
-Despite not having a perfectly normal distribution, the sample quantiles remain relatively close to the theoretical quantiles for many of our variables. Ultimately, even if none of our variables are perfectly "normal," few would seem to pose substantial issues during modeling. `inequality` and `median_inc` have right-tailed distributions, but without very thick tails.
+Despite not having a perfectly normal distribution, the sample quantiles remain relatively close to the theoretical quantiles for many of our variables. `inequality` and `median_inc` have right-tailed distributions, but without very thick tails. Ultimately, even if none of our variables are perfectly "normal," few would seem to pose substantial issues during modeling.
 
 ## Correlation Matrix
 
@@ -468,6 +453,7 @@ lm2 <- lm(rankedfs,formula=mental_health_days ~ child_poverty + inequality + une
 summ(lm2, vifs=T)
 
 ```
+
 In the model with best 10 selected features, the adjusted R2 has declined significantly to 0.461.
 
 ### 3. Plot Output from regsubsets Function in leaps package
@@ -884,7 +870,6 @@ export_summs(lm_days_1, lm_days_5, lm_days_6, lm_days_7,
 
 After removing the collinear variables, the larger models still perform well, with an adjusted R2 of 0.72. Including the interaction terms between `inequality` and `region` do not change the adjusted R2, but they suggest that there are meaningful differences across regions for the relationship between mental health and inequality.
 
-
 ## Dependent variable: `mental_distress_rate`
 
 Next, we considered a series of linear models with `mental_distress_rate` as the dependent variable. In the following models, we used different combinations of variables to find the most suitable model. Just as above, we also incorporated the model produced by feature selection.
@@ -922,7 +907,7 @@ From the first model, we can see that the equations for each region are below:
 
 From above, we can see that the Midwest has the lowest estimate for `mental_distress_rate`, and the South has the highest estimate. The coefficient for the Northeast region is not significant at the 0.05 level, while the others are significant.
 
-After including the year factor variables, the economic variables, and the demographic variables, the coefficients on most variables remained significant. However, the coefficient on `inequality` declined from 0.0101 to 0.00274 in the fourth model, which suggests that the base model exhibited omitted variable bias that the fuller model at least partially addressed. The South region still has the largest coefficient among the `region` factor variables.
+After including the year factor variables, the economic variables, and the demographic variables, the coefficients on most variables remained significant. However, the coefficient on `inequality` declined from 0.0101 to 0.00274 in the third model, which suggests that the base model exhibited omitted variable bias that the fuller model at least partially addressed. The South region still has the largest coefficient among the `region` factor variables.
 
 ```{r lm_table_c, results='asis'}
 
@@ -954,17 +939,11 @@ summ(lm_rate_5, vifs = T)
 To permit the coefficients to differ by region, we included an interaction term between `inequality` and `region`
 
 ```{r lm_rate_c, results='asis'}
-## To permit the coefficients to differ by region, we included an interaction term between `inequality` and `region`.
+
 # x6: base model by region with interaction terms
 lm_rate_6 <- lm(mental_distress_rate ~ inequality*region, data = ranked)
 summ(lm_rate_6)
 
-#From the model x6, we can see that the equations for each region are below:
-# regionMidwest: mental_distress_rate = 0.064421 + 0.012271 * inequality
-# regionNortheast: mental_distress_rate = 0.064421 + 0.050482 + (0.012271 - 0.011059) * inequality
-# regionSouth: mental_distress_rate = 0.064421 + 0.022052 + (0.012271 - 0.001928) * inequality
-# regionWest: mental_distress_rate = 0.064421 + 0.013255 + (0.012271 - 0.002526) * inequality
-# From the above equations, we can see that the strength of the relationship between 'mental_distress_rate' and 'inequality' differs by region. In fact, while the Northeast has the highest estimated amount of mental distress rate (because the intercerpt of northeast region is '0.114903'). The coefficient on 'inequality' of northeast region is '0.001212' near 0. Conversely, the midwest region has the lowest estimate of mental distress rate (0.064421), while exhibiting the strongest association. All the independent variables are statistically significant. 
 ```
 
 From the model x6, we can see that the equations for each region are below:
@@ -1044,19 +1023,18 @@ xkabledply(anovaRes_mental_distress_rate, title = "ANOVA comparison of linear mo
 
 ## Comparing the Dependent Variables
 
-The results from the linear models for both dependent variables – `mental_health_days` and `mental_distress_rate` – are similar. Every model has a statistically significant coefficient on `inequality`, and the coefficients for the majority of regions are statistically significant too. These general trends remained after adding more independent variables, to make our models more robust.
+The results from the linear models for both dependent variables – `mental_health_days` and `mental_distress_rate` – are similar. Every model has a statistically significant coefficient on `inequality`, and the coefficients for the majority of regions are statistically significant too. These general trends remained after adding more independent variables.
 
-When we want to permit the coefficients to differ by region, we included an interaction term between `inequality` and `region`. For both dependent variables, the Midwest region exhibits the strongest association between `inequality` and mental health, and the South has the weakest association.
+We included an interaction term between `inequality` and `region` to permit the coefficients to differ by region. For both dependent variables, the Midwest region exhibits the strongest association between `inequality` and mental health, and the South has the weakest association.
 
-However, when `mental_distress_rate` is the dependent variable, the strength of the association is generally weaker than for the models with `mental_health_days` as the dependent variable. This could be partly due to how the variables are measured. For example, `mental_health_days` will be a number greater than zero (and usually > 1), while `mental_distress_rate` is always a percentage ranging from 0 to 1 (and typically < 0.25). Additionally, these differences could also suggest that the relationship between mental health and inequality also depends on the measure of mental health used.
-
+However, when `mental_distress_rate` is the dependent variable, the strength of the association is generally weaker than for the models with `mental_health_days` as the dependent variable. This could be partly due to how the variables are measured. For example, `mental_health_days` may range from 0 to 30 (and is usually > 4), while `mental_distress_rate` is always a percentage ranging from 0 to 1 (and typically < 0.15). Additionally, these differences could also suggest that the relationship between mental health and inequality also depends on the measure of mental health used.
 
 
 # Regression Tree Models
 
-In addition to the linear models above, regression tree models were also experimented with to determine if other model types could improve predicting the prevalence of the mental health variables and variable importance for predicting each mental health variable.
+We also experimented with regression tree models to determine if other model types could improve predicting the prevalence of the mental health variables and variable importance for predicting each mental health variable.
 
-The regression tree model analyzes the relationship between number of poor mental health days and the poor mental distress rate versus all the economic inequality variables included in our dataset. Additionally, region and year were included as explanatory variables to observe the regional and temporal effects on the dependent variable. In other words, the model regresses mental_health_days against inequality, median_inc, hs_grad, college, unempl, child_poverty, single_parent, severe_housing, food_index, mh_providers, pop_provider_ratio, region, and year. 
+The regression tree model analyzes the relationship between number of poor mental health days and the frequent mental distress rate versus all the economic variables included in our dataset. Additionally, region and year were included as explanatory variables to observe the regional and temporal effects on the dependent variable. In other words, the model regresses mental_health_days against inequality, median_inc, hs_grad, college, unempl, child_poverty, single_parent, severe_housing, food_index, mh_providers, pop_provider_ratio, region, and year. 
 
 The complexity parameter (cp) and max depth values for each regression tree are listed below. The cp values were increased for the pruned trees to decrease the tree size to improve prediction accuracy.
 
@@ -1077,9 +1055,6 @@ Overall, the original regression tree models had lower RMSE values than the prun
 
 #Regression Tree - Number of Mentally Unhealthy Days
 
-#View(ranked)
-#str(ranked)
-
 #Remove NA values.
 ranked <- na.omit(ranked)
 
@@ -1093,8 +1068,6 @@ model_ment_helth_day_tree <- rpart(mental_health_days ~ inequality + median_inc 
 #Summary for Number of Mentally Unhealthy Days
 summ_table1=summary(model_ment_helth_day_tree)
 table1_FI_tree<-data.frame(summ_table1$variable.importance)
-
-
 
 ```
 
@@ -1120,8 +1093,6 @@ plotcp(model_ment_helth_day_tree, minline = TRUE, lty = 3, col = 1, main="Regres
 #R-squared
 #rsq.rpart(model_ment_helth_day_tree)
 
-
-
 ```
 
 ## Pruned Regression Tree - mental_health_days
@@ -1139,8 +1110,6 @@ summ_table2=summary(prune_model_ment_helth_day_tree)
 #summ_table2$variable.importance
 
 table2_FI_tree<-data.frame(summ_table2$variable.importance)
-
-
 
 ```
 
@@ -1169,7 +1138,6 @@ plotcp(prune_model_ment_helth_day_tree,minline = TRUE, lty = 3, col = 1, main="P
 
 
 ## Predicting/RMSE for Regression Trees - mental_health_days
-
 
 ```{r, results='markup'}
 #Predicting and RMSE for Regression Trees
@@ -1213,7 +1181,6 @@ sqrt(mean((yhat_prune1-test1)^2))
 
 
 ## Regression Tree - mental_distress_rate
-
 
 ```{r, results='hide'}
 #Regression Trees - Mental Health Distress Rate
@@ -1303,7 +1270,6 @@ plotcp(prune_model_ment_dis_rate_tree,minline = TRUE, lty = 3, col = 1, main="Pr
 
 ## Predicting/RMSE for Regression Trees - mental_distress_rate
 
-
 ```{r, results='markup'}
 #Predicting and RMSE for Regression Trees
 
@@ -1345,13 +1311,14 @@ sqrt(mean((yhat_prune2-test2)^2))
 
 # Random Forest Models
 
-Finally, random forest models were constructed to further analyze the variable importance and how accurately a different model type can predict the metal health target variables. The first random forest model analyzes the number of poor mental health whereas the second random forest model analyzes the poor mental distress. The random forest models use the same independent variables as the regression trees
+Finally, we constructed random forest models to further analyze the variable importance and how accurately a different model type can predict the mental health target variables. The first random forest model analyzes the number of poor mental health days and the second random forest model analyzes the frequent mental distress rate. The random forest models use the same independent variables as the regression trees.
 
-The top three most important variables in order of importance by %IncMSE are year, median_inc, and region. The top three most important variables in order of importance by IncNudePurity are year, child_poverty, and median_inc. This occurred for both target mental health variables.
+The top three most important variables in order of importance by %IncMSE are `year`, `median_inc`, and `region.` The top three most important variables in order of importance by IncNudePurity are `year`, `child_poverty`, and `median_inc`. This occurred for both target mental health variables.
 
 Overall, the random forest models were better predicting models relative to the regression tree models as indicated by their lower RMSE values for each respective target mental health variable.
 
 ## Random Forest - mental_health_days
+
 ```{r, results='markup'}
 #Random Forest - Num. of Mentally Unhealthy Days
 
@@ -1426,11 +1393,12 @@ varImpPlot(bag_ment_dis_rate, main = "Random Forest Vars. Importance: Target Y -
 
 # RMSE Comparison for All Models
 
-Below is RMSE comparisons between all the models used in this project. Each model compares the target variable mental_health_days and mental_distress_rate against the independent variables inequality, college, hs_grad, unempl, child_poverty, single_parent, severe_housing, food_index, median_inc, mh_providers, pop_provider_ratio, region, and year. 
+Below is RMSE comparisons between all the models used in this project. Each model compares the target variable `mental_health_days` and `mental_distress_rate` against the independent variables `inequality`, `college`, `hs_grad`, `unempl`, `child_poverty`, `single_parent`, `severe_housing`, `food_index`, `median_inc`, `mh_providers`, `pop_provider_ratio`, `region`, and `year`. 
 
 Based on the RMSE values the random forest models are the best predicting models because they have the lowest RMSE values. A low RMSE value indicates that the simulated predicted data is close to the observed test data, indicating better accuracy relative to higher RMSE values. 
 
 ## RMSE Model Comparisons - mental_health_days
+
 ```{r, results='markup'}
 #RMSE Model Comparisons - mental_health_days
 
@@ -1500,7 +1468,7 @@ df2 %>%
 
 # Conclusion
 
-The EDA and hypothesis testing conducted in the Midterm Project suggested that the relationship between mental health and economic inequality differs by region. Linear modeling indicates that the relationship between mental health and economic inequality is statistically significant. However, the strength of association between mental and economic inequality does vary by region. Both measures of mental health exhibited similar relationships, but specifically the number of poor mental health days variable displayed more pronounced associations. The Midwest region had the strongest association between each mental health dependent variable. The South had the weakest association between each mental health dependent variable. 
+The EDA and hypothesis testing conducted in the Midterm Project suggested that the relationship between mental health and economic inequality differs by region. Linear modeling indicates that the relationship between mental health and economic inequality is statistically significant. However, the strength of association between mental and economic inequality varies by region. Both measures of mental health exhibited similar relationships, but specifically the number of poor mental health days variable displayed more pronounced associations. The Midwest region had the strongest association between each mental health dependent variable. The South had the weakest association between each mental health dependent variable. 
 
 As a result, we draw the following conclusions related to our SMART questions:
 
@@ -1508,11 +1476,11 @@ As a result, we draw the following conclusions related to our SMART questions:
 2. The relationship differs across U.S. regions, with the association being strongest in the Midwest and weakest in the South.
 3. The relationship remains consistent even when using two different measures for mental health. However, the strength of the association for `mental_health_days` seems stronger than the correlation for `mental_distress_rate`.
 
-The regression tree models constructed for both mental health dependent variables indicated that the top three most important variables are year, percentage of child poverty, and median income. Interestingly, for both mental health dependent variables the income inequality variable was considered to be the eighth most important variable. Although this finding does not outright contradict the notion that income inequality plays an important role in determining poor mental health, it must be noted that the income inequality variable does rank lower than expected. This is surprising given that the income inequality variable is the most direct measure of economic inequality as it is a ratio of household income between the 80th and 20th percentiles. One possible explanation for this is that the income inequality variable does not have a lot of variation within the dataset suggesting it does not have a lot of explanatory power for the variation in two mental health dependent variables. 
+The regression tree models constructed for both mental health dependent variables indicated that the top three most important variables are year, percentage of child poverty, and median income. Interestingly, for both mental health dependent variables the income inequality variable was considered to be the eighth most important variable. Although this finding does not outright contradict the notion that income inequality plays an important role in determining poor mental health, it must be noted that the income inequality variable does rank lower than expected. This is surprising given that the income inequality variable is the most direct measure of economic inequality as it is a ratio of household income between the 80th and 20th percentiles. One possible explanation for this is that the income inequality variable does not have a lot of variation within the dataset, mitigating its ability to explain the variation in the two mental health dependent variables. 
 
-The random forest models constructed produced somewhat similar results regarding variable importance. However, depending on the measure of variable importance, either %IncMSE or IncNodePurity, different variables were ranked within the top three most important. For both random forest models, the top three most important variables measured by %IncMSE include year, median income, and region. For both random forest models, the top three most important variables measured by IncNodePurity include year, percentage of child poverty, and median income. Again, income inequality ranked lower than expected for both random forest models. The income inequality variable was ranked as the eleventh most important variable by both measures of variable importance. A consistent result across all models is the importance of the region variable, indicating that poor mental health differs regionally in the United States. However, it is unclear if these regional differences are due to economic inequality, differences in regional and social attitudes discussing mental health, data collection biases, or some other unknown influence
+The random forest models constructed produced somewhat similar results regarding variable importance. However, depending on the measure of variable importance, either %IncMSE or IncNodePurity, different variables were ranked within the top three most important. For both random forest models, the top three most important variables measured by %IncMSE include year, median income, and region. For both random forest models, the top three most important variables measured by IncNodePurity include year, percentage of child poverty, and median income. Again, income inequality ranked lower than expected for both random forest models. The income inequality variable was ranked as the eleventh most important variable by both measures of variable importance. A consistent result across all models is the importance of the region variable, indicating that poor mental health differs regionally in the United States. However, it is unclear if these regional differences are due to economic inequality, differences in regional and social attitudes discussing mental health, data collection biases, or some other unknown influence.
 
-Finally, the RMSE model comparisons revealed that the random forest models were the best predicting models due to their low RMSE values relative to the other models. The worst predicting models were the regression trees due to their large RMSE values relative to the other models. The reason for why the regression trees are the worse predicting models is because they are over fitting the data and are unable to make accurate predictions given data different from the train set. The reasons why the random forest models likely performed better at predicting include the model's ability to effectively deal with high dimensional data, it's robustness to outliers, it's indifference to non-linear data, it's ability to handle unbalanced data, it's low bias, and it's moderate variance. Overall, random forest models should probably be used to make reliable predictions regarding the prevalence of poor mental health based on various economic variables. 
+Finally, the RMSE model comparisons revealed that the random forest models were the best predicting models due to their low RMSE values relative to the other models. The worst predicting models were the regression trees due to their large RMSE values relative to the other models. The reason for why the regression trees are the worse predicting models is because they are overfitting the data and are unable to make accurate predictions for data different from the train set. The random forest models likely performed better at prediction because they effectively deal with high dimensional data, they are robust to outliers, they are indifferent to non-linear data, they can handle unbalanced data, they have low bias, and they have moderate variance. Overall, random forest models should probably be used to make reliable predictions regarding the prevalence of poor mental health based on various economic variables. 
 
 # Limitations
 
@@ -1520,11 +1488,11 @@ Although these conclusions are interesting and insightful, there are severe limi
 
 First, the mental health target variables rely on self-reported mental health data. This data cannot be validated with medical records. Further research could be done by using a binary mental health variable in order to generate a confusion matrix, accuracy score, recall score, precision score, and ROC-AUC graphs.
 
-Secondly, there is a strong time influence on the models, as indicated by the year variable consistently being ranked as one of the top most important variables in the regression tree and random forest models. This makes it difficult to determine if economic inequality has a substantial impact on mental health or if these variable are just correlated overtime. Further research may want to focus on data within a single time period. The strong influence of the year variable likely reduces reliability and accuracy of the models. 
+Secondly, there is a strong time influence on the models, as indicated by the year variable consistently being ranked as one of the top most important variables in the regression tree and random forest models. This makes it difficult to determine if economic inequality has a substantial impact on mental health or if these variable are just correlated over time. Further research may want to focus on data within a single time period.
 
-Third, the models could be constructed and tuned better to provide more reliable predictions and lower RMSE values. For exampled, the regression trees could be reduced in size by choosing a smaller max depth and a more aggressive complexity parameter. Additionally, a better model selection tool could have been chosen to select for better linear models. Adjusted R-squared was initially chosen because the measure has a penalty for adding additional explanatory variables that do not improve the fit of the model. Adjusted R-squared also allows for comparisons across multiple models with different numbers of independent variables. For future research, model selection should be conducted by comparing AIC or BIC values respectively. AIC and BIC allows for better model selection by providing a measure for model performance that accounts for model complexity. The AIC or BIC value reflects how well the model fits the data and penalizes the model in proportion to its number of parameters. AIC tends to favor larger models whereas BIC tends to favor parsimonious models.
+Third, the models could be constructed and tuned better to provide more reliable predictions and lower RMSE values. For exampled, the regression trees could be reduced in size by choosing a smaller max depth and a more aggressive complexity parameter. Additionally, we could extend the model selection tools we use to select better linear models. Although we calculated the R-squared, adjusted R-squared, Mallow Cp, and BIC during feature selection, we primarily made our ultimate comparisons between models based on the adjusted R-squared and ANOVA tests. For future research, we may want to place more focus on Mallow Cp or BIC values respectively. These assist with model selection by providing a measure for model performance that accounts for model complexity.
 
-Overall, this project suggests that our initial hypothesis, mental health and economic inequality are related, was largely on the right track. However, our results also indicate that other predictors might be more important than income inequality when considering the effects on mental health. Even though there are limitations with this project further analysis is needed on the relationship between mental health and economic inequality. 
+Overall, this project suggests that our initial hypothesis, mental health and economic inequality are related, was largely on the right track. However, our results also indicate that other predictors might be more important than income inequality when considering the effects on mental health. Even though there are limitations with this project, further analysis is needed on the relationship between mental health and economic inequality. 
 
 
 # References
