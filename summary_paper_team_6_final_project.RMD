@@ -622,7 +622,7 @@ summ(lm4)
 
 ```
 
-In model with best 10 selected feeature, adjusted r2 has declined significantly to 0.497.
+In model with best 10 selected feature, adjusted r2 has declined significantly to 0.497.
 
 ### 3. Plot Output from regsubsets Function in leaps package
 
