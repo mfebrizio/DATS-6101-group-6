@@ -177,13 +177,11 @@ levels(ranked$region_abb) <- c("",
                               "S", 
                               "W")
 
-
 # subset ranked data by region
 ranked_MW <- ranked %>% subset(region=="Midwest")
 ranked_NE <- ranked %>% subset(region=="Northeast")
 ranked_SO <- ranked %>% subset(region=="South")
 ranked_WE <- ranked %>% subset(region=="West")
-
 
 # sort dataframe
 ranked <- ranked[order(ranked$year, ranked$region, ranked$division, ranked$statecode, ranked$countycode), ]
@@ -1036,7 +1034,7 @@ xkabledply(anovaRes_mental_health_days, title = "ANOVA comparison of linear mode
 
 Similar to the above results, the best model is the final model (#7) when `mental_distress_rate` is the dependent variable.  This model includes interaction terms between `inequality` and `region` as well as a set of economic and demographic variables. The F-statistics for these comparisons are all statistically significant.
 
-```{r anova_lm_rate, results='markup'}
+```{r anova_lm_ratei , results='markup'}
 
 anovaRes_mental_distress_rate <- anova(lm_rate_3, lm_rate_fs, lm_rate_5, lm_rate_7)
 
