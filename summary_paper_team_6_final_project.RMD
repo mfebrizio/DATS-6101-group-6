@@ -436,7 +436,7 @@ plot(reg.best10, scale = "adjr2", main = "Adjusted R^2")
 plot(reg.best10, scale = "r2", main = "R^2")
 plot(reg.best10, scale = "bic", main = "BIC")
 plot(reg.best10, scale = "Cp", main = "Cp")
-coef(reg.best10, 10, scale = "adjr2") # default BIC
+coef(reg.best10, 10, scale = "adjr2")
 ```
 
 The summary table below provides details on which predictors to use for the model. The best predictors are indicated by the word "true." And then we selected the best 10 features with the method adjusted R2 to build the model with the selected features.
@@ -681,7 +681,7 @@ points(rate_minCP, summary2.out$cp[rate_minCP], col='red', cex=2, pch=20)
 
 ```
 
-```{r, results='markup'}
+```{r, results='hide'}
 
 #See which model has the lowest BIC :
 rate_minBIC <- which.min(summary2.out$bic)
@@ -832,6 +832,10 @@ lm_days_7 <- lm(mental_health_days ~ inequality*region + college + hs_grad + une
                 + year, data = ranked) #, terms = 'marginal')
 summ(lm_days_7)
 
+```
+
+```{r, results='hide'}
+
 # check vifs but use "high-order" because of interaction terms
 # this method computes a GVIF for each high-order term in the model
 # GVIF^[1/(2*df)], the last of which is intended to be comparable across terms of different dimension
@@ -965,6 +969,10 @@ lm_rate_7 <- lm(mental_distress_rate ~ inequality*region + college + hs_grad + u
                 + year, data = ranked)
 #summary(lm_rate_7)
 summ(lm_rate_7)
+
+```
+
+```{r, results='hide'}
 
 # check vifs but use "high-order" because of interaction terms
 # this method computes a GVIF for each high-order term in the model
