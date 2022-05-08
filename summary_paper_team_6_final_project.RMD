@@ -1426,8 +1426,6 @@ varImpPlot(bag_ment_dis_rate, main = "Random Forest Vars. Importance: Target Y -
 
 # RMSE Comparison for All Models
 
-
-
 Below is RMSE comparisons between all the models used in this project. Each model compares the target variable mental_health_days and mental_distress_rate against the independent variables inequality, college, hs_grad, unempl, child_poverty, single_parent, severe_housing, food_index, median_inc, mh_providers, pop_provider_ratio, region, and year. 
 
 Based on the RMSE values the random forest models are the best predicting models because they have the lowest RMSE values. A low RMSE value indicates that the simulated predicted data is close to the observed test data, indicating better accuracy relative to higher RMSE values. 
@@ -1467,10 +1465,6 @@ df1 %>%
 ```
 
 ## RMSE Model Comparisons - mental_distress_rate
-
-Each model below compares the target variable mental_distress_rate against the independent variables inequality, college, hs_grad, unempl, child_poverty, single_parent, severe_housing, food_index, median_inc, mh_providers, pop_provider_ratio, region, and year. 
-
-Based on the RMSE values the random forest is the best predicting model because it has the lowest RMSE value of 0.0091. A low RMSE value indicates that the simulated predicted data is close to the observed test data, indicating better accuracy relative to higher RMSE values.
 
 ```{r, results='markup'}
 lm_dist_train <- lm(mental_distress_rate ~ inequality + college + hs_grad + unempl
