@@ -1500,8 +1500,6 @@ df2 %>%
 
 # Conclusion
 
-Designing models that accurately represent the relationships between mental health and economic inequality is a difficult but important task. The growing body of academic literature outlines that economic inequality is worsening within the United States and  health disparities increasingly occur along socioeconomic gradients. As health inequity continues to grow, mental health is likely to be impacted by the widening economic divide. 
-
 The EDA and hypothesis testing conducted in the Midterm Project suggested that the relationship between mental health and economic inequality differs by region. Linear modeling indicates that the relationship between mental health and economic inequality is statistically significant. However, the strength of association between mental and economic inequality does vary by region. Both measures of mental health exhibited similar relationships, but specifically the number of poor mental health days variable displayed more pronounced associations. The Midwest region had the strongest association between each mental health dependent variable. The South had the weakest association between each mental health dependent variable. 
 
 As a result, we draw the following conclusions related to our SMART questions:
