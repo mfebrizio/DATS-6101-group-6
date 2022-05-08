@@ -1038,13 +1038,13 @@ The regression tree model analyzes the relationship between number of poor menta
 
 The complexity parameter (cp) and max depth values for each regression tree are listed below. The cp values were increased for the pruned trees to decrease the tree size to improve prediction accuracy.
 
-Reg. Tree mental_health_days: Max depth and cp values
-Original Tree: max depth = 8; cp = 0.004
-Pruned Tree: max depth = 8; cp = 0.0067
+Reg. Tree mental_health_days: Max depth and cp values\
+Original Tree: max depth = 8; cp = 0.004\
+Pruned Tree: max depth = 8; cp = 0.0067\
 
-Reg. Tree mental_health_days: Max depth and cp values
-Original Tree: max depth = 8; cp = 0.004
-Pruned Tree: max depth = 8; cp = 0.01
+Reg. Tree mental_health_days: Max depth and cp values\
+Original Tree: max depth = 8; cp = 0.004\
+Pruned Tree: max depth = 8; cp = 0.01\
 
 Overall, the original regression tree models had lower RMSE values than the pruned trees. This indicates that the original trees were the better predicting models.
 
